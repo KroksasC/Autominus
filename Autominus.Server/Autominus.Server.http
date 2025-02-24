@@ -1,0 +1,6 @@
+@Autominus.Server_HostAddress = http://localhost:5138
+
+GET {{Autominus.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
