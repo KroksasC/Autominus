@@ -12,11 +12,10 @@ namespace Autominus.Server.Controllers
         private readonly ModelsContext _context;
 
         public CarController(ModelsContext context) => _context = context;
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Car>>> GetCars()
         {
-            return await _context.Cars.ToListAsync();
+            return await _context.Cars.Include(c => c.User).ToListAsync();
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Car>> GetCar(int id)
