@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Autominus.Server.Controllers
 {
-    [Route("api/user")]
+    [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {

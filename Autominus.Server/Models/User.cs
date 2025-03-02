@@ -10,6 +10,6 @@ public class User
     public DateTime CreatedAt { get; set; }
 
     // Navigacijos savybė: vartotojas gali turėti kelis automobilius
-    public List<Car> Cars { get; set; } = new();
+    public ICollection<Car>? Cars { get; set; }
 }
 
