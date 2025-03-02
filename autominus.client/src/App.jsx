@@ -2,50 +2,62 @@ import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
-    const [forecasts, setForecasts] = useState();
+    const [cars, setCars] = useState([]);
 
     useEffect(() => {
-        populateWeatherData();
+        fetchCars();
     }, []);
 
-    const contents = forecasts === undefined
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See hhhhhhffwefasdf<a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <table className="table table-striped" aria-labelledby="tableLabel">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                </tr>
-            </thead>
-            <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>;
+    async function fetchCars() {
+        try {
+            const response = await fetch('car'); // Adjust endpoint if needed
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            setCars(data);
+        } catch (error) {
+            console.error("Failed to fetch cars:", error);
+        }
+    }
 
     return (
         <div>
-            <h1 id="tableLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
+            <h1>Car Listings</h1>
+            <p>This component fetches and displays a list of cars.</p>
+
+            {cars.length === 0 ? (
+                <p><em>Loading or no cars available...</em></p>
+            ) : (
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Brand</th>
+                            <th>Model</th>
+                            <th>Year</th>
+                            <th>Mileage</th>
+                            <th>Fuel Type</th>
+                            <th>Transmission</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {cars.map(car => (
+                            <tr key={car.id}>
+                                <td>{car.brand}</td>
+                                <td>{car.model}</td>
+                                <td>{car.year}</td>
+                                <td>{car.mileage} km</td>
+                                <td>{car.fuelType}</td>
+                                <td>{car.transmission}</td>
+                                <td>${car.price.toFixed(2)}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
         </div>
     );
-    
-    async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        if (response.ok) {
-            const data = await response.json();
-            setForecasts(data);
-        }
-    }
 }
 
 export default App;

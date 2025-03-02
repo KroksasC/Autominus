@@ -29,6 +29,6 @@
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigacijos savybė: automobilis priklauso vartotojui
-        public User? User { get; set; }
+        public User User { get; set; }
     }
 }
