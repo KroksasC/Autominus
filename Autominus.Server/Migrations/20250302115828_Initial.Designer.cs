@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Autominus.Server.Migrations
 {
     [DbContext(typeof(ModelsContext))]
-    [Migration("20250301000027_Initial2")]
-    partial class Initial2
+    [Migration("20250302115828_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

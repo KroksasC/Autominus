@@ -1,4 +1,5 @@
 using Autominus.Server.Data;
+using Autominus.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,13 @@ builder.Services.AddDbContext<ModelsContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ModelsContext") ?? throw new InvalidOperationException("Connection string 'ModelsCOntext' not found.")));
 
 var app = builder.Build();
-
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ModelsContext>();
+    context.Database.Migrate();
+    DataSeedingService.Initialize(context); // Call your method here
+}
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
