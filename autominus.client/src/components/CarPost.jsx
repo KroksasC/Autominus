@@ -1,11 +1,15 @@
 import PropTypes from "prop-types"
+import "../Styles/CarPost.css"
 function CarPost({ car }) {
     return (
         <div className="car-post">
-            <h3>{car.brand}</h3>
-            <p>{car.model}</p>
-            <p>{car.year}</p>
-            <p>{car.price}</p>
+            <div className="info">
+                <p className="brand">{car.brand}</p>
+                <p className="model">{car.model}</p>
+                <p className="year">{car.year}</p>
+                <p className="price">{car.price}&euro;</p>
+            </div>
+            <img src="https://th.bing.com/th/id/OIP.cjUjzALkEKobv8G4Evr6GQHaEK?rs=1&pid=ImgDetMain" alt={car.brand }></img>
         </div>
     );
 }
@@ -16,6 +20,7 @@ CarPost.propTypes = {
         model: PropTypes.string.isRequired,
         year: PropTypes.number.isRequired,
         price: PropTypes.number.isRequired,
+        imageUrls: PropTypes.array.isRequired
     }).isRequired,
 };
 

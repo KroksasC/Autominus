@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Home from "./Pages/Home"
-import './App.css';
 
 function App() {
     const [cars, setCars] = useState([]);

@@ -1,0 +1,47 @@
+* {
+    margin: 0;
+    padding: 0;
+    
+}
+
+.car-post {
+    background-color: cornflowerblue;
+    margin: 30px 50px;
+    border-radius: 50px;
+    border: 5px solid black;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    height: 400px;
+    color: white;
+    font-weight: 1000;
+}
+
+.car-post > img {
+    border-radius: 50px;
+}
+
+.brand {
+    font-size: 5rem;
+}
+
+.model {
+    font-size: 3rem;
+}
+
+.year {
+    font-size: 2rem;
+}
+
+.price {
+    font-size: 2rem;
+    color: green;
+}
+
+.info {
+    margin-left: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 20px;
+}

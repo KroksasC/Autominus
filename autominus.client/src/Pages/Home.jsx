@@ -1,9 +1,12 @@
 import CarPost from "../components/CarPost"; 
 import PropTypes from "prop-types"
+import NavBar from "../components/NavBar";
+import "../Styles/Home.css"
 
 function Home({ car_list }) {
     return (
-        <div>
+        <div className="Home">
+            <NavBar className="NavBar"/>
             <div className="car-posts">
                 {car_list.length === 0 ? (
                     <p>Loading cars...</p>
