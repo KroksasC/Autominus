@@ -1,5 +1,5 @@
 import Home from "./Pages/Home"
-import Posting from "./Pages/Posting"
+import Posting from "./Pages/Posting";
 import { Routes, Route } from "react-router-dom"
 
 function App() {
