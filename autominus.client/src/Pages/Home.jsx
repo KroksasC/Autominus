@@ -1,15 +1,16 @@
 import CarPost from "../components/CarPost"; 
 import PropTypes from "prop-types"
 import NavBar from "../components/NavBar";
-import "../Styles/Home.css"
+import FetchCars from "../API/FetchCars";
 
 function Home({ car_list }) {
+    car_list = FetchCars();
     return (
         <div className="Home">
             <NavBar className="NavBar"/>
             <div className="car-posts">
                 {car_list.length === 0 ? (
-                    <p>Loading cars...</p>
+                    <p>Cars cannot be loaded</p>
                 ) : (
                     car_list.map(car => <CarPost key={car.id} car={car} />) 
                 )}
