@@ -11,8 +11,19 @@
     color: white;
     display: flex;
     justify-content: space-between;
+    height: 100px;
 }
 
 .buttons {
     display: flex;
 }
+
+.Home {
+    color: white;
+    text-decoration: none;
+}
+
+.button {
+    margin: 15px;
+}
+
