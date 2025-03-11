@@ -3,8 +3,8 @@ import PropTypes from "prop-types"
 import NavBar from "../components/NavBar";
 import FetchCars from "../API/FetchCars";
 
-function Home({ car_list }) {
-    car_list = FetchCars();
+function Home() {
+    const car_list = FetchCars();
     return (
         <div className="Home">
             <NavBar className="NavBar"/>
