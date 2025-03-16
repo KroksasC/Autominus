@@ -19,6 +19,7 @@
     color: #333;
 }
 
+/* Input fields styling */
 .posting-page select,
 .posting-page input[type="number"],
 .posting-page input[type="text"],
@@ -37,6 +38,7 @@
     resize: vertical;
 }
 
+/* Label Styling */
 .posting-page label {
     font-size: 16px;
     font-weight: bold;
@@ -45,6 +47,30 @@
     color: #333;
 }
 
+/* Radio and Checkbox Styling */
+.posting-page .radio-group,
+.posting-page .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; /* Spacing between radio/checkbox options */
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.posting-page .radio-group label,
+.posting-page .checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between radio button and label */
+    cursor: pointer;
+}
+
+.posting-page input[type="radio"],
+.posting-page input[type="checkbox"] {
+    transform: scale(1.2); /* Slightly increase size for better accessibility */
+}
+
+/* Button Styling */
 .posting-page .submit-btn,
 .posting-page .cancel-btn {
     padding: 10px 20px;
@@ -60,9 +86,9 @@
     border: none;
 }
 
-    .posting-page .submit-btn:hover {
-        background-color: #45a049;
-    }
+.posting-page .submit-btn:hover {
+    background-color: #45a049;
+}
 
 .posting-page .cancel-btn {
     background-color: #f44336;
@@ -77,37 +103,38 @@
     background-color: #e53935;
 }
 
+/* Form Actions */
 .posting-page .form-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.posting-page input[type="checkbox"] {
-    margin-right: 10px;
-}
-
-.posting-page .input-group {
-    margin-bottom: 20px;
-}
-
+/* Input Groups */
+.posting-page .input-group,
 .posting-page .select-group {
     margin-bottom: 20px;
 }
 
-.posting-page @media (max-width: 600px) {
-    .posting-page .main
+/* Responsive Design */
+@media (max-width: 600px) {
+    .posting-page .main {
+        padding: 15px;
+    }
 
-{
-    padding: 15px;
-}
+    .posting-page .form-actions {
+        flex-direction: column;
+    }
 
-.posting-page .form-actions {
-    flex-direction: column;
-}
+    .posting-page .submit-btn,
+    .posting-page .cancel-btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 
-.posting-page .submit-btn,
-.posting-page .cancel-btn {
-    width: 100%;
-    margin-bottom: 10px;
+    .posting-page .radio-group,
+    .posting-page .checkbox-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }

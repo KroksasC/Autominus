@@ -223,8 +223,13 @@ function Posting() {
 
                 {/* Accident History */}
                 <div className="input-group">
-                    <label htmlFor="accidentHistory">Has the car been in any accidents? </label>
-                    <input type="checkbox" id="accidentHistory" name="accidentHistory" />
+                    <label>Has the car been in any accidents?</label>
+                    <div className="radio-group">
+                        <input type="radio" id="accidentYes" name="accidentHistory" value="yes" />
+                        <label htmlFor="accidentYes">Yes</label>
+                        <input type="radio" id="accidentNo" name="accidentHistory" value="no" />
+                        <label htmlFor="accidentNo">No</label>
+                    </div>
                 </div>
 
                 {/* Technical Inspection Date */}
@@ -241,8 +246,13 @@ function Posting() {
 
                 {/* NEGOTIABLE */}
                 <div className="input-group">
-                    <label htmlFor="negotiable">Is the price negotiable? </label>
-                    <input type="checkbox" id="negotiable" name="negotiable" />
+                    <label>Is the price negotiable?</label>
+                    <div className="radio-group">
+                        <input type="radio" id="negotiableYes" name="negotiable" value="yes" />
+                        <label htmlFor="negotiableYes">Yes</label>
+                        <input type="radio" id="negotiableNo" name="negotiable" value="no" />
+                        <label htmlFor="negotiableNo">No</label>
+                    </div>
                 </div>
 
                 {/* DESCRIPTION */}
