@@ -19,7 +19,7 @@ function FetchCars() {
 
         fetchCars();
     }, []);
-    console.log(cars);
+    console.log(cars)
     return cars;
 }
 

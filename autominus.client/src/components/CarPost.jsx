@@ -2,6 +2,10 @@ import PropTypes from "prop-types"
 import "../Styles/CarPost.css"
 import { Link } from "react-router-dom"
 function CarPost({ car }) {
+    const carImage = car.imageUrls && car.imageUrls.length > 0
+        ? car.imageUrls[0]
+        : "https://via.placeholder.com/300x200?text=No+Image";
+
     return (
         <Link to={`/${car.id}`} style={{ textDecoration: 'none' }}>
             <div className="car-post" >
@@ -11,7 +15,7 @@ function CarPost({ car }) {
                     <p className="year">{car.year}</p>
                     <p className="price">{car.price}&euro;</p>
                 </div>
-                <img src="https://th.bing.com/th/id/OIP.cjUjzALkEKobv8G4Evr6GQHaEK?rs=1&pid=ImgDetMain" alt={car.brand }></img>
+                <img src={carImage} alt={`${car.brand} ${car.model}`} />
             </div>
         </Link>
     );
