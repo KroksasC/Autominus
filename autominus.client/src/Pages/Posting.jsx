@@ -1,6 +1,10 @@
 import { useState } from "react";
 import "../Styles/Posting.css";
 import { Link } from "react-router-dom";
+import { PostCars } from "../API/PostCars"
+import FetchCars from "../API/FetchCars";
+
+
 
 const carModels = {
     acura: ["ILX", "MDX", "NSX", "RDX", "TLX", "RLX", "ZDX", "Integra", "Legend"],
@@ -56,16 +60,98 @@ const carModels = {
 };
 
 function Posting() {
+    const car_list = FetchCars();
+    const [formData, setFormData] = useState({
+        id: car_list.length + 1,
+        brand: "",
+        model: "",
+        year: "",
+        mileage: "",
+        fuelType: "",
+        transmission: "",
+        engineCapacity: "",
+        horsePower: "",
+        drivetrain: "",
+        doors: "",
+        seats: "",
+        bodyType: "",
+        color: "",
+        vin: "",
+        registrationNumber: "",
+        condition: "",
+        accidentHistory: "",
+        technicalInspectionValidUntil: "",
+        price: "",
+        negotiable: "",
+        description: "",
+        imageUrls: [],
+        location: "",
+        createdAt: "",
+        user: {}
+    });
+
+
     const [selectedCar, setSelectedCar] = useState("");
     const years = Array.from({ length: 2025 - 1920 + 1 }, (_, index) => 1920 + index);
 
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+
+        // Handle select fields and text inputs
+        if (type !== "radio") {
+            setFormData(prevData => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
+
+        // Handle radio buttons
+        if (type === "radio") {
+            setFormData(prevData => ({
+                ...prevData,
+                [name]: checked ? value : prevData[name],  // Only update if checked
+            }));
+        }
+
+        // Handle brand change (special handling for model selection)
+        if (name === "brand") {
+            setSelectedCar(value); // Update selected car brand
+        }
+    };
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        // Ensure that user info is included in the form data
+        const user = {
+            id: 1,  // Assuming a placeholder ID for the user
+            username: "testUser",
+            email: "test@example.com",
+            passwordHash: "somehashedpassword", // Be sure to hash passwords!
+            role: "user", // Add the role (admin/user)
+            createdAt: new Date().toISOString(), // Timestamp when the user was created
+        };
+
+        const updatedFormData = {
+            ...formData,
+            user: user,
+            createdAt: new Date().toISOString(),  // Assuming current timestamp for car listing creation
+        };
+
+        // Call PostCars with updated data
+        PostCars(updatedFormData);
+    };
+
+
     return (
         <div className="posting-page">
-            <form className="main">
+            <form className="main" onSubmit={handleSubmit}>
+
                 {/* BRAND */}
                 <div className="select-group">
                     <label htmlFor="cars">Car Brand</label>
-                    <select id="cars" name="cars" onChange={(e) => setSelectedCar(e.target.value)}>
+                    <select id="brand" name="brand" onChange={handleChange} value={formData.brand}>
                         <option value="">--Select a brand--</option>
                         {Object.keys(carModels).map((car) => (
                             <option key={car} value={car}>{car.charAt(0).toUpperCase() + car.slice(1)}</option>
@@ -76,7 +162,7 @@ function Posting() {
                 {/* MODEL */}
                 <div className="select-group">
                     <label htmlFor="models">Car Model</label>
-                    <select id="models" name="models">
+                    <select id="model" name="model" onChange={handleChange} value={formData.model}>
                         <option value="">--Select a model--</option>
                         {selectedCar &&
                             carModels[selectedCar]?.map((model) => (
@@ -88,7 +174,7 @@ function Posting() {
                 {/* YEAR */}
                 <div className="select-group">
                     <label htmlFor="year">Car Year</label>
-                    <select id="year" name="year">
+                    <select id="year" name="year" onChange={handleChange} value={formData.year}>
                         <option value="">--Select a year--</option>
                         {years.map((year) => (
                             <option key={year} value={year}>
@@ -101,13 +187,13 @@ function Posting() {
                 {/* MILEAGE */}
                 <div className="input-group">
                     <label htmlFor="mileage">Mileage (in miles):</label>
-                    <input type="number" id="mileage" name="mileage" placeholder="Enter mileage" />
+                    <input type="number" id="mileage" name="mileage" placeholder="Enter mileage" value={formData.mileage} onChange={handleChange}/>
                 </div>
 
                 {/* FUEL TYPE */}
                 <div className="select-group">
                     <label htmlFor="fuelType">Fuel Type</label>
-                    <select id="fuelType" name="fuelType">
+                    <select id="fuelType" name="fuelType" onChange={handleChange} value={formData.fuelType}>
                         <option value="">--Select a fuel type--</option>
                         <option value="petrol">Petrol</option>
                         <option value="diesel">Diesel</option>
@@ -119,7 +205,7 @@ function Posting() {
                 {/* TRANSMISSION */}
                 <div className="select-group">
                     <label htmlFor="transmission">Transmission</label>
-                    <select id="transmission" name="transmission">
+                    <select id="transmission" name="transmission" onChange={handleChange} value={formData.transmission}>
                         <option value="">--Select transmission--</option>
                         <option value="manual">Manual</option>
                         <option value="automatic">Automatic</option>
@@ -129,19 +215,19 @@ function Posting() {
                 {/* ENGINE CAPACITY */}
                 <div className="input-group">
                     <label htmlFor="engineCapacity">Engine Capacity (in liters or cc):</label>
-                    <input type="number" id="engineCapacity" name="engineCapacity" placeholder="Enter engine capacity" step="0.1" />
+                    <input type="number" id="engineCapacity" name="engineCapacity" placeholder="Enter engine capacity" step="0.1" onChange={handleChange} value={formData.engineCapacity} />
                 </div>
 
                 {/* HORSE POWER */}
                 <div className="input-group">
                     <label htmlFor="horsePower">Horse Power (HP):</label>
-                    <input type="number" id="horsePower" name="horsePower" placeholder="Enter horsepower" />
+                    <input type="number" id="horsePower" name="horsePower" placeholder="Enter horsepower" value={formData.horsePower} onChange={handleChange} />
                 </div>
 
                 {/* DRIVETRAIN */}
                 <div className="select-group">
                     <label htmlFor="drivetrain">Drivetrain</label>
-                    <select id="drivetrain" name="drivetrain">
+                    <select id="drivetrain" name="drivetrain" onChange={handleChange} value={formData.drivetrain}>
                         <option value="">--Select drivetrain--</option>
                         <option value="awd">All-Wheel Drive (AWD)</option>
                         <option value="rwd">Rear-Wheel Drive (RWD)</option>
@@ -153,19 +239,19 @@ function Posting() {
                 {/* DOORS */}
                 <div className="input-group">
                     <label htmlFor="doors">Number of Doors:</label>
-                    <input type="number" id="doors" name="doors" placeholder="Enter number of doors" />
+                    <input type="number" id="doors" name="doors" placeholder="Enter number of doors" value={formData.doors} onChange={handleChange} />
                 </div>
 
                 {/* SEATS */}
                 <div className="input-group">
                     <label htmlFor="seats">Number of Seats:</label>
-                    <input type="number" id="seats" name="seats" placeholder="Enter number of seats" />
+                    <input type="number" id="seats" name="seats" placeholder="Enter number of seats" value={formData.seats} onChange={handleChange} />
                 </div>
 
                 {/* BODY TYPE */}
                 <div className="select-group">
                     <label htmlFor="bodyType">Body Type</label>
-                    <select id="bodyType" name="bodyType">
+                    <select id="bodyType" name="bodyType" onChange={handleChange} value={formData.bodyType}>
                         <option value="">--Select body type--</option>
                         <option value="sedan">Sedan</option>
                         <option value="suv">SUV</option>
@@ -182,7 +268,7 @@ function Posting() {
                 {/* COLOR */}
                 <div className="select-group">
                     <label htmlFor="color">Color</label>
-                    <select id="color" name="color">
+                    <select id="color" name="color" onChange={handleChange} value={formData.color}>
                         <option value="">--Select color--</option>
                         <option value="red">Red</option>
                         <option value="blue">Blue</option>
@@ -201,19 +287,19 @@ function Posting() {
                 {/* VIN */}
                 <div className="input-group">
                     <label htmlFor="vin">VIN (Vehicle Identification Number):</label>
-                    <input type="text" id="vin" name="vin" placeholder="Enter VIN" />
+                    <input type="text" id="vin" name="vin" placeholder="Enter VIN" value={formData.vin} onChange={handleChange} />
                 </div>
 
                 {/* Registration Number */}
                 <div className="input-group">
                     <label htmlFor="registrationNumber">Registration Number:</label>
-                    <input type="text" id="registrationNumber" name="registrationNumber" placeholder="Enter registration number" />
+                    <input type="text" id="registrationNumber" name="registrationNumber" placeholder="Enter registration number" value={formData.registrationNumber} onChange={handleChange} />
                 </div>
 
                 {/* CONDITION */}
                 <div className="select-group">
                     <label htmlFor="condition">Condition</label>
-                    <select id="condition" name="condition">
+                    <select id="condition" name="condition" onChange={handleChange} value={formData.condition}>
                         <option value="">--Select condition--</option>
                         <option value="new">New</option>
                         <option value="used">Used</option>
@@ -225,9 +311,9 @@ function Posting() {
                 <div className="input-group">
                     <label>Has the car been in any accidents?</label>
                     <div className="radio-group">
-                        <input type="radio" id="accidentYes" name="accidentHistory" value="yes" />
+                        <input type="radio" id="accidentYes" name="accidentHistory" value="yes" checked={formData.accidentHistory === 'yes'} onChange={handleChange} />
                         <label htmlFor="accidentYes">Yes</label>
-                        <input type="radio" id="accidentNo" name="accidentHistory" value="no" />
+                        <input type="radio" id="accidentNo" name="accidentHistory" value="no" checked={formData.accidentHistory === 'no'} onChange={handleChange} />
                         <label htmlFor="accidentNo">No</label>
                     </div>
                 </div>
@@ -235,22 +321,22 @@ function Posting() {
                 {/* Technical Inspection Date */}
                 <div className="input-group">
                     <label htmlFor="techInspectionDate">Technical Inspection Valid Until:</label>
-                    <input type="date" id="techInspectionDate" name="techInspectionDate" />
+                    <input type="date" id="techInspectionDate" name="techInspectionDate" value={formData.techInspectionDate} onChange={handleChange} />
                 </div>
 
                 {/* PRICE */}
                 <div className="input-group">
                     <label htmlFor="price">Price:</label>
-                    <input type="number" id="price" name="price" placeholder="Enter price" />
+                    <input type="number" id="price" name="price" placeholder="Enter price" value={formData.price} onChange={handleChange} />
                 </div>
 
                 {/* NEGOTIABLE */}
                 <div className="input-group">
                     <label>Is the price negotiable?</label>
                     <div className="radio-group">
-                        <input type="radio" id="negotiableYes" name="negotiable" value="yes" />
+                        <input type="radio" id="negotiableYes" name="negotiable" value="yes" checked={formData.negotiable === 'yes'} onChange={handleChange} />
                         <label htmlFor="negotiableYes">Yes</label>
-                        <input type="radio" id="negotiableNo" name="negotiable" value="no" />
+                        <input type="radio" id="negotiableNo" name="negotiable" value="no" checked={formData.negotiable === 'no'} onChange={handleChange} />
                         <label htmlFor="negotiableNo">No</label>
                     </div>
                 </div>
@@ -258,10 +344,11 @@ function Posting() {
                 {/* DESCRIPTION */}
                 <div className="input-group">
                     <label htmlFor="description">Description:</label>
-                    <textarea id="description" name="description" placeholder="Enter description"></textarea>
+                    <textarea id="description" name="description" placeholder="Enter description" value={formData.description} onChange={handleChange} ></textarea>
                 </div>
 
-                {/* IMAGES */ }
+                {/* IMAGES */}
+
 
                 {/* BUTTON */}
                 <div className="form-actions">
