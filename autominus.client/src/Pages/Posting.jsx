@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../Styles/Posting.css";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 const carModels = {
     acura: ["ILX", "MDX", "NSX", "RDX", "TLX", "RLX", "ZDX", "Integra", "Legend"],
@@ -58,181 +58,208 @@ const carModels = {
 function Posting() {
     const [selectedCar, setSelectedCar] = useState("");
     const years = Array.from({ length: 2025 - 1920 + 1 }, (_, index) => 1920 + index);
-    
+
     return (
-        <form className="main">
-            {/* BRAND */ }
-            <select id="cars" name="cars" onChange={(e) => setSelectedCar(e.target.value)}>
-                <option value="">--Select a brand--</option>
-                {Object.keys(carModels).map((car) => (
-                    <option key={car} value={car}>{car.charAt(0).toUpperCase() + car.slice(1)}</option>
-                ))}
-            </select>
+        <div className="posting-page">
+            <form className="main">
+                {/* BRAND */}
+                <div className="select-group">
+                    <label htmlFor="cars">Car Brand</label>
+                    <select id="cars" name="cars" onChange={(e) => setSelectedCar(e.target.value)}>
+                        <option value="">--Select a brand--</option>
+                        {Object.keys(carModels).map((car) => (
+                            <option key={car} value={car}>{car.charAt(0).toUpperCase() + car.slice(1)}</option>
+                        ))}
+                    </select>
+                </div>
 
-            {/* MODEL */}
-            <select id="models" name="models">
-                <option value="">--Select a model--</option>
-                {selectedCar &&
-                    carModels[selectedCar]?.map((model) => (
-                        <option key={model} value={model}>{model}</option>
-                    ))}
-            </select>
+                {/* MODEL */}
+                <div className="select-group">
+                    <label htmlFor="models">Car Model</label>
+                    <select id="models" name="models">
+                        <option value="">--Select a model--</option>
+                        {selectedCar &&
+                            carModels[selectedCar]?.map((model) => (
+                                <option key={model} value={model}>{model}</option>
+                            ))}
+                    </select>
+                </div>
 
-            {/* YEAR */}
-            <select id="year" name="year">
-                <option value="">--Select a year--</option>
-                {years.map((year) => (
-                    <option key={year} value={year}>
-                        {year}
-                    </option>
-                ))}
-            </select>
+                {/* YEAR */}
+                <div className="select-group">
+                    <label htmlFor="year">Car Year</label>
+                    <select id="year" name="year">
+                        <option value="">--Select a year--</option>
+                        {years.map((year) => (
+                            <option key={year} value={year}>
+                                {year}
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
-            {/* MILEAGE */}
-            <div>
-                <label htmlFor="mileage">Mileage (in miles):</label>
-                <input type="number" id="mileage" name="mileage" placeholder="Enter mileage"/>
-            </div>
+                {/* MILEAGE */}
+                <div className="input-group">
+                    <label htmlFor="mileage">Mileage (in miles):</label>
+                    <input type="number" id="mileage" name="mileage" placeholder="Enter mileage" />
+                </div>
 
-            {/* FUEL TYPE */}
-            <select id="fuelType" name="fuelType">
-                <option value="">--Select a fuel type--</option>
-                <option value="petrol">Petrol</option>
-                <option value="diesel">Diesel</option>
-                <option value="electric">Electric</option>
-                <option value="hybrid">Hybrid</option>
-            </select>
+                {/* FUEL TYPE */}
+                <div className="select-group">
+                    <label htmlFor="fuelType">Fuel Type</label>
+                    <select id="fuelType" name="fuelType">
+                        <option value="">--Select a fuel type--</option>
+                        <option value="petrol">Petrol</option>
+                        <option value="diesel">Diesel</option>
+                        <option value="electric">Electric</option>
+                        <option value="hybrid">Hybrid</option>
+                    </select>
+                </div>
 
-            {/* TRANSMISSION */}
-            <select id="transmission" name="transmission">
-                <option value="">--Select transmission--</option>
-                <option value="manual">Manual</option>
-                <option value="automatic">Automatic</option>
-            </select>
+                {/* TRANSMISSION */}
+                <div className="select-group">
+                    <label htmlFor="transmission">Transmission</label>
+                    <select id="transmission" name="transmission">
+                        <option value="">--Select transmission--</option>
+                        <option value="manual">Manual</option>
+                        <option value="automatic">Automatic</option>
+                    </select>
+                </div>
 
-            {/* ENGINE CAPACITY */}
-            <div>
-                <label htmlFor="engineCapacity">Engine Capacity (in liters or cc):</label>
-                <input type="number" id="engineCapacity" name="engineCapacity" placeholder="Enter engine capacity" step="0.1"/>
-            </div>
+                {/* ENGINE CAPACITY */}
+                <div className="input-group">
+                    <label htmlFor="engineCapacity">Engine Capacity (in liters or cc):</label>
+                    <input type="number" id="engineCapacity" name="engineCapacity" placeholder="Enter engine capacity" step="0.1" />
+                </div>
 
-            {/* HORSE POWER */}
-            <div>
-                <label htmlFor="horsePower">Horse Power (HP):</label>
-                <input type="number" id="horsePower" name="horsePower" placeholder="Enter horsepower"/>
-            </div>
+                {/* HORSE POWER */}
+                <div className="input-group">
+                    <label htmlFor="horsePower">Horse Power (HP):</label>
+                    <input type="number" id="horsePower" name="horsePower" placeholder="Enter horsepower" />
+                </div>
 
-            {/* DRIVETRAIN */}
-            <select id="drivetrain" name="drivetrain">
-                <option value="">--Select drivetrain--</option>
-                <option value="awd">All-Wheel Drive (AWD)</option>
-                <option value="rwd">Rear-Wheel Drive (RWD)</option>
-                <option value="fwd">Front-Wheel Drive (FWD)</option>
-                <option value="4wd">Four-Wheel Drive (4WD)</option>
-            </select>
+                {/* DRIVETRAIN */}
+                <div className="select-group">
+                    <label htmlFor="drivetrain">Drivetrain</label>
+                    <select id="drivetrain" name="drivetrain">
+                        <option value="">--Select drivetrain--</option>
+                        <option value="awd">All-Wheel Drive (AWD)</option>
+                        <option value="rwd">Rear-Wheel Drive (RWD)</option>
+                        <option value="fwd">Front-Wheel Drive (FWD)</option>
+                        <option value="4wd">Four-Wheel Drive (4WD)</option>
+                    </select>
+                </div>
 
-            {/* DOORS */}
-            <div>
-                <label htmlFor="doors">Number of Doors:</label>
-                <input type="number" id="doors" name="doors" placeholder="Enter number of doors"/>
-            </div>
+                {/* DOORS */}
+                <div className="input-group">
+                    <label htmlFor="doors">Number of Doors:</label>
+                    <input type="number" id="doors" name="doors" placeholder="Enter number of doors" />
+                </div>
 
-            {/* SEATS */}
-            <div>
-                <label htmlFor="seats">Number of Seats:</label>
-                <input type="number" id="seats" name="seats" placeholder="Enter number of seats"/>
-            </div>
+                {/* SEATS */}
+                <div className="input-group">
+                    <label htmlFor="seats">Number of Seats:</label>
+                    <input type="number" id="seats" name="seats" placeholder="Enter number of seats" />
+                </div>
 
-            {/* BODY TYPE */}
-            <select id="bodyType" name="bodyType">
-                <option value="">--Select body type--</option>
-                <option value="sedan">Sedan</option>
-                <option value="suv">SUV</option>
-                <option value="coupe">Coupe</option>
-                <option value="hatchback">Hatchback</option>
-                <option value="convertible">Convertible</option>
-                <option value="wagon">Wagon</option>
-                <option value="pickup">Pickup</option>
-                <option value="minivan">Minivan</option>
-                <option value="roadster">Roadster</option>
-            </select>
+                {/* BODY TYPE */}
+                <div className="select-group">
+                    <label htmlFor="bodyType">Body Type</label>
+                    <select id="bodyType" name="bodyType">
+                        <option value="">--Select body type--</option>
+                        <option value="sedan">Sedan</option>
+                        <option value="suv">SUV</option>
+                        <option value="coupe">Coupe</option>
+                        <option value="hatchback">Hatchback</option>
+                        <option value="convertible">Convertible</option>
+                        <option value="wagon">Wagon</option>
+                        <option value="pickup">Pickup</option>
+                        <option value="minivan">Minivan</option>
+                        <option value="roadster">Roadster</option>
+                    </select>
+                </div>
 
-            {/* COLOR */}
-            <select id="color" name="color">
-                <option value="">--Select color--</option>
-                <option value="red">Red</option>
-                <option value="blue">Blue</option>
-                <option value="black">Black</option>
-                <option value="white">White</option>
-                <option value="silver">Silver</option>
-                <option value="gray">Gray</option>
-                <option value="green">Green</option>
-                <option value="yellow">Yellow</option>
-                <option value="orange">Orange</option>
-                <option value="brown">Brown</option>
-                <option value="purple">Purple</option>
-            </select>
+                {/* COLOR */}
+                <div className="select-group">
+                    <label htmlFor="color">Color</label>
+                    <select id="color" name="color">
+                        <option value="">--Select color--</option>
+                        <option value="red">Red</option>
+                        <option value="blue">Blue</option>
+                        <option value="black">Black</option>
+                        <option value="white">White</option>
+                        <option value="silver">Silver</option>
+                        <option value="gray">Gray</option>
+                        <option value="green">Green</option>
+                        <option value="yellow">Yellow</option>
+                        <option value="orange">Orange</option>
+                        <option value="brown">Brown</option>
+                        <option value="purple">Purple</option>
+                    </select>
+                </div>
 
-            {/* VIN */}
-            <div>
-                <label htmlFor="vin">VIN (Vehicle Identification Number):</label>
-                <input type="text" id="vin" name="vin" placeholder="Enter VIN"/>
-            </div>
+                {/* VIN */}
+                <div className="input-group">
+                    <label htmlFor="vin">VIN (Vehicle Identification Number):</label>
+                    <input type="text" id="vin" name="vin" placeholder="Enter VIN" />
+                </div>
 
-            {/* Registration Number */}
-            <div>
-                <label htmlFor="registrationNumber">Registration Number:</label>
-                <input type="text" id="registrationNumber" name="registrationNumber" placeholder="Enter registration number"/>
-            </div>
+                {/* Registration Number */}
+                <div className="input-group">
+                    <label htmlFor="registrationNumber">Registration Number:</label>
+                    <input type="text" id="registrationNumber" name="registrationNumber" placeholder="Enter registration number" />
+                </div>
 
-            {/* CONDITION */}
-            <select id="condition" name="condition">
-                <option value="">--Select condition--</option>
-                <option value="new">New</option>
-                <option value="used">Used</option>
-                <option value="certifiedPreOwned">Certified Pre-Owned</option>
-            </select>
+                {/* CONDITION */}
+                <div className="select-group">
+                    <label htmlFor="condition">Condition</label>
+                    <select id="condition" name="condition">
+                        <option value="">--Select condition--</option>
+                        <option value="new">New</option>
+                        <option value="used">Used</option>
+                        <option value="certifiedPreOwned">Certified Pre-Owned</option>
+                    </select>
+                </div>
 
-            {/* Accident History */}
-            <div>
-                <label htmlFor="accidentHistory">Has the car been in any accidents?</label>
-                <input type="checkbox" id="accidentHistory" name="accidentHistory"/>
-            </div>
+                {/* Accident History */}
+                <div className="input-group">
+                    <label htmlFor="accidentHistory">Has the car been in any accidents? </label>
+                    <input type="checkbox" id="accidentHistory" name="accidentHistory" />
+                </div>
 
-            {/* Tech Inspect Valid Until */}
-            <div>
-                <label htmlFor="techInspectionDate">Technical Inspection Valid Until:</label>
-                <inpu type="date" id="techInspectionDate" name="techInspectionDate"/>
+                {/* Technical Inspection Date */}
+                <div className="input-group">
+                    <label htmlFor="techInspectionDate">Technical Inspection Valid Until:</label>
+                    <input type="date" id="techInspectionDate" name="techInspectionDate" />
+                </div>
 
-            </div>
+                {/* PRICE */}
+                <div className="input-group">
+                    <label htmlFor="price">Price:</label>
+                    <input type="number" id="price" name="price" placeholder="Enter price" />
+                </div>
 
-            {/* PRICE */}
-            <div>
-                <label htmlFor="price">Price:</label>
-                <input type="number" id="price" name="price" placeholder="Enter price"/>
-            </div>
+                {/* NEGOTIABLE */}
+                <div className="input-group">
+                    <label htmlFor="negotiable">Is the price negotiable? </label>
+                    <input type="checkbox" id="negotiable" name="negotiable" />
+                </div>
 
-            {/* NEGOTIABLE */}
-            <div>
-                <label htmlFor="negotiable">Is the price negotiable?</label>
-                <input type="checkbox" id="negotiable" name="negotiable" />
-            </div>
+                {/* DESCRIPTION */}
+                <div className="input-group">
+                    <label htmlFor="description">Description:</label>
+                    <textarea id="description" name="description" placeholder="Enter description"></textarea>
+                </div>
 
-            {/* DESCRIPTION */}
-            <div>
-                <label htmlFor="description">Description:</label>
-                <textarea id="description" name="description" placeholder="Enter a description of the car" rows="4" cols="50"/>
-            </div>
+                {/* IMAGES */ }
 
-            {/* IMAGES */}
-
-
-            {/* BUTTONS */}
-            <div className="buttons">
-                <button type="submit" className="Add">Post</button>
-                <Link to="/" className="Cancel"><button type="button">Cancel</button></Link>
-            </div>
-        </form>
+                {/* BUTTON */}
+                <div className="form-actions">
+                    <button type="submit" className="submit-btn">Post Listing</button>
+                    <Link to="/" className="cancel-btn">Cancel</Link>
+                </div>
+            </form>
+        </div>
     );
 }
 
