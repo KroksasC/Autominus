@@ -95,24 +95,20 @@ function Posting() {
             </div>
 
             {/* FUEL TYPE */}
-            <div>
-                <select id="fuelType" name="fuelType">
-                    <option value="">--Select a fuel type--</option>
-                    <option value="petrol">Petrol</option>
-                    <option value="diesel">Diesel</option>
-                    <option value="electric">Electric</option>
-                    <option value="hybrid">Hybrid</option>
-                </select>
-            </div>
+            <select id="fuelType" name="fuelType">
+                <option value="">--Select a fuel type--</option>
+                <option value="petrol">Petrol</option>
+                <option value="diesel">Diesel</option>
+                <option value="electric">Electric</option>
+                <option value="hybrid">Hybrid</option>
+            </select>
 
             {/* TRANSMISSION */}
-            <div>
-                <select id="transmission" name="transmission">
-                    <option value="">--Select transmission--</option>
-                    <option value="manual">Manual</option>
-                    <option value="automatic">Automatic</option>
-                </select>
-            </div>
+            <select id="transmission" name="transmission">
+                <option value="">--Select transmission--</option>
+                <option value="manual">Manual</option>
+                <option value="automatic">Automatic</option>
+            </select>
 
             {/* ENGINE CAPACITY */}
             <div>
@@ -123,10 +119,115 @@ function Posting() {
             {/* HORSE POWER */}
             <div>
                 <label htmlFor="horsePower">Horse Power (HP):</label>
-                <input
-                    type="number" id="horsePower" name="horsePower" placeholder="Enter horsepower"/>
+                <input type="number" id="horsePower" name="horsePower" placeholder="Enter horsepower"/>
             </div>
 
+            {/* DRIVETRAIN */}
+            <select id="drivetrain" name="drivetrain">
+                <option value="">--Select drivetrain--</option>
+                <option value="awd">All-Wheel Drive (AWD)</option>
+                <option value="rwd">Rear-Wheel Drive (RWD)</option>
+                <option value="fwd">Front-Wheel Drive (FWD)</option>
+                <option value="4wd">Four-Wheel Drive (4WD)</option>
+            </select>
+
+            {/* DOORS */}
+            <div>
+                <label htmlFor="doors">Number of Doors:</label>
+                <input type="number" id="doors" name="doors" placeholder="Enter number of doors"/>
+            </div>
+
+            {/* SEATS */}
+            <div>
+                <label htmlFor="seats">Number of Seats:</label>
+                <input type="number" id="seats" name="seats" placeholder="Enter number of seats"/>
+            </div>
+
+            {/* BODY TYPE */}
+            <select id="bodyType" name="bodyType">
+                <option value="">--Select body type--</option>
+                <option value="sedan">Sedan</option>
+                <option value="suv">SUV</option>
+                <option value="coupe">Coupe</option>
+                <option value="hatchback">Hatchback</option>
+                <option value="convertible">Convertible</option>
+                <option value="wagon">Wagon</option>
+                <option value="pickup">Pickup</option>
+                <option value="minivan">Minivan</option>
+                <option value="roadster">Roadster</option>
+            </select>
+
+            {/* COLOR */}
+            <select id="color" name="color">
+                <option value="">--Select color--</option>
+                <option value="red">Red</option>
+                <option value="blue">Blue</option>
+                <option value="black">Black</option>
+                <option value="white">White</option>
+                <option value="silver">Silver</option>
+                <option value="gray">Gray</option>
+                <option value="green">Green</option>
+                <option value="yellow">Yellow</option>
+                <option value="orange">Orange</option>
+                <option value="brown">Brown</option>
+                <option value="purple">Purple</option>
+            </select>
+
+            {/* VIN */}
+            <div>
+                <label htmlFor="vin">VIN (Vehicle Identification Number):</label>
+                <input type="text" id="vin" name="vin" placeholder="Enter VIN"/>
+            </div>
+
+            {/* Registration Number */}
+            <div>
+                <label htmlFor="registrationNumber">Registration Number:</label>
+                <input type="text" id="registrationNumber" name="registrationNumber" placeholder="Enter registration number"/>
+            </div>
+
+            {/* CONDITION */}
+            <select id="condition" name="condition">
+                <option value="">--Select condition--</option>
+                <option value="new">New</option>
+                <option value="used">Used</option>
+                <option value="certifiedPreOwned">Certified Pre-Owned</option>
+            </select>
+
+            {/* Accident History */}
+            <div>
+                <label htmlFor="accidentHistory">Has the car been in any accidents?</label>
+                <input type="checkbox" id="accidentHistory" name="accidentHistory"/>
+            </div>
+
+            {/* Tech Inspect Valid Until */}
+            <div>
+                <label htmlFor="techInspectionDate">Technical Inspection Valid Until:</label>
+                <inpu type="date" id="techInspectionDate" name="techInspectionDate"/>
+
+            </div>
+
+            {/* PRICE */}
+            <div>
+                <label htmlFor="price">Price:</label>
+                <input type="number" id="price" name="price" placeholder="Enter price"/>
+            </div>
+
+            {/* NEGOTIABLE */}
+            <div>
+                <label htmlFor="negotiable">Is the price negotiable?</label>
+                <input type="checkbox" id="negotiable" name="negotiable" />
+            </div>
+
+            {/* DESCRIPTION */}
+            <div>
+                <label htmlFor="description">Description:</label>
+                <textarea id="description" name="description" placeholder="Enter a description of the car" rows="4" cols="50"/>
+            </div>
+
+            {/* IMAGES */}
+
+
+            {/* BUTTONS */}
             <div className="buttons">
                 <button type="submit" className="Add">Post</button>
                 <Link to="/" className="Cancel"><button type="button">Cancel</button></Link>
