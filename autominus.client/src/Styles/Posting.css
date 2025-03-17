@@ -1,11 +1,6 @@
-/* Styles specific to the Posting page */
-.posting-page body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    padding: 20px;
-}
+/* General Styles */
 
-.posting-page .main {
+.main {
     background-color: white;
     padding: 20px;
     max-width: 800px;
@@ -14,17 +9,17 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.posting-page h1 {
+h1 {
     text-align: center;
     color: #333;
 }
 
-/* Input fields styling */
-.posting-page select,
-.posting-page input[type="number"],
-.posting-page input[type="text"],
-.posting-page input[type="date"],
-.posting-page textarea {
+/* Form Elements */
+select,
+input[type="number"],
+input[type="text"],
+input[type="date"],
+textarea {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -33,13 +28,12 @@
     font-size: 16px;
 }
 
-.posting-page textarea {
+textarea {
     height: 150px;
     resize: vertical;
 }
 
-/* Label Styling */
-.posting-page label {
+label {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 8px;
@@ -47,32 +41,19 @@
     color: #333;
 }
 
-/* Radio and Checkbox Styling */
-.posting-page .radio-group,
-.posting-page .checkbox-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px; /* Spacing between radio/checkbox options */
-    align-items: center;
-    margin-bottom: 15px;
+/* Select Groups */
+.select-group {
+    margin-bottom: 20px;
 }
 
-.posting-page .radio-group label,
-.posting-page .checkbox-group label {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Space between radio button and label */
-    cursor: pointer;
+/* Input Groups */
+.input-group {
+    margin-bottom: 20px;
 }
 
-.posting-page input[type="radio"],
-.posting-page input[type="checkbox"] {
-    transform: scale(1.2); /* Slightly increase size for better accessibility */
-}
-
-/* Button Styling */
-.posting-page .submit-btn,
-.posting-page .cancel-btn {
+/* Button Styles */
+.submit-btn,
+.cancel-btn {
     padding: 10px 20px;
     font-size: 16px;
     border-radius: 4px;
@@ -80,17 +61,17 @@
     transition: background-color 0.3s ease;
 }
 
-.posting-page .submit-btn {
+.submit-btn {
     background-color: #4CAF50;
     color: white;
     border: none;
 }
 
-.posting-page .submit-btn:hover {
-    background-color: #45a049;
-}
+    .submit-btn:hover {
+        background-color: #45a049;
+    }
 
-.posting-page .cancel-btn {
+.cancel-btn {
     background-color: #f44336;
     color: white;
     text-decoration: none;
@@ -99,42 +80,35 @@
     border: none;
 }
 
-.posting-page .cancel-btn:hover {
-    background-color: #e53935;
-}
+    .cancel-btn:hover {
+        background-color: #e53935;
+    }
 
 /* Form Actions */
-.posting-page .form-actions {
+.form-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* Input Groups */
-.posting-page .input-group,
-.posting-page .select-group {
-    margin-bottom: 20px;
+/* Checkbox */
+input[type="checkbox"] {
+    margin-right: 10px;
 }
 
 /* Responsive Design */
 @media (max-width: 600px) {
-    .posting-page .main {
+    .main {
         padding: 15px;
     }
 
-    .posting-page .form-actions {
+    .form-actions {
         flex-direction: column;
     }
 
-    .posting-page .submit-btn,
-    .posting-page .cancel-btn {
+    .submit-btn,
+    .cancel-btn {
         width: 100%;
         margin-bottom: 10px;
-    }
-
-    .posting-page .radio-group,
-    .posting-page .checkbox-group {
-        flex-direction: column;
-        align-items: flex-start;
     }
 }

@@ -1,21 +1,22 @@
-// PostCars.js
-
-export const PostCars = async (formData) => {
+async function postCarListing(carData) {
     try {
-        const response = await fetch('car', {
-            method: 'POST',
+        const response = await fetch(`car`, {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(carData),
         });
 
-        if (response.ok) {
-            alert("Car listing posted successfully!");
-        } else {
-            alert("Failed to post the car listing. Please try again.");
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
+
+        return await response.json();
     } catch (error) {
-        alert("An error occurred: " + error.message);
+        console.error("Error posting car listing:", error);
+        throw error;
     }
-};
+}
+
+export default postCarListing;
