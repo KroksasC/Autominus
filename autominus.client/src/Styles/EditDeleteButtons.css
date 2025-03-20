@@ -1,0 +1,29 @@
+
+.EDButtons {
+    width: 0px;
+    white-space: nowrap;
+    border-collapse: collapse;
+    overflow: hidden;
+}
+
+
+.Edit {
+    margin: 0px;
+    max-width: 24px;
+    background-color: #0D92F4;
+    border-radius: 5px;
+}
+
+.Delete {
+    margin: 0px;
+    max-width: 24px;
+    background-color: #F62E2E;
+    border-radius: 5px;
+}
+
+.Edit:hover {
+    filter: brightness(0.9);
+}
+.Delete:hover {
+    filter: brightness(0.9);
+}

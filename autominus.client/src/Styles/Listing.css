@@ -1,22 +1,77 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+
+
+.info-table {
+    width: 100%;
+    max-width: 600px;
+    min-width: 400px;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-.main {
+th, td {
+    padding: 4px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    font-weight: bold;
+}
+
+ul {
+    list-style-type: none;
+    text-align: center;
+}
+
+
+.flex-container {
     display: flex;
-    flex-direction: column;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: flex-start;
 }
 
-.container {
-    margin: 10px;
-    width: 10%;
-    height: 50px;
+.item_width {
+    width: 100vw;
+    max-width: 600px;
+    min-width: 400px;
 }
 
-.buttons > button {
-    margin: 10px;
-    width: 50%;
-    height: 50px;
+.pic_width {
+    width: 100vw;
+    max-width: 700px;
+    min-width: 400px;
 }
+
+
+.header-row {
+    font-size: 22px;
+    font-weight: bold;
+    background-color: #007bff;
+    color: white;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+.info-body tr:nth-child(odd) {
+    background-color: #F2F2F2;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+    .table-header h1 {
+        margin: 0;
+        font-size: 32px;
+    }
+
+    .table-header EditDeleteButtons {
+        margin-left: auto;
+    }
