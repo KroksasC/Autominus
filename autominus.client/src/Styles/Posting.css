@@ -1,22 +1,114 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* General Styles */
 
 .main {
+    background-color: white;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* Form Elements */
+select,
+input[type="number"],
+input[type="text"],
+input[type="date"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: inline-block;
+    color: #333;
+}
+
+/* Select Groups */
+.select-group {
+    margin-bottom: 20px;
+}
+
+/* Input Groups */
+.input-group {
+    margin-bottom: 20px;
+}
+
+/* Button Styles */
+.submit-btn,
+.cancel-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+}
+
+    .submit-btn:hover {
+        background-color: #45a049;
+    }
+
+.cancel-btn {
+    background-color: #f44336;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+    border: none;
+}
+
+    .cancel-btn:hover {
+        background-color: #e53935;
+    }
+
+/* Form Actions */
+.form-actions {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.container {
-    margin: 10px;
-    width: 10%;
-    height: 50px;
+/* Checkbox */
+input[type="checkbox"] {
+    margin-right: 10px;
 }
 
-.buttons > button {
-    margin: 10px;
-    width: 50%;
-    height: 50px;
+/* Responsive Design */
+@media (max-width: 600px) {
+    .main {
+        padding: 15px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .submit-btn,
+    .cancel-btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 }
