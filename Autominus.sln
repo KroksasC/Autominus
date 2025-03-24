@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35806.99 d17.13
+VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "autominus.client", "autominus.client\autominus.client.esproj", "{A5B18B82-D82D-2155-A5B1-F32D77113620}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autominus.Server", "Autominus.Server\Autominus.Server.csproj", "{7D92AD6A-C706-444E-9BDB-27EAE453A129}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auto.tests", "Auto.tests\Auto.tests.csproj", "{83223370-A2DF-4F96-B8EE-7E21F3958654}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{7D92AD6A-C706-444E-9BDB-27EAE453A129}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D92AD6A-C706-444E-9BDB-27EAE453A129}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D92AD6A-C706-444E-9BDB-27EAE453A129}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83223370-A2DF-4F96-B8EE-7E21F3958654}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83223370-A2DF-4F96-B8EE-7E21F3958654}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83223370-A2DF-4F96-B8EE-7E21F3958654}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83223370-A2DF-4F96-B8EE-7E21F3958654}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
