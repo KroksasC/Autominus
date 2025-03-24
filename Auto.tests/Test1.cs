@@ -31,6 +31,24 @@ namespace Auto.Tests
             return context;
         }
 
+        private ModelsContext GetDbCarContext()
+        {
+            var options = new DbContextOptionsBuilder<ModelsContext>()
+                .UseInMemoryDatabase(databaseName: "TestDb")
+                .Options;
+
+            var context = new ModelsContext(options);
+
+            // Seed the database with a test car
+            context.Cars.Add(new Car
+            {
+                Id = 1,
+            });
+            context.SaveChanges();
+
+            return context;
+        }
+
         [TestMethod]
         public async Task GetUser_ShouldReturnNotFound_WhenUserDoesNotExist()
         {
@@ -43,6 +61,22 @@ namespace Auto.Tests
 
             // Assert
             Assert.IsInstanceOfType(result.Result, typeof(NotFoundResult));  // Should return 404
+        }
+        [TestMethod]
+        public async Task GetCar_ShouldNotReturnNull_WhenCarExists()
+        {
+            // Arrange
+            var context = GetDbCarContext();
+            var controller = new CarController(context);
+
+            // Act
+            var result = await controller.GetCar(1);
+            var okResult = result.Result as OkObjectResult;
+            var car = okResult?.Value as Car;
+
+
+            // Assert
+            Assert.IsNotNull(result.Value);
         }
     }
 }
