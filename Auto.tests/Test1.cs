@@ -91,13 +91,8 @@ namespace Auto.Tests
             var context = GetDbContext();
             var controller = new CarController(context);
 
-            var testCar = new Car { Id = 2, Brand = "1", Model = "1" };
-            context.Cars.Add(testCar);
-            context.SaveChanges();
-
             var result = await controller.GetCar(1);
             var okResult = result.Result as OkObjectResult;
-            var car = okResult?.Value as Car;
 
             Assert.IsNotNull(result.Value);
             Assert.AreEqual("1", result.Value.Brand);
