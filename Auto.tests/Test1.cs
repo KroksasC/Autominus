@@ -14,7 +14,7 @@ namespace Auto.Tests
         private ModelsContext GetDbContext()
         {
             var options = new DbContextOptionsBuilder<ModelsContext>()
-                .UseInMemoryDatabase(databaseName: "TestDb")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) 
                 .Options;
 
             var context = new ModelsContext(options);
@@ -44,6 +44,22 @@ namespace Auto.Tests
 
             // Assert
             Assert.IsInstanceOfType(result.Result, typeof(NotFoundResult));  // Should return 404
+        }
+
+        [TestMethod]
+        public async Task GetUser_ShouldNotReturnNull_WhenUserExists()
+        {
+            // Arrange
+            var context = GetDbContext();
+            var controller = new UserController(context);
+
+            // Act
+            var result = await controller.GetUser(1);
+            var okResult = result.Result as OkObjectResult;
+            var user = okResult?.Value as User;
+
+            // Assert
+            Assert.IsNotNull(result);
         }
     }
     [TestClass]
