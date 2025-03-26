@@ -59,6 +59,7 @@ label {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-bottom: 20px;
 }
 
 .submit-btn {
@@ -67,9 +68,9 @@ label {
     border: none;
 }
 
-    .submit-btn:hover {
+.submit-btn:hover {
         background-color: #45a049;
-    }
+ }
 
 .cancel-btn {
     background-color: #f44336;
@@ -80,9 +81,9 @@ label {
     border: none;
 }
 
-    .cancel-btn:hover {
+.cancel-btn:hover {
         background-color: #e53935;
-    }
+0}
 
 /* Form Actions */
 .form-actions {

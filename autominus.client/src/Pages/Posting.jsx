@@ -120,6 +120,13 @@ function Posting() {
 
     return (
         <form className="main" onSubmit={handleSubmit}>
+
+            {/* BUTTON */}
+            <div className="form-actions">
+                <Link to="/" className="cancel-btn">Cancel</Link>
+                <Link to="/"><button type="submit" className="submit-btn">Post</button></Link>
+            </div>
+
             {/* BRAND */}
             <div className="select-group">
                 <label htmlFor="brand">Car Brand</label>
@@ -324,8 +331,8 @@ function Posting() {
 
             {/* BUTTON */}
             <div className="form-actions">
-                <Link to="/"><button type="submit" className="submit-btn">Post Listing</button></Link>
                 <Link to="/" className="cancel-btn">Cancel</Link>
+                <Link to="/"><button type="submit" className="submit-btn">Post</button></Link>
             </div>
         </form>
     );
