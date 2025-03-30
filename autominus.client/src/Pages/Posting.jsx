@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../Styles/Posting.css";
 import { Link } from "react-router-dom";
-import postCarListing from "../API/PostCars"; 
+import { useNavigate } from "react-router-dom";
 
 const carModels = {
     acura: ["ILX", "MDX", "NSX", "RDX", "TLX", "RLX", "ZDX", "Integra", "Legend"],
@@ -76,10 +76,10 @@ function Posting() {
         "vin": "",
         "registrationNumber": "",
         "condition": "",
-        "accidentHistory": true,
+        "accidentHistory": undefined,
         "technicalInspectionValidUntil": "",
         "price": 0,
-        "negotiable": true,
+        "negotiable": undefined,
         "description": "",
         "imageUrls": [
             ""
@@ -96,23 +96,57 @@ function Posting() {
         }
     });
 
+    const [errors, setErrors] = useState({});
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const navigate = useNavigate();
+
+    const validateForm = () => {
+        const newErrors = {};
+        const requiredFields = [
+            'brand', 'model', 'year', 'fuelType', 'transmission',
+            'horsepower', 'bodyType', 'condition', 'price'
+        ];
+
+        requiredFields.forEach(field => {
+            if (!formData[field]) {
+                newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
+            }
+        });
+
+        // Special validation for radio buttons
+        if (formData.accidentHistory === undefined) {
+            newErrors.accidentHistory = "Please select accident history";
+        }
+        if (formData.negotiable === undefined) {
+            newErrors.negotiable = "Please select negotiable option";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData({
             ...formData,
             [name]: type === "checkbox" ? checked : value,
         });
-        console.log(formData);
+
+        // Clear error when field changes
+        if (errors[name]) {
+            setErrors({
+                ...errors,
+                [name]: null
+            });
+        }
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        try {
-            const response = await postCarListing(formData);
-            console.log("Car listing posted:", response);
-        } catch (error) {
-            console.error("Failed to post listing:", error);
+        if (!validateForm()) {
+            return;
         }
+        setShowConfirmation(true); // Show confirmation popup instead of submitting
     };
 
     const [selectedCar, setSelectedCar] = useState("");
@@ -120,6 +154,13 @@ function Posting() {
 
     return (
         <form className="main" onSubmit={handleSubmit}>
+
+            {/* BUTTON */}
+            <div className="form-actions">
+                <Link to="/" className="cancel-btn">Cancel</Link>
+                <button type="submit" className="submit-btn">Post</button>
+            </div>
+
             {/* BRAND */}
             <div className="select-group">
                 <label htmlFor="brand">Car Brand</label>
@@ -132,6 +173,7 @@ function Posting() {
                         <option key={car} value={car}>{car.charAt(0).toUpperCase() + car.slice(1)}</option>
                     ))}
                 </select>
+                {errors.brand && <span className="error-message">{errors.brand}</span>}
             </div>
 
             {/* MODEL */}
@@ -144,6 +186,7 @@ function Posting() {
                             <option key={model} value={model}>{model}</option>
                         ))}
                 </select>
+                {errors.model && <span className="error-message">{errors.model}</span>}
             </div>
 
             {/* YEAR */}
@@ -157,6 +200,7 @@ function Posting() {
                         </option>
                     ))}
                 </select>
+                {errors.year && <span className="error-message">{errors.year}</span>}
             </div>
 
             {/* MILEAGE */}
@@ -175,6 +219,7 @@ function Posting() {
                     <option value="electric">Electric</option>
                     <option value="hybrid">Hybrid</option>
                 </select>
+                {errors.fuelType && <span className="error-message">{errors.fuelType}</span>}
             </div>
 
             {/* TRANSMISSION */}
@@ -185,6 +230,7 @@ function Posting() {
                     <option value="manual">Manual</option>
                     <option value="automatic">Automatic</option>
                 </select>
+                {errors.transmission && <span className="error-message">{errors.transmission}</span>}
             </div>
 
             {/* ENGINE CAPACITY */}
@@ -197,6 +243,7 @@ function Posting() {
             <div className="input-group">
                 <label htmlFor="horsepower">Horse Power (HP):</label>
                 <input type="number" id="horsepower" name="horsepower" placeholder="Enter horsepower" onChange={handleChange} />
+                {errors.horsepower && <span className="error-message">{errors.horsepower}</span>}
             </div>
 
             {/* DRIVETRAIN */}
@@ -238,6 +285,7 @@ function Posting() {
                     <option value="minivan">Minivan</option>
                     <option value="roadster">Roadster</option>
                 </select>
+                {errors.bodyType && <span className="error-message">{errors.bodyType}</span>}
             </div>
 
             {/* COLOR */}
@@ -280,17 +328,23 @@ function Posting() {
                     <option value="used">Used</option>
                     <option value="certifiedPreOwned">Certified Pre-Owned</option>
                 </select>
+                {errors.condition && <span className="error-message">{errors.condition}</span>}
             </div>
 
             {/* Accident History */}
             <div className="input-group">
                 <label>Has the car been in any accidents?</label>
-                <div className="radio-group" style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                    <input type="radio" id="accidentYes" name="accidentHistory" value="true" onChange={handleChange} checked={formData.accidentHistory === "true"} />
+                <div className="radio-group">
+                    <input type="radio" id="accidentYes" name="accidentHistory"
+                        onChange={() => setFormData({ ...formData, accidentHistory: true })}
+                        checked={formData.accidentHistory === true} />
                     <label htmlFor="accidentYes">Yes</label>
-                    <input type="radio" id="accidentNo" name="accidentHistory" value="false" onChange={handleChange} checked={formData.accidentHistory === "false"} />
+                    <input type="radio" id="accidentNo" name="accidentHistory"
+                        onChange={() => setFormData({ ...formData, accidentHistory: false })}
+                        checked={formData.accidentHistory === false} />
                     <label htmlFor="accidentNo">No</label>
                 </div>
+                {errors.accidentHistory && <span className="error-message">{errors.accidentHistory}</span>}
             </div>
 
             {/* Technical Inspection Date */}
@@ -302,18 +356,24 @@ function Posting() {
             {/* PRICE */}
             <div className="input-group">
                 <label htmlFor="price">Price:</label>
-                <input type="number" id="price" name="price" placeholder="Enter price" onChange={handleChange}/>
+                <input type="number" id="price" name="price" placeholder="Enter price" onChange={handleChange} />
+                {errors.price && <span className="error-message">{errors.price}</span>}
             </div>
 
             {/* NEGOTIABLE */}
             <div className="input-group">
                 <label>Is the price negotiable?</label>
-                <div className="radio-group" style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                    <input type="radio" id="negotiableYes" name="negotiable" value="true" onChange={handleChange} checked={formData.negotiable === "true"} />
+                <div className="radio-group">
+                    <input type="radio" id="negotiableYes" name="negotiable"
+                        onChange={() => setFormData({ ...formData, negotiable: true })}
+                        checked={formData.negotiable === true} />
                     <label htmlFor="negotiableYes">Yes</label>
-                    <input type="radio" id="negotiableNo" name="negotiable" value="false" onChange={handleChange} checked={formData.negotiable === "false"} />
+                    <input type="radio" id="negotiableNo" name="negotiable"
+                        onChange={() => setFormData({ ...formData, negotiable: false })}
+                        checked={formData.negotiable === false} />
                     <label htmlFor="negotiableNo">No</label>
                 </div>
+                {errors.negotiable && <span className="error-message">{errors.negotiable}</span>}
             </div>
 
             {/* DESCRIPTION */}
@@ -324,9 +384,34 @@ function Posting() {
 
             {/* BUTTON */}
             <div className="form-actions">
-                <Link to="/"><button type="submit" className="submit-btn">Post Listing</button></Link>
                 <Link to="/" className="cancel-btn">Cancel</Link>
+                <button type="submit" className="submit-btn">Post</button>
             </div>
+
+            {showConfirmation && (
+                <div className="confirmation-popup">
+                    <div className="popup-content">
+                        <h3>Confirm Submission</h3>
+                        <p>Are you sure you want to post this car listing?</p>
+                        <div className="popup-buttons">
+                            <button
+                                type="button"
+                                className="cancel-btn"
+                                onClick={() => setShowConfirmation(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                className="submit-btn"
+                                onClick={() => navigate("/")}  // Just navigate directly
+                            >
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </form>
     );
 }
