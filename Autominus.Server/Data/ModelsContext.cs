@@ -9,7 +9,6 @@ namespace Autominus.Server.Data
     {
         public ModelsContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<Car> Cars { get; set; } = null!;
-        //public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Car> Cars { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 using Autominus.Server.Data;
-using Autominus.Server.Services;
+//using Autominus.Server.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +18,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ModelsContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ModelsContext") ?? throw new InvalidOperationException("Connection string 'ModelsCOntext' not found.")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("ModelsContext") ?? throw new InvalidOperationException("Connection string 'ModelsCOntext' not found.")));
 builder.Services.AddAuthorization();
 builder.Services.AddIdentityApiEndpoints<User>()
     .AddEntityFrameworkStores<ModelsContext>();
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", builder =>
@@ -38,7 +40,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ModelsContext>();
     context.Database.Migrate();
-    DataSeedingService.Initialize(context); // Call your method here
+    //DataSeedingService.Initialize(context); // Call your method here
 }
 
 app.MapPost("/log", async ([FromBody] LoginRequest request, SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration) =>
