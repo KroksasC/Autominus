@@ -1,0 +1,92 @@
+/* Reset defaults */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+/* Table Row Backgrounds */
+tr:nth-child(even) {
+    background: #F2F2F2;
+}
+
+tr:nth-child(odd) {
+    background: #FFF;
+}
+
+th,
+td {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Container Box Styles */
+/* Container Box Styles */
+.containerbox {
+    max-width: 100%;
+    padding: 70px;
+    margin: 100px auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px gray;
+    background-color: white;
+    text-align: left;
+    justify-content: center;
+    align-items: center;
+}
+
+    /* Container box child elements */
+    .containerbox h3 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .containerbox .forminput {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .containerbox input[type="email"],
+    .containerbox input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .containerbox input[type="checkbox"] {
+        margin-right: 5px;
+    }
+
+    .containerbox button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: green;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+        .containerbox button:hover {
+            background-color: #1e5805;
+        }
+
+    .containerbox .error {
+        color: red;
+        text-align: center;
+        margin-top: 10px;
+    }

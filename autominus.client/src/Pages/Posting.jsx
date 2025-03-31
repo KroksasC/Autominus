@@ -59,7 +59,6 @@ const carModels = {
 function Posting() {
 
     const [formData, setFormData] = useState({
-        "id": 0,
         "brand": "",
         "model": "",
         "year": 0,
@@ -87,12 +86,7 @@ function Posting() {
         "location": "",
         "createdAt": "",
         "user": {
-            "id": 0,
-            "username": "",
-            "email": "",
-            "passwordHash": "",
-            "role": "",
-            "createdAt": ""
+            id: 0
         }
     });
 
@@ -127,24 +121,54 @@ function Posting() {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+        let newValue = value;
+        if (type === "checkbox") {
+            newValue = checked;
+        } else if (name === "accidentHistory" || name === "negotiable") {
+            newValue = value === "true"; // convert string to boolean
+
+        }
         setFormData({
             ...formData,
-            [name]: type === "checkbox" ? checked : value,
+            [name]: newValue,
         });
 
-        // Clear error when field changes
-        if (errors[name]) {
-            setErrors({
-                ...errors,
-                [name]: null
-            });
-        }
+
+        
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!validateForm()) {
+        const userId = localStorage.getItem("userId"); // Retrieve user ID from local storage
+        if (!userId) {
+            console.error("User ID not found. Please log in.");
             return;
+        }
+        console.log(userId)
+
+        // Ensure correct data format
+        const updatedFormData = {
+            ...formData,
+            user: { id: userId }, // Ensure ID is a number
+            year: Number(formData.year), // Convert to integer
+            mileage: Number(formData.mileage), // Convert to integer
+            engineCapacity: parseFloat(formData.engineCapacity), // Convert to float
+            horsepower: Number(formData.horsepower), // Convert to integer
+            doors: Number(formData.doors), // Convert to integer
+            seats: Number(formData.seats), // Convert to integer
+            price: parseFloat(formData.price), // Convert to float
+            createdAt: new Date().toISOString(), // Ensure correct date format
+            technicalInspectionValidUntil: formData.technicalInspectionValidUntil ? new Date(formData.technicalInspectionValidUntil).toISOString() : null, // Handle nullable date
+            imageUrls: formData.imageUrls.filter(url => url.trim() !== ""), // Remove empty URLs
+        };
+
+        console.log("Updated Form Data:", updatedFormData); // Debugging output
+
+        try {
+            const response = await postCarListing(updatedFormData);
+            console.log("Car listing posted successfully!", response);
+        } catch (error) {
+            console.error("Failed to post listing:", error);
         }
         setShowConfirmation(true); // Show confirmation popup instead of submitting
     };
@@ -334,14 +358,25 @@ function Posting() {
             {/* Accident History */}
             <div className="input-group">
                 <label>Has the car been in any accidents?</label>
-                <div className="radio-group">
-                    <input type="radio" id="accidentYes" name="accidentHistory"
-                        onChange={() => setFormData({ ...formData, accidentHistory: true })}
-                        checked={formData.accidentHistory === true} />
+
+                <div className="radio-group" style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                    <input
+                        type="radio"
+                        id="accidentYes"
+                        name="accidentHistory"
+                        value="true"
+                        onChange={handleChange}
+                        checked={formData.accidentHistory === true}  // compare to boolean true
+                    />
                     <label htmlFor="accidentYes">Yes</label>
-                    <input type="radio" id="accidentNo" name="accidentHistory"
-                        onChange={() => setFormData({ ...formData, accidentHistory: false })}
-                        checked={formData.accidentHistory === false} />
+                    <input
+                        type="radio"
+                        id="accidentNo"
+                        name="accidentHistory"
+                        value="false"
+                        onChange={handleChange}
+                        checked={formData.accidentHistory === false} // compare to boolean false
+                    />
                     <label htmlFor="accidentNo">No</label>
                 </div>
                 {errors.accidentHistory && <span className="error-message">{errors.accidentHistory}</span>}
@@ -360,17 +395,28 @@ function Posting() {
                 {errors.price && <span className="error-message">{errors.price}</span>}
             </div>
 
-            {/* NEGOTIABLE */}
+            {/* Negotiable */}
             <div className="input-group">
                 <label>Is the price negotiable?</label>
-                <div className="radio-group">
-                    <input type="radio" id="negotiableYes" name="negotiable"
-                        onChange={() => setFormData({ ...formData, negotiable: true })}
-                        checked={formData.negotiable === true} />
+
+                <div className="radio-group" style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                    <input
+                        type="radio"
+                        id="negotiableYes"
+                        name="negotiable"
+                        value="true"
+                        onChange={handleChange}
+                        checked={formData.negotiable === true}  // compare to boolean true
+                    />
                     <label htmlFor="negotiableYes">Yes</label>
-                    <input type="radio" id="negotiableNo" name="negotiable"
-                        onChange={() => setFormData({ ...formData, negotiable: false })}
-                        checked={formData.negotiable === false} />
+                    <input
+                        type="radio"
+                        id="negotiableNo"
+                        name="negotiable"
+                        value="false"
+                        onChange={handleChange}
+                        checked={formData.negotiable === false} // compare to boolean false
+                    />
                     <label htmlFor="negotiableNo">No</label>
                 </div>
                 {errors.negotiable && <span className="error-message">{errors.negotiable}</span>}
@@ -384,6 +430,8 @@ function Posting() {
 
             {/* BUTTON */}
             <div className="form-actions">
+                <button type="submit" className="submit-btn">Post Listing</button>
+
                 <Link to="/" className="cancel-btn">Cancel</Link>
                 <button type="submit" className="submit-btn">Post</button>
             </div>

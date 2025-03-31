@@ -33,7 +33,7 @@ namespace Autominus.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User User)
         {
-            if (id != User.Id)
+            if (id != Convert.ToInt64(User.Id))
             {
                 return BadRequest();
             }
@@ -82,7 +82,7 @@ namespace Autominus.Server.Controllers
         }
         private bool UserExist(int id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            return _context.Users.Any(e => Convert.ToInt64(e.Id) == id);
         }
     }
 }
