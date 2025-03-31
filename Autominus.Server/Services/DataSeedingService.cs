@@ -14,11 +14,21 @@ namespace Autominus.Server.Services
             if (!context.Users.Any()) // Check if users exist
             {
                 var userFaker = new Faker<User>()
-                    .RuleFor(u => u.Username, f => f.Internet.UserName())
+                    .RuleFor(u => u.Id, f => f.Random.Guid().ToString()) // Generating a unique Id
+                    .RuleFor(u => u.UserName, f => f.Internet.UserName())
                     .RuleFor(u => u.Email, f => f.Internet.Email())
                     .RuleFor(u => u.PasswordHash, f => f.Random.Hash())
-                    .RuleFor(u => u.Role, f => f.PickRandom("Admin", "User"))
-                    .RuleFor(u => u.CreatedAt, f => f.Date.Past(2));
+                    .RuleFor(u => u.NormalizedUserName, f => f.Internet.UserName().ToUpper()) // Normalized UserName
+                    .RuleFor(u => u.NormalizedEmail, f => f.Internet.Email().ToUpper()) // Normalized Email
+                    .RuleFor(u => u.EmailConfirmed, f => f.Random.Bool()) // Randomly setting EmailConfirmed
+                    .RuleFor(u => u.SecurityStamp, f => f.Random.String(10)) // Random SecurityStamp
+                    .RuleFor(u => u.ConcurrencyStamp, f => f.Random.String(10)) // Random ConcurrencyStamp
+                    .RuleFor(u => u.PhoneNumber, f => f.Phone.PhoneNumber()) // Random Phone Number
+                    .RuleFor(u => u.PhoneNumberConfirmed, f => f.Random.Bool()) // Randomly setting PhoneNumberConfirmed
+                    .RuleFor(u => u.TwoFactorEnabled, f => f.Random.Bool()) // Randomly setting TwoFactorEnabled
+                    .RuleFor(u => u.LockoutEnd, f => f.Date.Future(1)) // LockoutEnd date in the future
+                    .RuleFor(u => u.LockoutEnabled, f => f.Random.Bool()) // Randomly setting LockoutEnabled
+                    .RuleFor(u => u.AccessFailedCount, f => f.Random.Int(0, 5)); // Random AccessFailedCount between 0 and 5
 
                 var users = userFaker.Generate(10); // Create 10 users
                 context.Users.AddRange(users);

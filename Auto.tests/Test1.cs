@@ -22,8 +22,7 @@ namespace Auto.Tests
             // Seed the database with a test user
             context.Users.Add(new User
             {
-                Id = 1,
-                Username = "testuser",
+                UserName = "testuser",
                 Email = "test@example.com"
             });
             context.SaveChanges();

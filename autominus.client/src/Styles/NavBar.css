@@ -1,29 +1,54 @@
+/* Reset some defaults */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* NavBar Container */
 .navBar {
     background-color: green;
     font-size: 40px;
     font-weight: 800;
     color: white;
     display: flex;
+    align-items: center; /* vertically centers items */
     justify-content: space-between;
+    padding: 10px;
     height: 100px;
 }
 
-.buttons {
+/* Button containers within the navbar */
+.filter.button,
+.Home.button,
+.buttons .button,
+.LoginRegister-button {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
 }
 
+/* Container for buttons */
+.buttons {
+    display: flex;
+    align-items: center;
+}
+
+/* Home link styling */
 .Home {
     color: white;
     text-decoration: none;
 }
 
+/* Common button margin */
 .button {
     margin: 15px;
 }
 
+/* Images within buttons */
+.button img,
+.LoginRegister-button img {
+    max-height: 40px;
+    max-width: 40px;
+}

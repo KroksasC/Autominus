@@ -59,6 +59,15 @@ namespace Autominus.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Car>> PostCar(Car Car)
         {
+            var user = await _context.Users.FindAsync(Car.User.Id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            Car.User = user;
+
             _context.Cars.Add(Car);
 
             await _context.SaveChangesAsync();
