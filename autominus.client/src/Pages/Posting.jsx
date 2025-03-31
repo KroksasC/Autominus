@@ -97,8 +97,8 @@ function Posting() {
     const validateForm = () => {
         const newErrors = {};
         const requiredFields = [
-            'brand', 'model', 'year', 'fuelType', 'transmission',
-            'horsepower', 'bodyType', 'condition', 'price'
+            'brand', 'model', 'year', 'fuel Type', 'transmission',
+            'horse Power', 'body Type', 'condition', 'price'
         ];
 
         requiredFields.forEach(field => {
@@ -137,7 +137,7 @@ function Posting() {
         
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const userId = localStorage.getItem("userId"); // Retrieve user ID from local storage
         if (!userId) {
@@ -145,7 +145,10 @@ function Posting() {
             return;
         }
         console.log(userId)
-
+        const isValid = validateForm();
+        if (!isValid) {
+            return; // Don't proceed if validation fails
+        }
         // Ensure correct data format
         const updatedFormData = {
             ...formData,
@@ -243,7 +246,7 @@ function Posting() {
                     <option value="electric">Electric</option>
                     <option value="hybrid">Hybrid</option>
                 </select>
-                {errors.fuelType && <span className="error-message">{errors.fuelType}</span>}
+                {errors['fuel Type'] && <span className="error-message">{errors['fuel Type']}</span>}
             </div>
 
             {/* TRANSMISSION */}
@@ -267,7 +270,7 @@ function Posting() {
             <div className="input-group">
                 <label htmlFor="horsepower">Horse Power (HP):</label>
                 <input type="number" id="horsepower" name="horsepower" placeholder="Enter horsepower" onChange={handleChange} />
-                {errors.horsepower && <span className="error-message">{errors.horsepower}</span>}
+                {errors['horse Power'] && <span className="error-message">{errors['horse Power']}</span>}
             </div>
 
             {/* DRIVETRAIN */}
@@ -309,7 +312,7 @@ function Posting() {
                     <option value="minivan">Minivan</option>
                     <option value="roadster">Roadster</option>
                 </select>
-                {errors.bodyType && <span className="error-message">{errors.bodyType}</span>}
+                {errors['body Type'] && <span className="error-message">{errors['body Type']}</span>}
             </div>
 
             {/* COLOR */}
@@ -430,8 +433,6 @@ function Posting() {
 
             {/* BUTTON */}
             <div className="form-actions">
-                <button type="submit" className="submit-btn">Post Listing</button>
-
                 <Link to="/" className="cancel-btn">Cancel</Link>
                 <button type="submit" className="submit-btn">Post</button>
             </div>
