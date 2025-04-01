@@ -2,6 +2,8 @@ import { useState } from "react";
 import "../Styles/Posting.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import postCarListing from "../API/PostCars"
+
 
 const carModels = {
     acura: ["ILX", "MDX", "NSX", "RDX", "TLX", "RLX", "ZDX", "Integra", "Legend"],
