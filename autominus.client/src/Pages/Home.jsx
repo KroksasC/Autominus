@@ -10,7 +10,7 @@ function Home() {
             <NavBar className="NavBar"/>
             <div className="car-posts">
                 {car_list.length === 0 ? (
-                    <p>Cars cannot be loaded</p>
+                    <p style={{ color: 'black' }}>Cars cannot be loaded</p>
                 ) : (
                     car_list.map(car => <CarPost key={car.id} car={car} />) 
                 )}

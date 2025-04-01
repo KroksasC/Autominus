@@ -2,6 +2,8 @@ import { useState } from "react";
 import "../Styles/Posting.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import postCarListing from "../API/PostCars"
+
 
 const carModels = {
     acura: ["ILX", "MDX", "NSX", "RDX", "TLX", "RLX", "ZDX", "Integra", "Legend"],
@@ -97,13 +99,20 @@ function Posting() {
     const validateForm = () => {
         const newErrors = {};
         const requiredFields = [
-            'brand', 'model', 'year', 'fuel Type', 'transmission',
-            'horse Power', 'body Type', 'condition', 'price'
+            'brand', 'model', 'year', 'fuelType', 'transmission',
+            'horsepower', 'bodyType', 'condition', 'price'
         ];
 
         requiredFields.forEach(field => {
             if (!formData[field]) {
-                newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
+                // Create display names by splitting camelCase and capitalizing
+                let displayName = field;
+                if (field === 'fuelType') displayName = 'Fuel type';
+                else if (field === 'horsepower') displayName = 'Horse power';
+                else if (field === 'bodyType') displayName = 'Body type';
+                else displayName = field.charAt(0).toUpperCase() + field.slice(1);
+
+                newErrors[field] = `${displayName} is required`;
             }
         });
 
@@ -246,7 +255,7 @@ function Posting() {
                     <option value="electric">Electric</option>
                     <option value="hybrid">Hybrid</option>
                 </select>
-                {errors['fuel Type'] && <span className="error-message">{errors['fuel Type']}</span>}
+                {errors.fuelType && <span className="error-message">{errors.fuelType}</span>}
             </div>
 
             {/* TRANSMISSION */}
@@ -270,7 +279,7 @@ function Posting() {
             <div className="input-group">
                 <label htmlFor="horsepower">Horse Power (HP):</label>
                 <input type="number" id="horsepower" name="horsepower" placeholder="Enter horsepower" onChange={handleChange} />
-                {errors['horse Power'] && <span className="error-message">{errors['horse Power']}</span>}
+                {errors.horsepower && <span className="error-message">{errors.horsepower}</span>}
             </div>
 
             {/* DRIVETRAIN */}
@@ -312,7 +321,7 @@ function Posting() {
                     <option value="minivan">Minivan</option>
                     <option value="roadster">Roadster</option>
                 </select>
-                {errors['body Type'] && <span className="error-message">{errors['body Type']}</span>}
+                {errors.bodyType && <span className="error-message">{errors.bodyType}</span>}
             </div>
 
             {/* COLOR */}
