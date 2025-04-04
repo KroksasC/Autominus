@@ -7,15 +7,16 @@ import loginRegisterImg from "../images/loginNavBarPhoto.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { FilterWindow } from "./FilterWindow";
+import PropTypes from "prop-types"
 
-export function NavBar() {
+
+export function NavBar({ onFiltersChange }) {
     const [showFilters, setShowFilters] = useState(false);
     const [currentFilters, setCurrentFilters] = useState(null);
 
     const handleApplyFilters = (filters) => {
         setCurrentFilters(filters);
-        // Here you would typically apply the filters to your data
-        console.log("Applied filters:", filters);
+        onFiltersChange(filters); // Pass filters to parent component
     };
 
     return (
@@ -52,5 +53,10 @@ export function NavBar() {
         </div>
     );
 }
+
+NavBar.propTypes = {
+    onFiltersChange: PropTypes.func.isRequired,
+};
+
 
 export default NavBar;
