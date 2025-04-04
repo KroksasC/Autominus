@@ -3,6 +3,7 @@ import CarPost from "../components/CarPost";
 import PropTypes from "prop-types";
 import NavBar from "../components/NavBar";
 import FetchCars from "../API/FetchCars";
+import SearchBar from "../components/SearchBar";
 
 function Home() {
     const [carList, setCarList] = useState([]);
@@ -10,6 +11,8 @@ function Home() {
     const [filters, setFilters] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+
 
     // Fetch cars on component mount
     useEffect(() => {
@@ -41,7 +44,7 @@ function Home() {
             return;
         }
 
-        const filtered = carList.filter(car => {
+        let filtered = carList.filter(car => {
             // Brand filter
             if (filters.brand && car.brand.toLowerCase() !== filters.brand.toLowerCase()) {
                 return false;
@@ -130,11 +133,29 @@ function Home() {
             return true;
         });
 
+        if (searchTerm) {
+            const term = searchTerm.toLowerCase();
+            filtered = filtered.filter(car => {
+                return (
+                    car.brand.toLowerCase().includes(term) ||
+                    car.model.toLowerCase().includes(term) ||
+                    (car.description && car.description.toLowerCase().includes(term)) ||
+                    car.color.toLowerCase().includes(term) ||
+                    car.vin.toLowerCase().includes(term) ||
+                    car.registrationNumber.toLowerCase().includes(term)
+                );
+            });
+        }
+
         setFilteredCarList(filtered);
     }, [filters, carList]);
 
     const handleFiltersChange = (newFilters) => {
         setFilters(newFilters);
+    };
+
+    const handleSearch = (term) => {
+        setSearchTerm(term);
     };
 
     if (isLoading) {
@@ -153,6 +174,7 @@ function Home() {
     return (
         <div className="Home">
             <NavBar className="NavBar" onFiltersChange={handleFiltersChange} />
+            <SearchBar onSearch={handleSearch} />
             <div className="car-posts">
                 {filteredCarList.length === 0 ? (
                     <p style={{ color: 'black' }}>No cars found</p>
