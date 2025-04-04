@@ -1,29 +1,48 @@
-﻿import FetchCars from "../API/FetchCars";
-import PropTypes from "prop-types"
+﻿import { useState, useEffect } from "react";
+import FetchCars from "../API/FetchCars";
+import PropTypes from "prop-types";
 import NavBar from "../components/NavBar";
 import { useParams } from "react-router-dom";
-import "../Styles/Listing.css"
-import UserCard from "../components/UserCard"; 
-import EditDeleteButtons from "../components/EditDeleteButtons"; 
-
+import "../Styles/Listing.css";
+import UserCard from "../components/UserCard";
+import EditDeleteButtons from "../components/EditDeleteButtons";
 
 function Listing() {
-    const car_list = FetchCars();
+    const [carList, setCarList] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const { id } = useParams();
 
-    const car = car_list.find((car) => car.id.toString() === id)
+    useEffect(() => {
+        const fetchCars = async () => {
+            try {
+                const data = await FetchCars();
+                setCarList(data);
+                setLoading(false);
+            } catch (err) {
+                setError(err.message);
+                setLoading(false);
+            }
+        };
+        fetchCars();
+    }, []);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
+
+    const car = carList.find((car) => car.id.toString() === id);
 
     if (!car) {
         return <div>Automobilis nerastas</div>;
     }
 
-    const formattedDate = car.technicalInspectionValidUntil.slice(0, 10);
-    const uploadTime = car.createdAt.slice(0, 10);
+    const formattedDate = car.technicalInspectionValidUntil?.slice(0, 10) || "Nenurodyta";
+    const uploadTime = car.createdAt?.slice(0, 10) || "Nenurodyta";
     let accident = "Taip";
     let negotiable = "Ne";
 
-    if (car.accidentHistory.toString() == "false") accident = "Ne";
-    if (car.negotiable.toString() == "true") negotiable = "Taip";
+    if (car.accidentHistory?.toString() === "false") accident = "Ne";
+    if (car.negotiable?.toString() === "true") negotiable = "Taip";
 
     return (
         <div>
@@ -126,51 +145,47 @@ function Listing() {
                     <li><img src="https://th.bing.com/th/id/OIP.cjUjzALkEKobv8G4Evr6GQHaEK?rs=1&pid=ImgDetMain" alt={car.brand} className="pic_width"></img></li>
                     <li><img src="https://th.bing.com/th/id/OIP.cjUjzALkEKobv8G4Evr6GQHaEK?rs=1&pid=ImgDetMain" alt={car.brand} className="pic_width"></img></li>
                     <li><img src="https://th.bing.com/th/id/OIP.cjUjzALkEKobv8G4Evr6GQHaEK?rs=1&pid=ImgDetMain" alt={car.brand} className="pic_width"></img></li>
-                    {car.imageUrls.map((url, index) => (
+                    {car.imageUrls?.map((url, index) => (
                         <li key={index}>
                             {/* src={url} */}
-                            <img src="https://th.bing.com/th/id/OIP.cjUjzALkEKobv8G4Evr6GQHaEK?rs=1&pid=ImgDetMain" className="pic_width" /> 
+                            <img src="https://th.bing.com/th/id/OIP.cjUjzALkEKobv8G4Evr6GQHaEK?rs=1&pid=ImgDetMain" className="pic_width" alt={`Car ${index}`} />
                         </li>
                     ))}
                 </ul>
-                
             </div>
-
-            
-
         </div>
-
     );
 }
 
 Listing.propTypes = {
     car: PropTypes.shape({
-        accidentHistory: PropTypes.bool.isRequired,
-        bodyType: PropTypes.string.isRequired,
-        brand: PropTypes.string.isRequired,
-        color: PropTypes.string.isRequired,
-        condition: PropTypes.string.isRequired,
-        createdAt: PropTypes.string.isRequired, // ISO Date string
-        description: PropTypes.string.isRequired,
-        doors: PropTypes.number.isRequired,
-        drivetrain: PropTypes.string.isRequired,
-        engineCapacity: PropTypes.number.isRequired,
-        fuelType: PropTypes.string.isRequired,
-        horsepower: PropTypes.number.isRequired,
-        id: PropTypes.number.isRequired,
-        imageUrls: PropTypes.arrayOf(PropTypes.string).isRequired,
-        location: PropTypes.string.isRequired,
-        mileage: PropTypes.number.isRequired,
-        model: PropTypes.string.isRequired,
-        negotiable: PropTypes.bool.isRequired,
-        price: PropTypes.number.isRequired,
-        registrationNumber: PropTypes.string.isRequired,
-        seats: PropTypes.number.isRequired,
-        technicalInspectionValidUntil: PropTypes.string.isRequired, // ISO Date string
-        transmission: PropTypes.string.isRequired,
-        vin: PropTypes.string.isRequired,
-        year: PropTypes.number.isRequired
-    }).isRequired,
+        accidentHistory: PropTypes.bool,
+        bodyType: PropTypes.string,
+        brand: PropTypes.string,
+        color: PropTypes.string,
+        condition: PropTypes.string,
+        createdAt: PropTypes.string,
+        description: PropTypes.string,
+        doors: PropTypes.number,
+        drivetrain: PropTypes.string,
+        engineCapacity: PropTypes.number,
+        fuelType: PropTypes.string,
+        horsepower: PropTypes.number,
+        id: PropTypes.number,
+        imageUrls: PropTypes.arrayOf(PropTypes.string),
+        location: PropTypes.string,
+        mileage: PropTypes.number,
+        model: PropTypes.string,
+        negotiable: PropTypes.bool,
+        price: PropTypes.number,
+        registrationNumber: PropTypes.string,
+        seats: PropTypes.number,
+        technicalInspectionValidUntil: PropTypes.string,
+        transmission: PropTypes.string,
+        vin: PropTypes.string,
+        year: PropTypes.number,
+        user: PropTypes.object
+    })
 };
 
 export default Listing;
