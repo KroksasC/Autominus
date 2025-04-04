@@ -1,0 +1,31 @@
+.search-bar-container {
+    margin: 20px 0;
+    padding: 0 20px;
+}
+
+    .search-bar-container form {
+        display: flex;
+        gap: 10px;
+    }
+
+    .search-bar-container input {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    .search-bar-container button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .search-bar-container button:hover {
+            background-color: #0056b3;
+        }
