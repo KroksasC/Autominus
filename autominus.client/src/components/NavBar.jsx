@@ -1,9 +1,9 @@
 import "../Styles/NavBar.css";
-import filtersImg from "../images/filters.png";
-import addPostImg from "../images/addPost.png";
-import notificationsImg from "../images/notifications.png";
-import settingsImg from "../images/settings.png";
-import loginRegisterImg from "../images/loginNavBarPhoto.png";
+import filtersImg from "../images/newFilter.png";
+import addPostImg from "../images/newAdd.png";
+import notificationsImg from "../images/newNotification.png";
+import settingsImg from "../images/newSettings.png";
+import loginRegisterImg from "../images/newProfile.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { FilterWindow } from "./FilterWindow";
@@ -33,7 +33,7 @@ export function NavBar({ onFiltersChange }) {
                 />
             )}
 
-            <Link to="/" className="Home button">
+            <Link to="/" className="Home">
                 <p>AUTOMINUS</p>
             </Link>
             <div className="buttons">

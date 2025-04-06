@@ -1,7 +1,8 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styles/LoginAndRegistration.css";
 import Swal from 'sweetalert2';
+import NavBar from "../components/NavBar";
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -26,7 +27,7 @@ function Login() {
         setError("");
 
         if (!email || !password) {
-            setError("Please fill in all fields.");
+            setError("Užpildykite visus laukus.");
             return;
         }
 
@@ -42,7 +43,7 @@ function Login() {
             });
 
             if (!response.ok) {
-                throw new Error("Invalid login credentials.");
+                throw new Error("Neteisingi prisijungimo duomenys.");
             }
 
             const data = await response.json();
@@ -59,17 +60,19 @@ function Login() {
             window.location.href = "/";
         } catch (error) {
             console.error(error);
-            Swal.fire('Oops!', 'Something went wrong, try again!', 'error');
+            Swal.fire('Oops!', 'Įvyko klaida, bandykite dar kartą!', 'error');
         }
     };
 
     return (
+        <div>
+            <NavBar className="NavBar" />
         <div className="containerbox">
-            <h3>Login</h3>
+            <h3>Prisijungti</h3>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label className="forminput" htmlFor="email">
-                        Email:
+                        El. paštas:
                     </label>
                 </div>
                 <div>
@@ -82,7 +85,7 @@ function Login() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="password">Password:</label>
+                    <label htmlFor="password">Slaptažodis:</label>
                 </div>
                 <div>
                     <input
@@ -101,18 +104,19 @@ function Login() {
                         checked={rememberme}
                         onChange={handleChange}
                     />
-                    <span>Remember Me</span>
+                    <span>Prisiminti mane</span>
                 </div>
                 <div>
-                    <button type="submit">Login</button>
+                    <button type="submit">Prisijungti</button>
                 </div>
                 <div>
                     <button type="button" onClick={handleRegisterClick}>
-                        Register
+                        Registruotis
                     </button>
                 </div>
             </form>
             {error && <p className="error">{error}</p>}
+            </div>
         </div>
     );
 }

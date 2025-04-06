@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import "../Styles/SearchBar.css";
 import PropTypes from "prop-types";
 
@@ -15,11 +15,11 @@ function SearchBar({ onSearch }) {
             <form onSubmit={handleSearch}>
                 <input
                     type="text"
-                    placeholder="Search cars by brand, model, description..."
+                    placeholder="Ieškokite automobilius pagal markę, modelį, aprašymą..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <button type="submit">Search</button>
+                <button type="submit">Ieškoti</button>
             </form>
         </div>
     );

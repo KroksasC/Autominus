@@ -64,11 +64,11 @@ function Listing() {
                         <tbody className="info-body">
                             <tr>
                                 <td><strong>Kaina:</strong></td>
-                                <td>{car.price}&euro;</td>
+                                <td>{car.price} &euro;</td>
                             </tr>
                             <tr>
                                 <td><strong>Rida:</strong></td>
-                                <td>{car.mileage} Km</td>
+                                <td>{car.mileage} km</td>
                             </tr>
                             <tr>
                                 <td><strong>Pavarų dėžė:</strong></td>
@@ -80,7 +80,7 @@ function Listing() {
                             </tr>
                             <tr>
                                 <td><strong>Variklis:</strong></td>
-                                <td>{car.engineCapacity} l, {car.horsepower} AG ({parseInt((car.horsepower * 0.745699872), 10)} KW)</td>
+                                <td>{car.engineCapacity} l, {car.horsepower} AG ({parseInt((car.horsepower * 0.745699872), 10)}KW)</td>
                             </tr>
                             <tr>
                                 <td><strong>Varantieji ratai:</strong></td>
