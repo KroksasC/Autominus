@@ -34,9 +34,12 @@ ul {
 
 
 .car-post-header {
-    font-weight: bold;
     padding-left: 16px;
     line-height: 20px;
+}
+
+.desription {
+    font-weight: bold;
 }
 
 
