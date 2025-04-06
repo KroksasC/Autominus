@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
     "prop-types": "^15.8.1",
     "react-router-dom": "^7.3.0",
     "sweetalert2": "^11.17.2"
