@@ -144,13 +144,10 @@ function Listing() {
                     <br></br>
                 </div>
                 <ul>
-                    <li><img src="https://th.bing.com/th/id/OIP.cjUjzALkEKobv8G4Evr6GQHaEK?rs=1&pid=ImgDetMain" alt={car.brand} className="pic_width"></img></li>
-                    <li><img src="https://th.bing.com/th/id/OIP.cjUjzALkEKobv8G4Evr6GQHaEK?rs=1&pid=ImgDetMain" alt={car.brand} className="pic_width"></img></li>
-                    <li><img src="https://th.bing.com/th/id/OIP.cjUjzALkEKobv8G4Evr6GQHaEK?rs=1&pid=ImgDetMain" alt={car.brand} className="pic_width"></img></li>
                     {car.imageUrls?.map((url, index) => (
                         <li key={index}>
                             {/* src={url} */}
-                            <img src="https://th.bing.com/th/id/OIP.cjUjzALkEKobv8G4Evr6GQHaEK?rs=1&pid=ImgDetMain" className="pic_width" alt={`Car ${index}`} />
+                            <img src={url} className="pic_width" alt={`Car ${index}`} />
                         </li>
                     ))}
                 </ul>

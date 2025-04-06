@@ -3,7 +3,9 @@ import "../Styles/Posting.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import postCarListing from "../API/PostCars"
+import { supabase } from "../API/supabaseClient";
 import NavBar from "../components/NavBar";
+
 
 
 const carModels = {
@@ -83,9 +85,7 @@ function Posting() {
         "price": 0,
         "negotiable": undefined,
         "description": "",
-        "imageUrls": [
-            ""
-        ],
+        "imageUrls": [],
         "location": "",
         "createdAt": "",
         "user": {
@@ -128,38 +128,66 @@ function Posting() {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
+    const handleFileChange = async (e) => {
+        const files = e.target.files;
+        const urls = [];
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
+            const filePath = `img-bucket/${fileName}`;
+
+            const { error } = await supabase.storage
+                .from('img-bucket') // tavo Supabase bucket pavadinimas
+                .upload(filePath, file);
+
+            if (error) {
+                console.error("Failed to upload file:", error);
+            } else {
+                const { data: publicUrlData } = supabase.storage
+                    .from('img-bucket')
+                    .getPublicUrl(filePath);
+                urls.push(publicUrlData.publicUrl);
+            }
+        }
+
+        setFormData((prev) => ({
+            ...prev,
+            imageUrls: [...prev.imageUrls, ...urls]
+        }));
+    };
+
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value, type, checked, files } = e.target;
         let newValue = value;
         if (type === "checkbox") {
             newValue = checked;
         } else if (name === "accidentHistory" || name === "negotiable") {
-            newValue = value === "true"; // convert string to boolean
-
+            newValue = value === "true";
+        } else if (type === "file") {
+            newValue = Array.from(files); // Handle file input
         }
         setFormData({
             ...formData,
             [name]: newValue,
         });
-
-
-        
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const userId = localStorage.getItem("userId"); // Retrieve user ID from local storage
+        const userId = localStorage.getItem("userId");
         if (!userId) {
             console.error("User ID not found. Please log in.");
             return;
         }
-        console.log(userId)
+
         const isValid = validateForm();
         if (!isValid) {
-            return; // Don't proceed if validation fails
+            return;
         }
-        // Ensure correct data format
+
         const updatedFormData = {
             ...formData,
             user: { id: userId }, // Ensure ID is a number
@@ -183,7 +211,7 @@ function Posting() {
         } catch (error) {
             console.error("Failed to post listing:", error);
         }
-        setShowConfirmation(true); // Show confirmation popup instead of submitting
+        setShowConfirmation(true);
     };
 
     const [selectedCar, setSelectedCar] = useState("");
@@ -193,12 +221,6 @@ function Posting() {
         <div>
             <NavBar className="NavBar" />
         <form className="main" onSubmit={handleSubmit}>
-            {/* BUTTON */}
-            <div className="form-actions">
-                <Link to="/" className="cancel-btn">Atšaukti</Link>
-                <button type="submit" className="submit-btn">Įkelti</button>
-            </div>
-
             {/* BRAND */}
             <div className="select-group">
                 <label htmlFor="brand">Markė</label>
@@ -450,6 +472,17 @@ function Posting() {
             <div className="form-actions">
                 <Link to="/" className="cancel-btn">Atšaukti</Link>
                 <button type="submit" className="submit-btn">Įkelti</button>
+            </div>
+
+            <div className="input-group">
+                <label htmlFor="images">Upload Images:</label>
+                <input
+                    type="file"
+                    id="images"
+                    multiple
+                    accept="image/*"
+                    onChange={handleFileChange}
+                />
             </div>
 
             {showConfirmation && (
