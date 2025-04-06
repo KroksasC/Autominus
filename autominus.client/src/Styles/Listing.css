@@ -32,6 +32,17 @@ ul {
     align-items: flex-start;
 }
 
+
+.car-post-header {
+    padding-left: 16px;
+    line-height: 20px;
+}
+
+.desription {
+    font-weight: bold;
+}
+
+
 .item_width {
     width: 100vw;
     max-width: 600px;

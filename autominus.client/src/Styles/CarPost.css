@@ -1,47 +1,79 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 .car-post {
-    background-color: cornflowerblue;
-    margin: 30px 50px;
+    background-color: #4a90e2;
+    margin: 20px 50px;
     border-radius: 50px;
-    border: 5px solid black;
+    border: 3px solid #2a70c0; 
     padding: 10px;
     display: flex;
     justify-content: space-between;
-    height: 400px;
+    height: 200px;
+    width: 600px;
     color: white;
-    font-weight: 1000;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+
+
 }
 
+
+/* Hover effects */
+.car-post:hover {
+    background-color: #3a7bc8;
+    transform: translateY(-3px); 
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    border-color: #1a60b0; 
+}
+
+/* Image styling */
 .car-post > img {
     border-radius: 50px;
+    height: 175px;
+    width: auto;
+    object-fit: cover; 
+    border: 2px solid white;
+    transition: all 0.3s ease;
 }
 
+.car-post-image-text
+{
+    align-items: center;
+}
+
+.car-post:hover > img {
+    transform: scale(1.10); /* Slight zoom on hover */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Text container */
+.info {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+/* Text elements */
 .brand {
-    font-size: 5rem;
+    font-size: 2.5rem;
+    margin-bottom: 5px;
 }
 
 .model {
-    font-size: 3rem;
+    font-size: 2rem;
+    margin-bottom: 5px;
 }
 
 .year {
-    font-size: 2rem;
+    font-size: 1.5rem;
+    margin-bottom: 5px;
 }
 
 .price {
     font-size: 2rem;
-    color: green;
-}
-
-.info {
-    margin-left: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    padding: 20px;
+    color: #4CAF50; /* Modern green */
+    font-weight: bold;
+    margin-top: 10px;
 }

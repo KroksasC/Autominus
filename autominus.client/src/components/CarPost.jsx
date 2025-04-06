@@ -15,7 +15,8 @@ function CarPost({ car }) {
                     <p className="year">{car.year}</p>
                     <p className="price">{car.price}&euro;</p>
                 </div>
-                <img src={carImage} alt={`${car.brand} ${car.model}`} />
+                <img src={carImage} alt= {`Nėra įkelto 
+                paveikslėlio :/`} />
             </div>
         </Link>
     );

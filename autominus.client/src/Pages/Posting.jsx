@@ -1,62 +1,64 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import "../Styles/Posting.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import postCarListing from "../API/PostCars"
 import { supabase } from "../API/supabaseClient";
+import NavBar from "../components/NavBar";
+
 
 
 const carModels = {
-    acura: ["ILX", "MDX", "NSX", "RDX", "TLX", "RLX", "ZDX", "Integra", "Legend"],
-    "alfa-romeo": ["Giulia", "Stelvio", "4C Spider", "4C Coupe", "Tonale", "8C Competizione", "Brera", "MiTo"],
-    "aston-martin": ["DB11", "Vantage", "DBS Superleggera", "Rapide", "Vanquish", "DBX", "One-77", "Cygnet"],
-    audi: ["A3", "A4", "A5", "Q5", "Q7", "R8", "A6", "A7", "Q3", "Q8", "RS5", "S3", "TT", "E-Tron GT"],
-    bentley: ["Bentayga", "Continental GT", "Flying Spur", "Mulsanne", "Azure", "Brooklands", "Arnage"],
-    bmw: ["X1", "X3", "X5", "M3", "M4", "X7", "M8", "Z4", "i4", "iX", "i8", "7 Series"],
-    bugatti: ["Chiron", "Divo", "Veyron", "Bolide", "Centodieci", "La Voiture Noire"],
-    buick: ["Enclave", "Encore", "Regal", "Lucerne", "LaCrosse", "Verano", "Park Avenue"],
-    cadillac: ["CT4", "CT5", "Escalade", "XT4", "XT5", "XT6", "CTS", "XLR", "SRX"],
-    chevrolet: ["Camaro", "Corvette", "Malibu", "Silverado", "Tahoe", "Impala", "Trailblazer", "Suburban", "Bolt EV"],
-    chrysler: ["300", "Pacifica", "Aspen", "Sebring", "Crossfire", "PT Cruiser"],
-    citroen: ["C3", "C4", "C5 Aircross", "Berlingo", "DS3", "DS4", "C6", "Saxo"],
-    dodge: ["Challenger", "Charger", "Durango", "Journey", "Dart", "Ram", "Viper", "Magnum"],
-    ferrari: ["488", "F8 Tributo", "Portofino", "SF90 Stradale", "812 Superfast", "California", "Roma", "LaFerrari"],
-    fiat: ["500", "Panda", "Tipo", "Bravo", "Uno", "124 Spider", "Doblo"],
-    ford: ["Bronco", "Escape", "Explorer", "F-150", "Mustang", "Focus", "Fusion", "Edge", "Expedition", "GT"],
-    genesis: ["G70", "G80", "G90", "GV70", "GV80"],
-    gmc: ["Acadia", "Sierra", "Yukon", "Canyon", "Terrain", "Envoy", "Savana"],
-    honda: ["Accord", "Civic", "CR-V", "Pilot", "Ridgeline", "Odyssey", "HR-V", "Fit", "Element"],
-    hyundai: ["Elantra", "Kona", "Tucson", "Santa Fe", "Sonata", "Palisade", "Veloster", "Ioniq"],
-    infiniti: ["Q50", "Q60", "QX80", "QX60", "QX50", "G37", "FX35", "EX37"],
-    jaguar: ["E-PACE", "F-PACE", "XE", "XF", "XJ", "I-PACE", "F-TYPE"],
-    jeep: ["Cherokee", "Wrangler", "Grand Cherokee", "Compass", "Renegade", "Gladiator", "Patriot"],
-    kia: ["Forte", "Sorento", "Sportage", "Telluride", "Seltos", "Optima", "Cadenza", "Rio"],
-    lamborghini: ["Aventador", "Huracan", "Urus", "Gallardo", "Murcielago", "Diablo", "Countach", "Reventon"],
-    "land-rover": ["Defender", "Discovery", "Range Rover", "Evoque", "Velar", "Freelander"],
-    lexus: ["ES", "RX", "LX", "IS", "GS", "NX", "GX", "LC", "RC"],
-    lincoln: ["Aviator", "Corsair", "Navigator", "MKZ", "MKX", "Continental", "Town Car"],
-    maserati: ["Ghibli", "Levante", "Quattroporte", "MC20", "GranTurismo", "GranCabrio"],
-    mazda: ["CX-5", "MX-5 Miata", "Mazda3", "Mazda6", "CX-9", "CX-30", "RX-8", "Tribute"],
-    mclaren: ["570S", "720S", "Artura", "765LT", "P1", "MP4-12C", "650S"],
-    mercedes: ["A-Class", "C-Class", "E-Class", "GLA", "GLE", "S-Class", "AMG GT", "SL", "GLC"],
-    mini: ["Clubman", "Countryman", "Hardtop", "Cooper", "Paceman", "Roadster"],
-    mitsubishi: ["Eclipse Cross", "Outlander", "Mirage", "Lancer", "Pajero", "Galant", "Montero"],
-    nissan: ["Altima", "GT-R", "Rogue", "Sentra", "Titan", "370Z", "Maxima", "Murano", "Xterra"],
-    pagani: ["Huayra", "Zonda", "Utopia"],
-    peugeot: ["208", "3008", "5008", "2008", "508", "RCZ"],
-    polestar: ["Polestar 1", "Polestar 2", "Polestar 3"],
-    porsche: ["911", "Cayenne", "Taycan", "Panamera", "Macan", "718 Boxster", "918 Spyder"],
-    ram: ["1500", "2500", "3500", "Dakota", "ProMaster"],
-    renault: ["Clio", "Megane", "Captur", "Talisman", "Kadjar", "Zoe"],
-    "rolls-royce": ["Cullinan", "Ghost", "Phantom", "Dawn", "Wraith", "Spectre"],
-    saab: ["9-3", "9-5", "900", "9000"],
-    smart: ["EQ Fortwo", "EQ Forfour", "Roadster"],
-    subaru: ["Forester", "Outback", "WRX", "Impreza", "Legacy", "BRZ", "Crosstrek"],
-    suzuki: ["Swift", "Vitara", "Jimny", "SX4", "Baleno", "Celerio", "Alto"],
-    tesla: ["Model 3", "Model S", "Model X", "Model Y", "Roadster", "Cybertruck"],
-    toyota: ["Camry", "Corolla", "Highlander", "Rav4", "Supra", "Avalon", "Tacoma", "Tundra", "Sienna"],
-    volkswagen: ["Atlas", "Golf", "Jetta", "Passat", "Tiguan", "Arteon", "Polo", "Beetle"],
-    volvo: ["S60", "XC40", "XC90", "V60", "S90", "XC60", "C40 Recharge"]
+    Acura: ["ILX", "MDX", "NSX", "RDX", "TLX", "RLX", "ZDX", "Integra", "Legend"],
+    "Alfa Romeo": ["Giulia", "Stelvio", "4C Spider", "4C Coupe", "Tonale", "8C Competizione", "Brera", "MiTo"],
+    "Aston Martin": ["DB11", "Vantage", "DBS Superleggera", "Rapide", "Vanquish", "DBX", "One-77", "Cygnet"],
+    Audi: ["A3", "A4", "A5", "Q5", "Q7", "R8", "A6", "A7", "Q3", "Q8", "RS5", "S3", "TT", "E-Tron GT"],
+    Bentley: ["Bentayga", "Continental GT", "Flying Spur", "Mulsanne", "Azure", "Brooklands", "Arnage"],
+    BMW: ["X1", "X3", "X5", "M3", "M4", "X7", "M8", "Z4", "i4", "iX", "i8", "7 Series"],
+    Bugatti: ["Chiron", "Divo", "Veyron", "Bolide", "Centodieci", "La Voiture Noire"],
+    Buick: ["Enclave", "Encore", "Regal", "Lucerne", "LaCrosse", "Verano", "Park Avenue"],
+    Cadillac: ["CT4", "CT5", "Escalade", "XT4", "XT5", "XT6", "CTS", "XLR", "SRX"],
+    Chevrolet: ["Camaro", "Corvette", "Malibu", "Silverado", "Tahoe", "Impala", "Trailblazer", "Suburban", "Bolt EV"],
+    Chrysler: ["300", "Pacifica", "Aspen", "Sebring", "Crossfire", "PT Cruiser"],
+    Citroen: ["C3", "C4", "C5 Aircross", "Berlingo", "DS3", "DS4", "C6", "Saxo"],
+    Dodge: ["Challenger", "Charger", "Durango", "Journey", "Dart", "Ram", "Viper", "Magnum"],
+    Ferrari: ["488", "F8 Tributo", "Portofino", "SF90 Stradale", "812 Superfast", "California", "Roma", "LaFerrari"],
+    Fiat: ["500", "Panda", "Tipo", "Bravo", "Uno", "124 Spider", "Doblo"],
+    Ford: ["Bronco", "Escape", "Explorer", "F-150", "Mustang", "Focus", "Fusion", "Edge", "Expedition", "GT"],
+    Genesis: ["G70", "G80", "G90", "GV70", "GV80"],
+    GMC: ["Acadia", "Sierra", "Yukon", "Canyon", "Terrain", "Envoy", "Savana"],
+    Honda: ["Accord", "Civic", "CR-V", "Pilot", "Ridgeline", "Odyssey", "HR-V", "Fit", "Element"],
+    Hyundai: ["Elantra", "Kona", "Tucson", "Santa Fe", "Sonata", "Palisade", "Veloster", "Ioniq"],
+    Infiniti: ["Q50", "Q60", "QX80", "QX60", "QX50", "G37", "FX35", "EX37"],
+    Jaguar: ["E-PACE", "F-PACE", "XE", "XF", "XJ", "I-PACE", "F-TYPE"],
+    Jeep: ["Cherokee", "Wrangler", "Grand Cherokee", "Compass", "Renegade", "Gladiator", "Patriot"],
+    Kia: ["Forte", "Sorento", "Sportage", "Telluride", "Seltos", "Optima", "Cadenza", "Rio"],
+    Lamborghini: ["Aventador", "Huracan", "Urus", "Gallardo", "Murcielago", "Diablo", "Countach", "Reventon"],
+    "Land Rover": ["Defender", "Discovery", "Range Rover", "Evoque", "Velar", "Freelander"],
+    Lexus: ["ES", "RX", "LX", "IS", "GS", "NX", "GX", "LC", "RC"],
+    Lincoln: ["Aviator", "Corsair", "Navigator", "MKZ", "MKX", "Continental", "Town Car"],
+    Maserati: ["Ghibli", "Levante", "Quattroporte", "MC20", "GranTurismo", "GranCabrio"],
+    Mazda: ["CX-5", "MX-5 Miata", "Mazda3", "Mazda6", "CX-9", "CX-30", "RX-8", "Tribute"],
+    McLaren: ["570S", "720S", "Artura", "765LT", "P1", "MP4-12C", "650S"],
+    Mercedes: ["A-Class", "C-Class", "E-Class", "GLA", "GLE", "S-Class", "AMG GT", "SL", "GLC"],
+    Mini: ["Clubman", "Countryman", "Hardtop", "Cooper", "Paceman", "Roadster"],
+    Mitsubishi: ["Eclipse Cross", "Outlander", "Mirage", "Lancer", "Pajero", "Galant", "Montero"],
+    Nissan: ["Altima", "GT-R", "Rogue", "Sentra", "Titan", "370Z", "Maxima", "Murano", "Xterra"],
+    Pagani: ["Huayra", "Zonda", "Utopia"],
+    Peugeot: ["208", "3008", "5008", "2008", "508", "RCZ"],
+    Polestar: ["Polestar 1", "Polestar 2", "Polestar 3"],
+    Porsche: ["911", "Cayenne", "Taycan", "Panamera", "Macan", "718 Boxster", "918 Spyder"],
+    Ram: ["1500", "2500", "3500", "Dakota", "ProMaster"],
+    Renault: ["Clio", "Megane", "Captur", "Talisman", "Kadjar", "Zoe"],
+    "Rolls Royce": ["Cullinan", "Ghost", "Phantom", "Dawn", "Wraith", "Spectre"],
+    Saab: ["9-3", "9-5", "900", "9000"],
+    Smart: ["EQ Fortwo", "EQ Forfour", "Roadster"],
+    Subaru: ["Forester", "Outback", "WRX", "Impreza", "Legacy", "BRZ", "Crosstrek"],
+    Suzuki: ["Swift", "Vitara", "Jimny", "SX4", "Baleno", "Celerio", "Alto"],
+    Tesla: ["Model 3", "Model S", "Model X", "Model Y", "Roadster", "Cybertruck"],
+    Toyota: ["Camry", "Corolla", "Highlander", "Rav4", "Supra", "Avalon", "Tacoma", "Tundra", "Sienna"],
+    Volkswagen: ["Atlas", "Golf", "Jetta", "Passat", "Tiguan", "Arteon", "Polo", "Beetle"],
+    Volvo: ["S60", "XC40", "XC90", "V60", "S90", "XC60", "C40 Recharge"]
 };
 
 function Posting() {
@@ -106,21 +108,21 @@ function Posting() {
             if (!formData[field]) {
                 // Create display names by splitting camelCase and capitalizing
                 let displayName = field;
-                if (field === 'fuelType') displayName = 'Fuel type';
-                else if (field === 'horsepower') displayName = 'Horse power';
-                else if (field === 'bodyType') displayName = 'Body type';
+                if (field === 'fuelType') displayName = 'Kuro tipas';
+                else if (field === 'horsepower') displayName = 'Arklio galia';
+                else if (field === 'bodyType') displayName = 'Kėbulo tipas';
                 else displayName = field.charAt(0).toUpperCase() + field.slice(1);
 
-                newErrors[field] = `${displayName} is required`;
+                newErrors[field] = `${displayName} yra privalomas`;
             }
         });
 
         // Special validation for radio buttons
         if (formData.accidentHistory === undefined) {
-            newErrors.accidentHistory = "Please select accident history";
+            newErrors.accidentHistory = "Pasirinkite avarijų istoriją";
         }
         if (formData.negotiable === undefined) {
-            newErrors.negotiable = "Please select negotiable option";
+            newErrors.negotiable = "Pasirinkite ar kaina derinama";
         }
 
         setErrors(newErrors);
@@ -216,16 +218,17 @@ function Posting() {
     const years = Array.from({ length: 2025 - 1920 + 1 }, (_, index) => 1920 + index);
 
     return (
+        <div>
+            <NavBar className="NavBar" />
         <form className="main" onSubmit={handleSubmit}>
-
             {/* BRAND */}
             <div className="select-group">
-                <label htmlFor="brand">Car Brand</label>
+                <label htmlFor="brand">Markė</label>
                 <select id="brand" name="brand" onChange={(e) => {
                     setSelectedCar(e.target.value);
                     handleChange(e);
                 }}>
-                    <option value="">--Select a brand--</option>
+                    <option value="">--Pasirinkite markę--</option>
                     {Object.keys(carModels).map((car) => (
                         <option key={car} value={car}>{car.charAt(0).toUpperCase() + car.slice(1)}</option>
                     ))}
@@ -235,9 +238,9 @@ function Posting() {
 
             {/* MODEL */}
             <div className="select-group">
-                <label htmlFor="model">Car Model</label>
+                <label htmlFor="model">Modelis</label>
                 <select id="model" name="model" onChange={handleChange} value={formData.model}>
-                    <option value="">--Select a model--</option>
+                    <option value="">--Pasirinkite modelį--</option>
                     {selectedCar &&
                         carModels[selectedCar]?.map((model) => (
                             <option key={model} value={model}>{model}</option>
@@ -248,9 +251,9 @@ function Posting() {
 
             {/* YEAR */}
             <div className="select-group">
-                <label htmlFor="year">Car Year</label>
+                <label htmlFor="year">Pirma registracija</label>
                 <select id="year" name="year" onChange={handleChange} value={formData.year}>
-                    <option value="">--Select a year--</option>
+                    <option value="">--Pasirinkite metus--</option>
                     {years.map((year) => (
                         <option key={year} value={year}>
                             {year}
@@ -262,135 +265,139 @@ function Posting() {
 
             {/* MILEAGE */}
             <div className="input-group">
-                <label htmlFor="mileage">Mileage (in miles):</label>
-                <input type="number" id="mileage" name="mileage" placeholder="Enter mileage" onChange={handleChange} />
+                <label htmlFor="mileage">Rida:</label>
+                <input type="number" id="mileage" name="mileage" placeholder="Įveskite ridą" onChange={handleChange} />
             </div>
 
             {/* FUEL TYPE */}
             <div className="select-group">
-                <label htmlFor="fuelType">Fuel Type</label>
+                <label htmlFor="fuelType">Kuro tipas</label>
                 <select id="fuelType" name="fuelType" onChange={handleChange} value={formData.fuelType}>
-                    <option value="">--Select a fuel type--</option>
-                    <option value="petrol">Petrol</option>
-                    <option value="diesel">Diesel</option>
-                    <option value="electric">Electric</option>
-                    <option value="hybrid">Hybrid</option>
+                    <option value="">--Pasirinkite kuro tipą--</option>
+                    <option value="Benzinas">Benzinas</option>
+                    <option value="Dyzelinas">Dyzelinas</option>
+                    <option value="Elektra">Elektra</option>
+                    <option value="Benzinas/Dujos">Benzinas/Dujos</option>
+                    <option value="Benzinas/Elektra">Benzinas/Elektra</option>
+                    <option value="Dyzelinas/Elektra">Dyzelinas/Elektra</option>
+                    <option value="Benzinas/Elektra/Dujos">Benzinas/Elektra/Dujos</option>
+                    <option value="Vandenilis">Vandenilis</option>
+                    <option value="Kita">Kita</option>
                 </select>
                 {errors.fuelType && <span className="error-message">{errors.fuelType}</span>}
             </div>
 
             {/* TRANSMISSION */}
             <div className="select-group">
-                <label htmlFor="transmission">Transmission</label>
+                <label htmlFor="transmission">Pavarų dėžė</label>
                 <select id="transmission" name="transmission" onChange={handleChange} value={formData.transmission}>
-                    <option value="">--Select transmission--</option>
-                    <option value="manual">Manual</option>
-                    <option value="automatic">Automatic</option>
+                    <option value="">--Pasirinkite pavarų dėžę--</option>
+                    <option value="Mechaninė">Mechaninė</option>
+                    <option value="Automatinė">Automatinė</option>
                 </select>
                 {errors.transmission && <span className="error-message">{errors.transmission}</span>}
             </div>
 
             {/* ENGINE CAPACITY */}
             <div className="input-group">
-                <label htmlFor="engineCapacity">Engine Capacity (in liters or cc):</label>
-                <input type="number" id="engineCapacity" name="engineCapacity" placeholder="Enter engine capacity" step="0.1" onChange={handleChange}/>
+                <label htmlFor="engineCapacity">Variklio tūris</label>
+                <input type="number" id="engineCapacity" name="engineCapacity" placeholder="Įveskite variklio tūrį" step="0.1" onChange={handleChange}/>
             </div>
 
             {/* HORSE POWER */}
             <div className="input-group">
-                <label htmlFor="horsepower">Horse Power (HP):</label>
-                <input type="number" id="horsepower" name="horsepower" placeholder="Enter horsepower" onChange={handleChange} />
+                <label htmlFor="horsepower">Arklio galia (HP)</label>
+                <input type="number" id="horsepower" name="horsepower" placeholder="Įveskite arklio galią" onChange={handleChange} />
                 {errors.horsepower && <span className="error-message">{errors.horsepower}</span>}
             </div>
 
             {/* DRIVETRAIN */}
             <div className="select-group">
-                <label htmlFor="drivetrain">Drivetrain</label>
+                <label htmlFor="drivetrain">Varantieji ratai</label>
                 <select id="drivetrain" name="drivetrain" onChange={handleChange} value={formData.drivetrain}>
-                    <option value="">--Select drivetrain--</option>
-                    <option value="awd">All-Wheel Drive (AWD)</option>
-                    <option value="rwd">Rear-Wheel Drive (RWD)</option>
-                    <option value="fwd">Front-Wheel Drive (FWD)</option>
-                    <option value="4wd">Four-Wheel Drive (4WD)</option>
+                    <option value="">--Pasirinkite varančiuosius ratus--</option>
+                    <option value="Visi varantys (4x4)">Visi varantys (4x4)</option>
+                    <option value="Galiniai">Galiniai</option>
+                    <option value="Priekiniai">Priekiniai</option>
                 </select>
             </div>
 
             {/* DOORS */}
             <div className="input-group">
-                <label htmlFor="doors">Number of Doors:</label>
-                <input type="number" id="doors" name="doors" placeholder="Enter number of doors" onChange={handleChange}  />
+                <label htmlFor="doors">Durų skaičius</label>
+                <input type="number" id="doors" name="doors" placeholder="Įveskite durų skaičių" onChange={handleChange}  />
             </div>
 
             {/* SEATS */}
             <div className="input-group">
-                <label htmlFor="seats">Number of Seats:</label>
-                <input type="number" id="seats" name="seats" placeholder="Enter number of seats" onChange={handleChange} />
+                <label htmlFor="seats">Sėdimų vietų skaičius:</label>
+                <input type="number" id="seats" name="seats" placeholder="Įveskite sėdimų vietų skaičių" onChange={handleChange} />
             </div>
 
             {/* BODY TYPE */}
             <div className="select-group">
-                <label htmlFor="bodyType">Body Type</label>
+                <label htmlFor="bodyType">Kėbulo tipas</label>
                 <select id="bodyType" name="bodyType" onChange={handleChange} value={formData.bodyType}>
-                    <option value="">--Select body type--</option>
-                    <option value="sedan">Sedan</option>
-                    <option value="suv">SUV</option>
-                    <option value="coupe">Coupe</option>
-                    <option value="hatchback">Hatchback</option>
-                    <option value="convertible">Convertible</option>
-                    <option value="wagon">Wagon</option>
-                    <option value="pickup">Pickup</option>
-                    <option value="minivan">Minivan</option>
-                    <option value="roadster">Roadster</option>
+                    <option value="">--Pasirinkite kėbulo tipą--</option>
+                    <option value="Sedanas">Sedanas</option>
+                    <option value="Visureigis / Krosoveris">Visureigis / Krosoveris</option>
+                    <option value="Kupė (Coupe)">Kupė (Coupe)</option>
+                    <option value="Hečbekas">Hečbekas</option>
+                    <option value="Kabrioletas">Kabrioletas</option>
+                    <option value="Universalas">Universalas</option>
+                    <option value="Pikapas">Pikapas</option>
+                    <option value="Keleivinis mikroautobusas">Keleivinis mikroautobusas</option>
+                    <option value="Rodsteris">Rodsteris</option>
                 </select>
                 {errors.bodyType && <span className="error-message">{errors.bodyType}</span>}
             </div>
 
             {/* COLOR */}
             <div className="select-group">
-                <label htmlFor="color">Color</label>
+                <label htmlFor="color">Spalva</label>
                 <select id="color" name="color" onChange={handleChange} value={formData.color}>
-                    <option value="">--Select color--</option>
-                    <option value="red">Red</option>
-                    <option value="blue">Blue</option>
-                    <option value="black">Black</option>
-                    <option value="white">White</option>
-                    <option value="silver">Silver</option>
-                    <option value="gray">Gray</option>
-                    <option value="green">Green</option>
-                    <option value="yellow">Yellow</option>
-                    <option value="orange">Orange</option>
-                    <option value="brown">Brown</option>
-                    <option value="purple">Purple</option>
+                    <option value="">--Pasirinkite spalvą--</option>
+                    <option value="Raudona">Raudona</option>
+                    <option value="Mėlyna">Mėlyna</option>
+                    <option value="Juoda">Juoda</option>
+                    <option value="Balta">Balta</option>
+                    <option value="Sidabrinė">Sidabrinė</option>
+                    <option value="Pilka">Pilka</option>
+                    <option value="Žalia">Žalia</option>
+                    <option value="Geltona">Geltona</option>
+                    <option value="Oranžinė">Oranžinė</option>
+                    <option value="Ruda">Ruda</option>
+                    <option value="Violetinė">Violetinė</option>
                 </select>
             </div>
 
             {/* VIN */}
             <div className="input-group">
-                <label htmlFor="vin">VIN (Vehicle Identification Number):</label>
-                <input type="text" id="vin" name="vin" placeholder="Enter VIN" onChange={handleChange} value={formData.vin} />
+                <label htmlFor="vin">VIN numeris</label>
+                <input type="text" id="vin" name="vin" placeholder="Įveskite VIN numerį" onChange={handleChange} value={formData.vin} />
             </div>
 
             {/* Registration Number */}
             <div className="input-group">
-                <label htmlFor="registrationNumber">Registration Number:</label>
-                <input type="text" id="registrationNumber" name="registrationNumber" placeholder="Enter registration number" onChange={handleChange} />
+                <label htmlFor="registrationNumber">Registracijos numeris</label>
+                <input type="text" id="registrationNumber" name="registrationNumber" placeholder="Įveskite registracijos numerį" onChange={handleChange} />
             </div>
 
             {/* CONDITION */}
             <div className="select-group">
-                <label htmlFor="condition">Condition</label>
+                <label htmlFor="condition">Būklė</label>
                 <select id="condition" name="condition" onChange={handleChange} value={formData.condition}>
-                    <option value="">--Select condition--</option>
-                    <option value="new">New</option>
-                    <option value="used">Used</option>
-                    <option value="certifiedPreOwned">Certified Pre-Owned</option>
+                    <option value="">--Pasirinkite būklę--</option>
+                    <option value="Nauja">Nauja</option>
+                    <option value="Naudota">Naudota</option>
+                    <option value="Sertifikuotas naudotas">Sertifikuotas naudotas</option>
                 </select>
                 {errors.condition && <span className="error-message">{errors.condition}</span>}
             </div>
 
             {/* Accident History */}
             <div className="input-group">
-                <label>Has the car been in any accidents?</label>
+                <label>Ar automobilis buvo daužtas?</label>
 
                 <div className="radio-group" style={{ display: "flex", gap: "10px", alignItems: "center" }}>
                     <input
@@ -401,7 +408,7 @@ function Posting() {
                         onChange={handleChange}
                         checked={formData.accidentHistory === true}  // compare to boolean true
                     />
-                    <label htmlFor="accidentYes">Yes</label>
+                    <label htmlFor="accidentYes">Taip</label>
                     <input
                         type="radio"
                         id="accidentNo"
@@ -410,27 +417,27 @@ function Posting() {
                         onChange={handleChange}
                         checked={formData.accidentHistory === false} // compare to boolean false
                     />
-                    <label htmlFor="accidentNo">No</label>
+                    <label htmlFor="accidentNo">Ne</label>
                 </div>
                 {errors.accidentHistory && <span className="error-message">{errors.accidentHistory}</span>}
             </div>
 
             {/* Technical Inspection Date */}
             <div className="input-group">
-                <label htmlFor="technicalInspectionValidUntil">Technical Inspection Valid Until:</label>
+                <label htmlFor="technicalInspectionValidUntil">Tech. apžiūra iki</label>
                 <input type="date" id="technicalInspectionValidUntil" name="technicalInspectionValidUntil" onChange={handleChange}  />
             </div>
 
             {/* PRICE */}
             <div className="input-group">
-                <label htmlFor="price">Price:</label>
-                <input type="number" id="price" name="price" placeholder="Enter price" onChange={handleChange} />
+                <label htmlFor="price">Kaina</label>
+                <input type="number" id="price" name="price" placeholder="Įveskite kainą" onChange={handleChange} />
                 {errors.price && <span className="error-message">{errors.price}</span>}
             </div>
 
             {/* Negotiable */}
             <div className="input-group">
-                <label>Is the price negotiable?</label>
+                <label>Ar kaina derinama?</label>
 
                 <div className="radio-group" style={{ display: "flex", gap: "10px", alignItems: "center" }}>
                     <input
@@ -441,7 +448,7 @@ function Posting() {
                         onChange={handleChange}
                         checked={formData.negotiable === true}  // compare to boolean true
                     />
-                    <label htmlFor="negotiableYes">Yes</label>
+                    <label htmlFor="negotiableYes">Taip</label>
                     <input
                         type="radio"
                         id="negotiableNo"
@@ -450,21 +457,21 @@ function Posting() {
                         onChange={handleChange}
                         checked={formData.negotiable === false} // compare to boolean false
                     />
-                    <label htmlFor="negotiableNo">No</label>
+                    <label htmlFor="negotiableNo">Ne</label>
                 </div>
                 {errors.negotiable && <span className="error-message">{errors.negotiable}</span>}
             </div>
 
             {/* DESCRIPTION */}
             <div className="input-group">
-                <label htmlFor="description">Description:</label>
-                <textarea id="description" name="description" placeholder="Enter description" onChange={handleChange}></textarea>
+                <label className="car_posting_header">Aprašymas:</label>
+                <textarea id="description" name="description" placeholder="Įveskite aprašymą" onChange={handleChange}></textarea>
             </div>
 
             {/* BUTTON */}
             <div className="form-actions">
-                <Link to="/" className="cancel-btn">Cancel</Link>
-                <button type="submit" className="submit-btn">Post</button>
+                <Link to="/" className="cancel-btn">Atšaukti</Link>
+                <button type="submit" className="submit-btn">Įkelti</button>
             </div>
 
             <div className="input-group">
@@ -481,28 +488,29 @@ function Posting() {
             {showConfirmation && (
                 <div className="confirmation-popup">
                     <div className="popup-content">
-                        <h3>Confirm Submission</h3>
-                        <p>Are you sure you want to post this car listing?</p>
+                        <h3>Patvirtinkite pateikimą</h3>
+                        <p>Ar tikrai norite įkelti šį automobilio skelbimą?</p>
                         <div className="popup-buttons">
                             <button
                                 type="button"
                                 className="cancel-btn"
                                 onClick={() => setShowConfirmation(false)}
                             >
-                                Cancel
+                                Atšaukti
                             </button>
                             <button
                                 type="button"
                                 className="submit-btn"
                                 onClick={() => navigate("/")}  // Just navigate directly
                             >
-                                Confirm
+                                Patvirtinti
                             </button>
                         </div>
                     </div>
                 </div>
             )}
-        </form>
+            </form>
+        </div>
     );
 }
 
