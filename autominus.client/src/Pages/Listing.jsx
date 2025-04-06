@@ -134,8 +134,8 @@ function Listing() {
                     </table>
                     <br></br>
                     <div className="item_width">
-                        <p><strong>Aprašymas</strong></p>
-                        <p>{car.description} </p>
+                        <div className="car-post-header">Aprašymas
+                        <p>{car.description} </p></div>
                     </div>
                     <br></br>
                     <UserCard user={car.user} />

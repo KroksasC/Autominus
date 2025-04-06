@@ -442,7 +442,7 @@ function Posting() {
 
             {/* DESCRIPTION */}
             <div className="input-group">
-                <label htmlFor="description">Aprašymas:</label>
+                <label className="car_posting_header">Aprašymas:</label>
                 <textarea id="description" name="description" placeholder="Įveskite aprašymą" onChange={handleChange}></textarea>
             </div>
 

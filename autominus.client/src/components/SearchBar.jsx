@@ -19,7 +19,7 @@ function SearchBar({ onSearch }) {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <button type="submit">Ieškoti</button>
+                <button type="submit"><h3>Ieškoti</h3></button>
             </form>
         </div>
     );
