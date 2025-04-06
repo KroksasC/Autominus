@@ -56,7 +56,7 @@ function Listing() {
                                 <th colSpan="2">
                                     <div className="table-header">
                                         <h1>{car.brand} {car.model} {car.year}</h1>
-                                        <EditDeleteButtons />
+                                        <EditDeleteButtons car={car} />
                                     </div>
                                 </th>
                             </tr>

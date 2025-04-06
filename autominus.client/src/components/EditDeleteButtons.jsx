@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import DeleteConfirmation from "../components/DeleteConfirmation"; 
 import { useState } from "react";
 
-function EditDeleteButtons() {
+function EditDeleteButtons({ car }) {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     return (
         <div>
@@ -14,7 +14,11 @@ function EditDeleteButtons() {
                 <tbody>
                     <tr>
                         <td>
-                            <Link to={`/`} style={{ textDecoration: 'none' }}>
+                            <Link
+                                to="/edit"
+                                state={{ car }}
+                                style={{ textDecoration: 'none' }}
+                            >
                                 <img className="Edit" src={EditImg} alt="Redaguoti" />
                             </Link>
                         </td>
