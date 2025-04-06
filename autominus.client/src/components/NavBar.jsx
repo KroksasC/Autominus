@@ -34,7 +34,9 @@ export function NavBar({ onFiltersChange }) {
             )}
 
             <Link to="/" className="Home">
-                <p>AUTOMINUS</p>
+            <h3 className="login-heading"> 
+                <span>AUTOMINUS</span> 
+                </h3>
             </Link>
             <div className="buttons">
                 <Link to="/Posting" className="Post button">

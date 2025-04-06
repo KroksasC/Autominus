@@ -62,7 +62,7 @@ function Register() {
         <div>
             <NavBar className="NavBar" />
         <div className="containerbox">
-            <h3>Registracija</h3>
+        <h3 className="login-heading">Registracija</h3>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="email">El. paštas:</label>

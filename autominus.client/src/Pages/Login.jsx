@@ -68,8 +68,8 @@ function Login() {
         <div>
             <NavBar className="NavBar" />
         <div className="containerbox">
-            <h3>Prisijungti</h3>
-            <form onSubmit={handleSubmit}>
+        <h3 className="login-heading1">Prisijungti</h3>
+        <form onSubmit={handleSubmit}>
                 <div>
                     <label className="forminput" htmlFor="email">
                         El. paštas:
@@ -96,16 +96,18 @@ function Login() {
                         onChange={handleChange}
                     />
                 </div>
-                <div>
-                    <input
-                        type="checkbox"
-                        id="rememberme"
-                        name="rememberme"
-                        checked={rememberme}
-                        onChange={handleChange}
-                    />
-                    <span>Prisiminti mane</span>
-                </div>
+                <div className="checkbox-container">
+  <label htmlFor="rememberme">
+    <input
+      type="checkbox"
+      id="rememberme"
+      name="rememberme"
+      checked={rememberme}
+      onChange={handleChange}
+    />
+    <span>Prisiminti mane</span>
+  </label>
+</div>
                 <div>
                     <button type="submit">Prisijungti</button>
                 </div>
