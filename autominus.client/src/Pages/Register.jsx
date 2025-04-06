@@ -1,7 +1,8 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styles/LoginAndRegistration.css";
 import Swal from 'sweetalert2';
+import NavBar from "../components/NavBar";
 
 function Register() {
     const [email, setEmail] = useState("");
@@ -24,11 +25,11 @@ function Register() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!email || !password || !confirmPassword) {
-            setError("Please fill in all fields.");
+            setError("Užpildykite visus laukus.");
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setError("Please enter a valid email address.");
+            setError("Įveskite tinkamą el. pašto adresą.");
         } else if (password !== confirmPassword) {
-            setError("Passwords do not match.");
+            setError("Slaptažodžiai nesutampa.");
         } else {
             setError("");
             fetch("/register", {
@@ -44,25 +45,27 @@ function Register() {
                 .then((data) => {
                     console.log(data);
                     if (data.ok) {
-                        Swal.fire("Successful register.", 'Your action was successful. Now, login', 'success');
+                        Swal.fire("Registracija sėkminga.", 'Jūs sėkmingai prisiregistravote. Dabar prisijunkite.', 'success');
                         navigate("/l");
                     } else {
-                        Swal.fire('Oops!', 'Something went wrong, try again!', 'error');
+                        Swal.fire('Oops!', 'Įvyko klaida, bandykite dar kartą!', 'error');
                     }
                 })
                 .catch((error) => {
                     console.error(error);
-                    Swal.fire('Oops!', 'Something went wrong, try again!', 'error');
+                    Swal.fire('Oops!', 'Įvyko klaida, bandykite dar kartą!', 'error');
                 });
         }
     };
 
     return (
+        <div>
+            <NavBar className="NavBar" />
         <div className="containerbox">
-            <h3>Register</h3>
+            <h3>Registracija</h3>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="email">Email:</label>
+                    <label htmlFor="email">El. paštas:</label>
                 </div>
                 <div>
                     <input
@@ -74,7 +77,7 @@ function Register() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="password">Password:</label>
+                    <label htmlFor="password">Slaptažodis:</label>
                 </div>
                 <div>
                     <input
@@ -86,7 +89,7 @@ function Register() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="confirmPassword">Confirm Password:</label>
+                    <label htmlFor="confirmPassword">Patvirtinkite slaptažodį:</label>
                 </div>
                 <div>
                     <input
@@ -98,15 +101,16 @@ function Register() {
                     />
                 </div>
                 <div>
-                    <button type="submit">Register</button>
+                    <button type="submit">Registruotis</button>
                 </div>
                 <div>
                     <button type="button" onClick={handleLoginClick}>
-                        Go to Login
+                        Prisijungti
                     </button>
                 </div>
             </form>
             {error && <p className="error">{error}</p>}
+            </div>
         </div>
     );
 }

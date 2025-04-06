@@ -162,7 +162,7 @@ function Home() {
     };
 
     if (isLoading) {
-        return <div className="Home">Loading...</div>;
+        return <div className="Home">Kraunama...</div>;
     }
 
     if (error) {
