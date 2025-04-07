@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import CarPost from "../components/CarPost";
 import NavBar from "../components/NavBar";
 import FetchCars from "../API/FetchCars";
@@ -181,7 +181,7 @@ function Home() {
             <div className="car-posts">
                 {filteredCarList.length === 0 ? (
                     <p style={{ color: 'black' }}>
-                        {searchTerm || filters ? "No cars match your search or filters" : "No cars available"}
+                        {searchTerm || filters ? "No cars match your search or filters" : "Automobilių nėra"}
                     </p>
                 ) : (
                     filteredCarList.map(car => (

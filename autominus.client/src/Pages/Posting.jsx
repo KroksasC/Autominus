@@ -251,7 +251,7 @@ function Posting() {
 
             {/* YEAR */}
             <div className="select-group">
-                <label htmlFor="year">Pirma registracija</label>
+                <label htmlFor="year">Metai</label>
                 <select id="year" name="year" onChange={handleChange} value={formData.year}>
                     <option value="">--Pasirinkite metus--</option>
                     {years.map((year) => (
@@ -265,7 +265,7 @@ function Posting() {
 
             {/* MILEAGE */}
             <div className="input-group">
-                <label htmlFor="mileage">Rida:</label>
+                <label htmlFor="mileage">Rida</label>
                 <input type="number" id="mileage" name="mileage" placeholder="Įveskite ridą" onChange={handleChange} />
             </div>
 
