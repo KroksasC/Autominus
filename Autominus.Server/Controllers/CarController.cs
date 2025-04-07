@@ -37,6 +37,13 @@ namespace Autominus.Server.Controllers
                 return BadRequest();
             }
 
+            var existingCar = await _context.Cars.FindAsync(id);
+            if (existingCar != null)
+            {
+                _context.Entry(existingCar).State = EntityState.Detached;
+            }
+
+
             _context.Cars.Entry(Car).State = EntityState.Modified;
 
             try
