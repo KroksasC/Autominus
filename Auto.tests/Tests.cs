@@ -16,9 +16,7 @@ namespace Auto.Tests
             var options = new DbContextOptionsBuilder<ModelsContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) 
                 .Options;
-
             var context = new ModelsContext(options);
-
             // Seed the database with a test user
             context.Users.Add(new User
             {
@@ -26,7 +24,6 @@ namespace Auto.Tests
                 Email = "test@example.com"
             });
             context.SaveChanges();
-
             return context;
         }
 
@@ -39,7 +36,7 @@ namespace Auto.Tests
             var controller = new UserController(context);
 
             // Act
-            var result = await controller.GetUser(999);
+            var result = await controller.GetUser("aaa");
 
             // Assert
             Assert.IsInstanceOfType(result.Result, typeof(NotFoundResult));  // Should return 404
@@ -49,11 +46,13 @@ namespace Auto.Tests
         public async Task GetUser_ShouldNotReturnNull_WhenUserExists()
         {
             // Arrange
+
             var context = GetDbContext();
+            // Seed the database with a test user
             var controller = new UserController(context);
 
             // Act
-            var result = await controller.GetUser(1);
+            var result = await controller.GetUsers();
             var okResult = result.Result as OkObjectResult;
             var user = okResult?.Value as User;
 

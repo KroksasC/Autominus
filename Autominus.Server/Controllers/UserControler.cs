@@ -19,7 +19,7 @@ namespace Autominus.Server.Controllers
             return await _context.Users.ToListAsync();
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<User>> GetUser(string id)
         {
             var User = await _context.Users.FindAsync(id);
 
@@ -31,9 +31,9 @@ namespace Autominus.Server.Controllers
             return User;
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User User)
+        public async Task<IActionResult> PutUser(string id, User User)
         {
-            if (id != Convert.ToInt64(User.Id))
+            if (id != User.Id)
             {
                 return BadRequest();
             }
@@ -67,22 +67,22 @@ namespace Autominus.Server.Controllers
             return CreatedAtAction(nameof(PostUser), new { id = User.Id }, User);
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(string id)
         {
-            var todo = await _context.Users.FindAsync(id);
-            if (todo == null)
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(todo);
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
-        private bool UserExist(int id)
+        private bool UserExist(string id)
         {
-            return _context.Users.Any(e => Convert.ToInt64(e.Id) == id);
+            return _context.Users.Any(e => e.Id == id);
         }
     }
 }
