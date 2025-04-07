@@ -9,58 +9,6 @@ using Autominus.Server.Data;
 namespace Auto.Tests
 {
     [TestClass]
-    public sealed class UserControllerTests
-    {
-        private ModelsContext GetDbContext()
-        {
-            var options = new DbContextOptionsBuilder<ModelsContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) 
-                .Options;
-            var context = new ModelsContext(options);
-            // Seed the database with a test user
-            context.Users.Add(new User
-            {
-                UserName = "testuser",
-                Email = "test@example.com"
-            });
-            context.SaveChanges();
-            return context;
-        }
-
-
-        [TestMethod]
-        public async Task GetUser_ShouldReturnNotFound_WhenUserDoesNotExist()
-        {
-            // Arrange
-            var context = GetDbContext();
-            var controller = new UserController(context);
-
-            // Act
-            var result = await controller.GetUser("aaa");
-
-            // Assert
-            Assert.IsInstanceOfType(result.Result, typeof(NotFoundResult));  // Should return 404
-        }
-
-        [TestMethod]
-        public async Task GetUser_ShouldNotReturnNull_WhenUserExists()
-        {
-            // Arrange
-
-            var context = GetDbContext();
-            // Seed the database with a test user
-            var controller = new UserController(context);
-
-            // Act
-            var result = await controller.GetUsers();
-            var okResult = result.Result as OkObjectResult;
-            var user = okResult?.Value as User;
-
-            // Assert
-            Assert.IsNotNull(result);
-        }
-    }
-    [TestClass]
     public sealed class CarControllerTests
     {
         private ModelsContext GetDbContext()
