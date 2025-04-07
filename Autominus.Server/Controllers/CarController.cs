@@ -113,15 +113,6 @@ namespace Autominus.Server.Controllers
             return results;
         }
 
-        [HttpGet("brands")]
-        public async Task<ActionResult<IEnumerable<string>>> GetDistinctBrands()
-        {
-            return await _context.Cars
-                .Select(c => c.Brand)
-                .Distinct()
-                .ToListAsync();
-        }
-
         [HttpGet("ordered-by-year")]
         public async Task<ActionResult<IEnumerable<Car>>> GetCarsOrderedByYear([FromQuery] bool desc = false)
         {
@@ -130,17 +121,6 @@ namespace Autominus.Server.Controllers
                 : _context.Cars.OrderBy(c => c.Year);
 
             return await cars.Include(c => c.User).ToListAsync();
-        }
-
-        [HttpGet("stats/make-counts")]
-        public async Task<ActionResult<IEnumerable<object>>> GetCarBrandCounts()
-        {
-            var stats = await _context.Cars
-                .GroupBy(c => c.Brand)
-                .Select(g => new { Make = g.Key, Count = g.Count() })
-                .ToListAsync();
-
-            return Ok(stats);
         }
 
         [HttpGet("recent")]
@@ -155,7 +135,7 @@ namespace Autominus.Server.Controllers
 
         [HttpGet("search-advanced")]
         public async Task<ActionResult<IEnumerable<Car>>> AdvancedSearchCars(
-            [FromQuery] string make,
+            [FromQuery] string brand,
             [FromQuery] string model,
             [FromQuery] int? year,
             [FromQuery] decimal? minPrice,
@@ -163,8 +143,8 @@ namespace Autominus.Server.Controllers
         {
             var query = _context.Cars.AsQueryable();
 
-            if (!string.IsNullOrEmpty(make))
-                query = query.Where(c => c.Brand.Contains(make));
+            if (!string.IsNullOrEmpty(brand))
+                query = query.Where(c => c.Brand.Contains(brand));
 
             if (!string.IsNullOrEmpty(model))
                 query = query.Where(c => c.Model.Contains(model));
@@ -180,25 +160,6 @@ namespace Autominus.Server.Controllers
 
             var result = await query.Include(c => c.User).ToListAsync();
             return Ok(result);
-        }
-
-        [HttpGet("price-range")]
-        public async Task<ActionResult<object>> GetPriceRange()
-        {
-            var minPrice = await _context.Cars.MinAsync(c => c.Price);
-            var maxPrice = await _context.Cars.MaxAsync(c => c.Price);
-            var avgPrice = await _context.Cars.AverageAsync(c => c.Price);
-
-            return new { MinPrice = minPrice, MaxPrice = maxPrice, AveragePrice = avgPrice };
-        }
-
-        [HttpGet("year-range")]
-        public async Task<ActionResult<object>> GetYearRange()
-        {
-            var minYear = await _context.Cars.MinAsync(c => c.Year);
-            var maxYear = await _context.Cars.MaxAsync(c => c.Year);
-
-            return new { OldestYear = minYear, NewestYear = maxYear };
         }
 
         [HttpGet("random")]
@@ -240,24 +201,6 @@ namespace Autominus.Server.Controllers
                 .ToListAsync();
         }
 
-        [HttpGet("price-stats-by-brand")]
-        public async Task<ActionResult<IEnumerable<object>>> GetPriceStatsByBrand()
-        {
-            var stats = await _context.Cars
-                .GroupBy(c => c.Brand)
-                .Select(g => new
-                {
-                    Brand = g.Key,
-                    Count = g.Count(),
-                    AveragePrice = g.Average(c => c.Price),
-                    MinPrice = g.Min(c => c.Price),
-                    MaxPrice = g.Max(c => c.Price)
-                })
-                .ToListAsync();
-
-            return Ok(stats);
-        }
-
         [HttpPatch("{id}/price")]
         public async Task<IActionResult> UpdateCarPrice(int id, [FromBody] decimal newPrice)
         {
@@ -291,18 +234,5 @@ namespace Autominus.Server.Controllers
                 .Take(5)
                 .ToListAsync();
         }
-
-        [HttpGet("count-by-year")]
-        public async Task<ActionResult<IEnumerable<object>>> GetCountByYear()
-        {
-            var stats = await _context.Cars
-                .GroupBy(c => c.Year)
-                .Select(g => new { Year = g.Key, Count = g.Count() })
-                .OrderBy(x => x.Year)
-                .ToListAsync();
-
-            return Ok(stats);
-        }
-
     }
 }
