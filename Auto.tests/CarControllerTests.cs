@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Autominus.Server.Controllers;
 using Autominus.Server.Models;
 using Autominus.Server.Data;
+using Moq;
 
 namespace Auto.Tests
 {
@@ -701,6 +702,34 @@ namespace Auto.Tests
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(NotFoundResult));
+        }
+
+        [TestMethod]
+        public async Task UpdateCarPrice_ShouldSaveChanges_WithSpy()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<ModelsContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+            
+            var context = new ModelsContext(options);
+            context.Cars.Add(new Car { Id = 1, Brand = "Toyota", Model = "Corolla", Price = 20000 });
+            await context.SaveChangesAsync();
+            
+            var saveChangesCalled = false;
+            var mockContext = new Mock<ModelsContext>(options) { CallBase = true };
+            mockContext.Setup(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .Callback(() => saveChangesCalled = true)
+                .ReturnsAsync(1);
+            
+            var controller = new CarController(mockContext.Object);
+
+            // Act
+            var result = await controller.UpdateCarPrice(1, 25000);
+
+            // Assert
+            Assert.IsTrue(saveChangesCalled, "SaveChangesAsync was not called");
+            Assert.IsInstanceOfType(result, typeof(NoContentResult));
         }
     }
 }

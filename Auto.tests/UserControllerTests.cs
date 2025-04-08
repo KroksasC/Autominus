@@ -2,6 +2,7 @@
 using Autominus.Server.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 
 namespace Auto.tests
 {
@@ -160,6 +161,44 @@ namespace Auto.tests
             var result = await controller.PutUser("urlId", user);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+        }
+
+        [TestMethod]
+        public async Task DeleteUser_ShouldCallSaveChanges_WhenUserExists()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<ModelsContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .Options;
+
+            using var dbContext = new ModelsContext(options);
+            var testUser = new User
+            {
+                Id = "user123",
+                UserName = "deletableUser",
+                Email = "delete@example.com"
+            };
+            dbContext.Users.Add(testUser);
+            await dbContext.SaveChangesAsync();
+
+            var saveChangesCalled = false;
+            var mockContext = new Mock<ModelsContext>(options) { CallBase = true };
+            mockContext.Setup(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .Callback(() => saveChangesCalled = true)
+                .ReturnsAsync(1);
+
+            mockContext.Setup(m => m.Users).Returns(dbContext.Users);
+            mockContext.Setup(m => m.FindAsync<User>(It.IsAny<object[]>()))
+                .ReturnsAsync((object[] ids) => ids[0].ToString() == "user123" ? testUser : null);
+
+            var controller = new UserController(mockContext.Object);
+
+            // Act
+            var result = await controller.DeleteUser("user123");
+
+            // Assert
+            Assert.IsTrue(saveChangesCalled, "SaveChangesAsync was not called");
+            Assert.IsInstanceOfType(result, typeof(NoContentResult));
         }
     }
 }
