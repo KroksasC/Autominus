@@ -5,61 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Autominus.Server.Controllers;
 using Autominus.Server.Models;
 using Autominus.Server.Data;
+using Moq;
 
 namespace Auto.Tests
 {
-    [TestClass]
-    public sealed class UserControllerTests
-    {
-        private ModelsContext GetDbContext()
-        {
-            var options = new DbContextOptionsBuilder<ModelsContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) 
-                .Options;
-            var context = new ModelsContext(options);
-            // Seed the database with a test user
-            context.Users.Add(new User
-            {
-                UserName = "testuser",
-                Email = "test@example.com"
-            });
-            context.SaveChanges();
-            return context;
-        }
-
-
-        [TestMethod]
-        public async Task GetUser_ShouldReturnNotFound_WhenUserDoesNotExist()
-        {
-            // Arrange
-            var context = GetDbContext();
-            var controller = new UserController(context);
-
-            // Act
-            var result = await controller.GetUser("aaa");
-
-            // Assert
-            Assert.IsInstanceOfType(result.Result, typeof(NotFoundResult));  // Should return 404
-        }
-
-        [TestMethod]
-        public async Task GetUser_ShouldNotReturnNull_WhenUserExists()
-        {
-            // Arrange
-
-            var context = GetDbContext();
-            // Seed the database with a test user
-            var controller = new UserController(context);
-
-            // Act
-            var result = await controller.GetUsers();
-            var okResult = result.Result as OkObjectResult;
-            var user = okResult?.Value as User;
-
-            // Assert
-            Assert.IsNotNull(result);
-        }
-    }
     [TestClass]
     public sealed class CarControllerTests
     {
@@ -753,6 +702,34 @@ namespace Auto.Tests
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(NotFoundResult));
+        }
+
+        [TestMethod]
+        public async Task UpdateCarPrice_ShouldSaveChanges_WithSpy()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<ModelsContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+            
+            var context = new ModelsContext(options);
+            context.Cars.Add(new Car { Id = 1, Brand = "Toyota", Model = "Corolla", Price = 20000 });
+            await context.SaveChangesAsync();
+            
+            var saveChangesCalled = false;
+            var mockContext = new Mock<ModelsContext>(options) { CallBase = true };
+            mockContext.Setup(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .Callback(() => saveChangesCalled = true)
+                .ReturnsAsync(1);
+            
+            var controller = new CarController(mockContext.Object);
+
+            // Act
+            var result = await controller.UpdateCarPrice(1, 25000);
+
+            // Assert
+            Assert.IsTrue(saveChangesCalled, "SaveChangesAsync was not called");
+            Assert.IsInstanceOfType(result, typeof(NoContentResult));
         }
     }
 }

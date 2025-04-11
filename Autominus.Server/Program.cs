@@ -1,4 +1,6 @@
 using Autominus.Server.Data;
+using Autominus.Server.Services;
+
 //using Autominus.Server.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
@@ -34,58 +36,22 @@ builder.Services.AddCors(options =>
                .AllowCredentials(); // Allow cookies if needed
     });
 });
+
+builder.Services.AddScoped<LoginService>();
 var app = builder.Build();
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ModelsContext>();
     context.Database.Migrate();
-    //DataSeedingService.Initialize(context); // Call your method here
 }
 
-app.MapPost("/log", async ([FromBody] LoginRequest request, SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration) =>
+app.MapPost("/log", async ([FromBody] LoginRequest request, LoginService loginService) =>
 {
-    var user = await userManager.FindByEmailAsync(request.Email);
-    if (user == null)
-    {
-        return Results.Unauthorized();
-    }
-
-    var signInResult = await signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-    if (!signInResult.Succeeded)
-    {
-        return Results.Unauthorized();
-    }
-
-    // Generate JWT token without a separate service
-    var tokenHandler = new JwtSecurityTokenHandler();
-    var key = Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]);
-
-    var claims = new[]
-    {
-        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-        new Claim(JwtRegisteredClaimNames.Email, user.Email),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-    };
-
-    var tokenDescriptor = new SecurityTokenDescriptor
-    {
-        Subject = new ClaimsIdentity(claims),
-        Expires = DateTime.UtcNow.AddMinutes(60),
-        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-    };
-
-    var token = tokenHandler.CreateToken(tokenDescriptor);
-    var jwt = tokenHandler.WriteToken(token);
-
-    return Results.Json(new
-    {
-        userId = user.Id,
-        tokenType = "Bearer",
-        accessToken = jwt,
-        expiresIn = 3600
-    });
+    return await loginService.LoginAsync(request);
 });
+
 app.MapPost("/logout", async (SignInManager<User> signInManager) =>
 {
 

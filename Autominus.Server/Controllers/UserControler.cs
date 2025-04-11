@@ -31,14 +31,20 @@ namespace Autominus.Server.Controllers
             return User;
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(string id, User User)
+        public async Task<IActionResult> PutUser(string id, User updatedUser)
         {
-            if (id != User.Id)
+            if (id != updatedUser.Id)
             {
                 return BadRequest();
             }
 
-            _context.Users.Entry(User).State = EntityState.Modified;
+            var existingUser = await _context.Users.FindAsync(id);
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+            existingUser.UserName = updatedUser.UserName;
+            existingUser.Email = updatedUser.Email;
 
             try
             {
@@ -55,16 +61,8 @@ namespace Autominus.Server.Controllers
                     throw;
                 }
             }
+
             return NoContent();
-        }
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User User)
-        {
-            _context.Users.Add(User);
-
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(PostUser), new { id = User.Id }, User);
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
