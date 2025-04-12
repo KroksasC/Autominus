@@ -7,6 +7,56 @@ import "../Styles/Listing.css";
 import UserCard from "../components/UserCard";
 import EditDeleteButtons from "../components/EditDeleteButtons";
 
+
+function TableRow(left, right, extra = "") {
+    if (right != null && right != 0 && right != "Nenurodyta") {
+        return (
+            <tr>
+                <td><strong>{left}</strong></td>
+                <td>{right} {extra}</td>
+            </tr>
+        );
+    }
+}
+
+function Description(descripton) {
+    if (descripton != null && descripton != 0 && descripton != "Nenurodyta") {
+        return (
+            <div className="car-post-header">
+                <p className="desription">Aprašymas</p>
+                <p>{descripton} </p>
+            </div>
+        );
+    }
+}
+
+function TableRowEngine(engineCap, hP) {
+    if (engineCap != 0 && hP != 0 && engineCap != null && hP!= null) {
+        return (
+            <tr>
+                <td><strong>Variklis:</strong></td>
+                <td>{engineCap} l, {hP} AG ({parseInt((hP * 0.745699872), 10)} KW)</td>
+            </tr>
+        );
+    }
+    if (engineCap != 0 && engineCap != null) {
+        return (
+            <tr>
+                <td><strong>Variklis:</strong></td>
+                <td>{engineCap} l</td>
+            </tr>
+        );
+    }
+    if (hP != 0 && hP != null) {
+        return (
+            <tr>
+                <td><strong>Variklis:</strong></td>
+                <td>{hP} AG ({parseInt((hP * 0.745699872 + 0.5), 10)} KW)</td>
+            </tr>
+        );
+    }
+}
+
 function Listing() {
     const [carList, setCarList] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -38,10 +88,12 @@ function Listing() {
 
     const formattedDate = car.technicalInspectionValidUntil?.slice(0, 10) || "Nenurodyta";
     const uploadTime = car.createdAt?.slice(0, 10) || "Nenurodyta";
-    let accident = "Taip";
-    let negotiable = "Ne";
+    let accident = 0;
+    let negotiable = 0;
 
     if (car.accidentHistory?.toString() === "false") accident = "Ne";
+    if (car.accidentHistory?.toString() === "true") accident = "Taip";
+    if (car.negotiable?.toString() === "false") negotiable = "Ne";
     if (car.negotiable?.toString() === "true") negotiable = "Taip";
 
     return (
@@ -66,78 +118,27 @@ function Listing() {
                                 <td><strong>Kaina:</strong></td>
                                 <td>{car.price} &euro;</td>
                             </tr>
-                            <tr>
-                                <td><strong>Rida:</strong></td>
-                                <td>{car.mileage} km</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Pavarų dėžė:</strong></td>
-                                <td>{car.transmission}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Kuro tipas:</strong></td>
-                                <td>{car.fuelType}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Variklis:</strong></td>
-                                <td>{car.engineCapacity} l, {car.horsepower} AG ({parseInt((car.horsepower * 0.745699872), 10)}KW)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Varantieji ratai:</strong></td>
-                                <td>{car.drivetrain}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Spalva:</strong></td>
-                                <td>{car.color}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Durų skaičius:</strong></td>
-                                <td>{car.doors}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Sėdimos vietos:</strong></td>
-                                <td>{car.seats}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Valstybiniai numeriai:</strong></td>
-                                <td>{car.registrationNumber}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>VIN:</strong></td>
-                                <td>{car.vin}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Automobilio būklė:</strong></td>
-                                <td>{car.condition}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Daužtas:</strong></td>
-                                <td>{accident}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Kaina derinama:</strong></td>
-                                <td>{negotiable}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Technikinė apžiūra galioja iki:</strong></td>
-                                <td>{formattedDate}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Skelbimas įkeltas:</strong></td>
-                                <td>{uploadTime}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Automobilio vieta:</strong></td>
-                                <td>{car.location}</td>
-                            </tr>
+                            {TableRow("Rida:", car.mileage, "km")}
+                            {TableRow("Pavarų dėžė:", car.transmission)}
+                            {TableRow("Kuro tipas:", car.fuelType)}
+                            {TableRowEngine(car.engineCapacity, car.horsepower)}
+                            {TableRow("Varantieji ratai:", car.drivetrain)}
+                            {TableRow("Spalva:", car.color)}
+                            {TableRow("Durų skaičius:", car.doors)}
+                            {TableRow("Sėdimos vietos:", car.seats)}
+                            {TableRow("Valstybiniai numeriai:", car.registrationNumber)}
+                            {TableRow("VIN:", car.vin)}
+                            {TableRow("Automobilio būklė:", car.condition)}
+                            {TableRow("Daužtas:", accident)}
+                            {TableRow("Kaina derinama:", negotiable)}
+                            {TableRow("Technikinė apžiūra galioja iki:", formattedDate)}
+                            {TableRow("Skelbimas įkeltas:", uploadTime)}
+                            {TableRow("Automobilio vieta:", car.location)}
                         </tbody>
                     </table>
                     <br></br>
                     <div className="item_width">
-                        <div className="car-post-header">
-                            <p className="desription">Aprašymas</p>
-                            <p>{car.description} </p>
-                        </div>
+                        {Description(car.description) }
                     </div>
                     <br></br>
                     <UserCard user={car.user} />
