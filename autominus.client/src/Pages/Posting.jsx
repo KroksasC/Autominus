@@ -113,6 +113,24 @@ const brandYears = {
     Volkswagen: { start: 1937, end: 2025 },
     Volvo: { start: 1927, end: 2025 }
 };
+
+const lithuanianCities = [
+    "Vilnius", "Kaunas", "Klaipėda", "Šiauliai", "Panevėžys", "Alytus", "Marijampolė",
+    "Mažeikiai", "Jonava", "Utena", "Kėdainiai", "Tauragė", "Telšiai", "Ukmergė",
+    "Visaginas", "Plungė", "Kretinga", "Palanga", "Radviliškis", "Šilutė", "Druskininkai",
+    "Gargždai", "Rokiškis", "Biržai", "Elektrėnai", "Kuršėnai", "Garliava", "Jurbarkas",
+    "Vilkaviškis", "Raseiniai", "Anykščiai", "Lentvaris", "Grigiškės", "Naujoji Akmenė",
+    "Prienai", "Joniškis", "Kelmė", "Varėna", "Kaišiadorys", "Pasvalys", "Kupiškis",
+    "Zarasai", "Skuodas", "Kazlų Rūda", "Širvintos", "Molėtai", "Šalčininkai", "Šakiai",
+    "Ignalina", "Pabradė", "Švenčionys", "Trakai", "Vievis", "Lazdijai", "Kalvarija",
+    "Rietavas", "Žiežmariai", "Neringa", "Šilalė", "Pakruojis", "Švenčionėliai", "Venta",
+    "Subačius", "Baltoji Vokė", "Dūkštas", "Pandėlys", "Dusetos", "Užventis", "Seda",
+    "Varniai", "Viekšniai", "Žagarė", "Ežerėlis", "Skaudvilė", "Kudirkos Naumiestis",
+    "Simnas", "Salantai", "Linkuva", "Veisiejai", "Ramygala", "Priekulė", "Joniškėlis",
+    "Jieznas", "Daugai", "Obeliai", "Vandžiogala", "Sasnava", "Daugėliškis", "Kybartai",
+    "Tytuvėnai", "Troškūnai", "Viduklė", "Žemaičių Naumiestis", "Eišiškės", "Antalieptė",
+    "Kurkliai", "Smalininkai", "Viešvilė", "Panemunė", "Valkininkai", "Rūdiškės"
+];
 function Posting() {
 
     const [formData, setFormData] = useState({
@@ -138,7 +156,7 @@ function Posting() {
         "negotiable": undefined,
         "description": "",
         "imageUrls": [],
-        "location": "",
+        "city": "",
         "createdAt": "",
         "user": {
             id: 0
@@ -148,6 +166,34 @@ function Posting() {
     const [errors, setErrors] = useState({});
     const [showConfirmation, setShowConfirmation] = useState(false);
     const navigate = useNavigate();
+
+    const [cityInput, setCityInput] = useState("");
+    const [filteredCities, setFilteredCities] = useState([]);
+    const [showCityDropdown, setShowCityDropdown] = useState(false);
+
+    // Add this handler
+    const handleCityInputChange = (e) => {
+        const input = e.target.value;
+        setCityInput(input);
+
+        if (input.length > 0) {
+            const filtered = lithuanianCities.filter(city =>
+                city.toLowerCase().includes(input.toLowerCase())
+            );
+            setFilteredCities(filtered);
+            setShowCityDropdown(true);
+        } else {
+            setFilteredCities([]);
+            setShowCityDropdown(false);
+        }
+    };
+
+    const handleCitySelect = (city) => {
+        setCityInput(city);
+        setFormData(prev => ({ ...prev, city: city }));
+        setShowCityDropdown(false);
+    };
+
 
     const [previewImages, setPreviewImages] = useState([]);
 
@@ -230,7 +276,7 @@ function Posting() {
         const newErrors = {};
         const requiredFields = [
             'brand', 'model', 'year', 'fuelType', 'transmission',
-            'horsepower', 'bodyType', 'condition', 'price'
+            'horsepower', 'bodyType', 'condition', 'price', 'city'
         ];
 
         requiredFields.forEach(field => {
@@ -246,6 +292,7 @@ function Posting() {
                 else if (field === 'condition') displayName = 'Būklė yra privaloma';
                 else if (field === 'horsepower') displayName = 'Variklio galia yra privaloma';
                 else if (field === 'bodyType') displayName = 'Kėbulo tipas yra privalomas';
+                else if (field === 'city') displayName = 'Miestas tipas yra privalomas';
                 else displayName = field.charAt(0).toUpperCase() + field.slice(1);
 
                 newErrors[field] = displayName;
@@ -596,6 +643,37 @@ function Posting() {
                 {errors.negotiable && <span className="error-message">{errors.negotiable}</span>}
             </div>
 
+
+            {/* CITY */}
+             <div className="input-group">
+                 <label htmlFor="location">Miestas/Savivaldybė</label>
+                 <input
+                     type="text"
+                     id="location"
+                     name="location"
+                     value={cityInput}
+                     onChange={handleCityInputChange}
+                     onFocus={() => cityInput.length > 0 && setShowCityDropdown(true)}
+                     onBlur={() => setTimeout(() => setShowCityDropdown(false), 200)}
+                     placeholder="Pradėkite vesti miestą"
+                     autoComplete="off"
+                 />
+                 {showCityDropdown && filteredCities.length > 0 && (
+                     <ul className="city-dropdown">
+                         {filteredCities.map((city, index) => (
+                             <li
+                                 key={index}
+                                 onClick={() => handleCitySelect(city)}
+                                 className="city-option"
+                             >
+                                 {city}
+                             </li>
+                         ))}
+                     </ul>
+                    )}
+                 {errors.city && <span className="error-message">{errors.city}</span>}
+             </div>
+
             {/* DESCRIPTION */}
             <div className="input-group">
                 <label className="car_posting_header">Aprašymas:</label>
@@ -660,17 +738,6 @@ function Posting() {
                 <Link to="/" className="cancel-btn">Atšaukti</Link>
                 <button type="submit" className="submit-btn">Įkelti</button>
             </div>
-
-            {/*<div className="input-group">*/}
-            {/*    <label htmlFor="images">Upload Images:</label>*/}
-            {/*    <input*/}
-            {/*        type="file"*/}
-            {/*        id="images"*/}
-            {/*        multiple*/}
-            {/*        accept="image/*"*/}
-            {/*        onChange={handleFileChange}*/}
-            {/*    />*/}
-            {/*</div>*/}
 
             {showConfirmation && (
                 <div className="confirmation-popup">

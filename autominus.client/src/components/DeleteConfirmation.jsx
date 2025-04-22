@@ -57,6 +57,7 @@ const DeleteConfirmation = ({ onClose, carUserId }) => {
 
 DeleteConfirmation.propTypes = {
     onClose: PropTypes.func.isRequired,
+    carUserId: PropTypes.func.isRequired,
 };
 
 export default DeleteConfirmation;

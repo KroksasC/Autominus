@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import "../Styles/Listing.css";
 import UserCard from "../components/UserCard";
 import EditDeleteButtons from "../components/EditDeleteButtons";
+import CarLocationMap from "../components/CarLocationMap";
 
 
 function TableRow(left, right, extra = "") {
@@ -143,6 +144,9 @@ function Listing() {
                     <br></br>
                     <UserCard user={car.user} />
                     <br></br>
+                    <div className="map-container">
+                        <CarLocationMap city={car.city} />
+                    </div>
                 </div>
                 <ul>
                     {car.imageUrls?.map((url, index) => (
@@ -152,6 +156,7 @@ function Listing() {
                         </li>
                     ))}
                 </ul>
+
             </div>
         </div>
     );
