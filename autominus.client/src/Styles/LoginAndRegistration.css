@@ -28,6 +28,26 @@ tr:nth-child(odd) {
     background: #FFF;
 }
 
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px; /* space for the icon */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    bottom: 15px;
+    user-select: none;
+    font-size: 1.2em;
+}
+
 th,
 td {
     padding-left: 1rem;
