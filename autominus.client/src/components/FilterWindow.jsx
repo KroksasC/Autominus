@@ -79,6 +79,32 @@ export function FilterWindow({ onClose, onApplyFilters, initialFilters }) {
         toPrice: ""
     });
 
+    const [sortConfig, setSortConfig] = useState(initialFilters?.sortConfig || {
+        key: null,
+        direction: 'asc'
+    });
+
+    const handleSort = (key) => {
+        let direction = 'asc';
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const clearSorting = () => {
+        setSortConfig({ key: null, direction: 'asc' });
+    };
+
+    const handleApply = () => {
+        // Include sorting in the filters object
+        onApplyFilters({
+            ...filters,
+            sortConfig
+        });
+        onClose();
+    };
+
     const years = Array.from({ length: 2025 - 1920 + 1 }, (_, index) => 1920 + index);
 
     const handleFilterChange = (e) => {
@@ -87,11 +113,6 @@ export function FilterWindow({ onClose, onApplyFilters, initialFilters }) {
             ...prev,
             [name]: value
         }));
-    };
-
-    const handleApply = () => {
-        onApplyFilters(filters);
-        onClose();
     };
 
     const handleClear = () => {
@@ -121,8 +142,50 @@ export function FilterWindow({ onClose, onApplyFilters, initialFilters }) {
         <div className="filter-window-overlay">
             <div className="filter-window">
                 <button className="close-button" onClick={onClose}>X</button>
-                <h3>Filtrai</h3>
 
+                <div className="filter-section">
+                    <h2>Rūšiavimas</h2>
+                    <div className="sort-buttons">
+                        <button
+                            className={`sort-button ${sortConfig.key === 'price' ? 'active' : ''}`}
+                            onClick={() => handleSort('price')}
+                        >
+                            Pagal kainą {sortConfig.key === 'price' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </button>
+                        <button
+                            className={`sort-button ${sortConfig.key === 'createdAt' ? 'active' : ''}`}
+                            onClick={() => handleSort('createdAt')}
+                        >
+                            Pagal sukūrimo data {sortConfig.key === 'createdAt' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </button>
+                        <button
+                            className={`sort-button ${sortConfig.key === 'brand' ? 'active' : ''}`}
+                            onClick={() => handleSort('brand')}
+                        >
+                            Pagal markę {sortConfig.key === 'brand' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </button>
+                        <button
+                            className={`sort-button ${sortConfig.key === 'year' ? 'active' : ''}`}
+                            onClick={() => handleSort('year')}
+                        >
+                            Pagal metus {sortConfig.key === 'year' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </button>
+                    </div>
+                    <div className="filter-actions">
+                        <button
+                            className="clear-btn"
+                            onClick={clearSorting}
+                        >
+                            Išvalyti rūšiavimą
+                        </button>
+                        <button type="button" className="apply-btn" onClick={handleApply}>
+                            Taikyti
+                        </button>
+                    </div>
+                </div>
+
+
+                <h2>Filtrai</h2>
                 <div className="filter-section">
                     <h4>Markė ir modelis</h4>
                     <div className="filter-group">

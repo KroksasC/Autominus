@@ -151,6 +151,31 @@ function Home() {
             });
         }
 
+        if (filters?.sortConfig?.key) {
+            filtered.sort((a, b) => {
+                const key = filters.sortConfig.key;
+                const direction = filters.sortConfig.direction === 'asc' ? 1 : -1;
+
+                // Handle different sort keys
+                if (key === 'price') {
+                    return (parseFloat(a.price) - parseFloat(b.price)) * direction;
+                }
+                else if (key === 'createdAt') {
+                    return (new Date(a.createdAt) - new Date(b.createdAt)) * direction;
+                }
+                else if (key === 'brand') {
+                    // Sort by brand, then by model
+                    const brandCompare = a.brand.localeCompare(b.brand) * direction;
+                    if (brandCompare !== 0) return brandCompare;
+                    return a.model.localeCompare(b.model) * direction;
+                }
+                else if (key === 'year') {
+                    return (parseInt(a.year) - parseInt(b.year)) * direction;
+                }
+                return 0;
+            });
+        }
+
         setFilteredCarList(filtered);
     }, [filters, searchTerm, carList]); // Added searchTerm to dependencies
 

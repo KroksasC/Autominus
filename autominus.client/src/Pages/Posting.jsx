@@ -661,17 +661,6 @@ function Posting() {
                 <button type="submit" className="submit-btn">Įkelti</button>
             </div>
 
-            {/*<div className="input-group">*/}
-            {/*    <label htmlFor="images">Upload Images:</label>*/}
-            {/*    <input*/}
-            {/*        type="file"*/}
-            {/*        id="images"*/}
-            {/*        multiple*/}
-            {/*        accept="image/*"*/}
-            {/*        onChange={handleFileChange}*/}
-            {/*    />*/}
-            {/*</div>*/}
-
             {showConfirmation && (
                 <div className="confirmation-popup">
                     <div className="popup-content">
