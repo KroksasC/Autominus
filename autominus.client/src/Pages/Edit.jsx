@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import "../Styles/Posting.css";
 import { Link } from "react-router-dom";
 import { useNavigate, useLocation, Navigate } from "react-router-dom";
@@ -165,9 +165,12 @@ function Edit() {
         const isValid = validateForm();
         if (!isValid) return;
 
+        const capitalizedBrand = formData.brand.charAt(0).toUpperCase() + formData.brand.slice(1);
+
         const updatedFormData = {
             id: carID,
             ...formData,
+            brand: capitalizedBrand,
             user: { id: userId },
             year: Number(formData.year),
             mileage: Number(formData.mileage),
@@ -201,11 +204,11 @@ function Edit() {
 
             {/* BRAND */}
             <div className="select-group">
-                <label htmlFor="brand">Car Brand</label>
+                <label htmlFor="brand">Markė</label>
                 <select
                     id="brand"
                     name="brand"
-                    value={formData.brand}
+                    value={formData.brand.toLowerCase().replace(' ', '-')} // Normalize the value to match carModels keys
                     onChange={(e) => {
                         setSelectedCar(e.target.value);
                         handleChange(e);
@@ -214,7 +217,9 @@ function Edit() {
                     <option value="">--Select a brand--</option>
                     {Object.keys(carModels).map((brand) => (
                         <option key={brand} value={brand}>
-                            {brand.charAt(0).toUpperCase() + brand.slice(1)}
+                            {brand.split('-').map(word =>
+                                word.charAt(0).toUpperCase() + word.slice(1)
+                            ).join(' ')}
                         </option>
                     ))}
                 </select>
