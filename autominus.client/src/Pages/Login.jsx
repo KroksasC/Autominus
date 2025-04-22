@@ -61,7 +61,10 @@ function Login() {
             if (data.token) {
                 localStorage.setItem("token", data.token);
             }
-
+            if (data.email) {
+                localStorage.setItem("email", data.email);
+            }
+            console.log(localStorage.getItem("userId"));
             window.location.href = "/";
         } catch (error) {
             console.error(error);
@@ -94,7 +97,7 @@ function Login() {
                     </div>
                     <div className= "password-wrapper">
                     <input
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         id="password"
                         name="password"
                         value={password}

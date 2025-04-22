@@ -3,9 +3,9 @@ import Posting from "./Pages/Posting";
 import Edit from "./Pages/Edit";
 import Listing from "./Pages/Listing";
 import { Routes, Route } from "react-router-dom"
-//import { BrowserRouter } from "../node_modules/react-router-dom/index";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
+import AccountPage from "./Pages/AccountPage";
 
 function App() {
     return (
@@ -17,6 +17,7 @@ function App() {
                 <Route path="/:id" element={<Listing />} />
                 <Route path="/l" element={<Login />}></Route>
                 <Route path="/r" element={<Register />}></Route>
+                <Route path="/AccountPage" element={<AccountPage />}></Route>
             </Routes>
         </main>
     );
