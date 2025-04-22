@@ -48,9 +48,16 @@ export function NavBar({ onFiltersChange }) {
                 <div className="Settings button">
                     <img src={settingsImg} alt="settings" />
                 </div>
-                <Link to="/l" className="LoginRegister-button">
-                    <img src={loginRegisterImg} alt="LoginRegister" />
-                </Link>
+
+                {localStorage.getItem("userId") ? (
+                    <Link to="/AccountPage" className="LoginRegister-button">
+                        <img src={loginRegisterImg} alt="LoginRegister" />
+                    </Link>
+                ) : 
+                    <Link to="/l" className="LoginRegister-button">
+                        <img src={loginRegisterImg} alt="LoginRegister" />
+                    </Link>
+                }
             </div>
         </div>
     );

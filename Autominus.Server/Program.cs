@@ -58,7 +58,7 @@ app.MapPost("/logout", async (SignInManager<User> signInManager) =>
     await signInManager.SignOutAsync();
     return Results.Ok();
 
-}).RequireAuthorization();
+});
 
 
 app.MapGet("/pingauth", (ClaimsPrincipal user) =>
