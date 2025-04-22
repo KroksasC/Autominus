@@ -61,6 +61,58 @@ const carModels = {
     Volvo: ["S60", "XC40", "XC90", "V60", "S90", "XC60", "C40 Recharge"]
 };
 
+const brandYears = {
+    Acura: { start: 1986, end: 2025 },
+    "Alfa Romeo": { start: 1910, end: 2025 },
+    "Aston Martin": { start: 1913, end: 2025 },
+    Audi: { start: 1910, end: 2025 },
+    Bentley: { start: 1919, end: 2025 },
+    BMW: { start: 1916, end: 2025 },
+    Bugatti: { start: 1909, end: 2025 },
+    Buick: { start: 1903, end: 2025 },
+    Cadillac: { start: 1902, end: 2025 },
+    Chevrolet: { start: 1911, end: 2025 },
+    Chrysler: { start: 1925, end: 2025 },
+    Citroen: { start: 1919, end: 2025 },
+    Dodge: { start: 1900, end: 2025 },
+    Ferrari: { start: 1947, end: 2025 },
+    Fiat: { start: 1899, end: 2025 },
+    Ford: { start: 1903, end: 2025 },
+    Genesis: { start: 2015, end: 2025 },
+    GMC: { start: 1911, end: 2025 },
+    Honda: { start: 1948, end: 2025 },
+    Hyundai: { start: 1967, end: 2025 },
+    Infiniti: { start: 1989, end: 2025 },
+    Jaguar: { start: 1922, end: 2025 },
+    Jeep: { start: 1941, end: 2025 },
+    Kia: { start: 1944, end: 2025 },
+    Lamborghini: { start: 1963, end: 2025 },
+    "Land Rover": { start: 1948, end: 2025 },
+    Lexus: { start: 1989, end: 2025 },
+    Lincoln: { start: 1917, end: 2025 },
+    Maserati: { start: 1914, end: 2025 },
+    Mazda: { start: 1920, end: 2025 },
+    McLaren: { start: 1963, end: 2025 },
+    Mercedes: { start: 1926, end: 2025 },
+    Mini: { start: 1959, end: 2025 },
+    Mitsubishi: { start: 1917, end: 2025 },
+    Nissan: { start: 1933, end: 2025 },
+    Pagani: { start: 1992, end: 2025 },
+    Peugeot: { start: 1889, end: 2025 },
+    Polestar: { start: 2017, end: 2025 },
+    Porsche: { start: 1948, end: 2025 },
+    Ram: { start: 2009, end: 2025 },
+    Renault: { start: 1899, end: 2025 },
+    "Rolls Royce": { start: 1904, end: 2025 },
+    Saab: { start: 1945, end: 2011 },
+    Smart: { start: 1994, end: 2025 },
+    Subaru: { start: 1953, end: 2025 },
+    Suzuki: { start: 1909, end: 2025 },
+    Tesla: { start: 2003, end: 2025 },
+    Toyota: { start: 1937, end: 2025 },
+    Volkswagen: { start: 1937, end: 2025 },
+    Volvo: { start: 1927, end: 2025 }
+};
 function Posting() {
 
     const [formData, setFormData] = useState({
@@ -230,7 +282,6 @@ function Posting() {
     };
 
     const [selectedCar, setSelectedCar] = useState("");
-    const years = Array.from({ length: 2025 - 1920 + 1 }, (_, index) => 1920 + index);
 
     return (
         <div>
@@ -264,19 +315,30 @@ function Posting() {
                 {errors.model && <span className="error-message">{errors.model}</span>}
             </div>
 
-            {/* YEAR */}
-            <div className="select-group">
-                <label htmlFor="year">Metai</label>
-                <select id="year" name="year" onChange={handleChange} value={formData.year}>
-                    <option value="">--Pasirinkite metus--</option>
-                    {years.map((year) => (
-                        <option key={year} value={year}>
-                            {year}
-                        </option>
-                    ))}
-                </select>
-                {errors.year && <span className="error-message">{errors.year}</span>}
-            </div>
+                {/* YEAR */}
+                <div className="select-group">
+                    <label htmlFor="year">Metai</label>
+                    <select
+                        id="year"
+                        name="year"
+                        onChange={handleChange}
+                        value={formData.year}
+                        disabled={!formData.brand} // Disable if no brand selected
+                    >
+                        <option value="">--Pasirinkite metus--</option>
+                        {formData.brand &&
+                            Array.from(
+                                { length: brandYears[formData.brand].end - brandYears[formData.brand].start + 1 },
+                                (_, index) => brandYears[formData.brand].start + index
+                            ).map((year) => (
+                                <option key={year} value={year}>
+                                    {year}
+                                </option>
+                            ))
+                        }
+                    </select>
+                    {errors.year && <span className="error-message">{errors.year}</span>}
+                </div>
 
             {/* MILEAGE */}
             <div className="input-group">
