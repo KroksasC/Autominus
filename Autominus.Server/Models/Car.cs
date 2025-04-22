@@ -27,6 +27,7 @@
         public List<string>? ImageUrls { get; set; }
         public string? Location { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public string? City { get; set; }
 
         // Navigacijos savybė: automobilis priklauso vartotojui
         public User User { get; set; }
