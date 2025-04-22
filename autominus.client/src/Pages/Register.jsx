@@ -8,6 +8,8 @@ function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
@@ -20,6 +22,14 @@ function Register() {
         if (name === "email") setEmail(value);
         if (name === "password") setPassword(value);
         if (name === "confirmPassword") setConfirmPassword(value);
+    };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword((prev) => !prev);
+    };
+
+    const toggleConfirmPasswordVisibility = () => {
+        setShowConfirmPassword((prev) => !prev);
     };
 
     const handleSubmit = (e) => {
@@ -78,28 +88,34 @@ function Register() {
                 </div>
                 <div>
                     <label htmlFor="password">Slaptažodis:</label>
-                </div>
-                <div>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={password}
-                        onChange={handleChange}
-                    />
-                </div>
+                    </div>
+                    <div className="password-wrapper">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            id="password"
+                            name="password"
+                            value={password}
+                            onChange={handleChange}
+                        />
+                        <span className="toggle-password" onClick={togglePasswordVisibility}>
+                            {showPassword ? "🙈" : "👁️"}
+                        </span>
+                    </div>
                 <div>
                     <label htmlFor="confirmPassword">Patvirtinkite slaptažodį:</label>
-                </div>
-                <div>
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        value={confirmPassword}
-                        onChange={handleChange}
-                    />
-                </div>
+                    </div>
+                    <div className="password-wrapper">
+                        <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            value={confirmPassword}
+                            onChange={handleChange}
+                        />
+                        <span className="toggle-password" onClick={toggleConfirmPasswordVisibility}>
+                            {showConfirmPassword ? "🙈" : "👁️"}
+                        </span>
+                    </div>
                 <div>
                     <button type="submit">Registruotis</button>
                 </div>
@@ -107,7 +123,8 @@ function Register() {
                     <button type="button" onClick={handleLoginClick}>
                         Prisijungti
                     </button>
-                </div>
+                    </div>
+
             </form>
             {error && <p className="error">{error}</p>}
             </div>

@@ -8,6 +8,7 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [rememberme, setRememberme] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
@@ -21,6 +22,10 @@ function Login() {
     const handleRegisterClick = () => {
         navigate("/r");
     };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword((prev) => !prev);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -86,28 +91,31 @@ function Login() {
                 </div>
                 <div>
                     <label htmlFor="password">Slaptažodis:</label>
-                </div>
-                <div>
+                    </div>
+                    <div className= "password-wrapper">
                     <input
                         type="password"
                         id="password"
                         name="password"
                         value={password}
                         onChange={handleChange}
-                    />
+                        />
+                        <span className="toggle-password" onClick={togglePasswordVisibility}>
+                            {showPassword ? "🙈" : "👁️"}
+                        </span>
                 </div>
                 <div className="checkbox-container">
-  <label htmlFor="rememberme">
-    <input
-      type="checkbox"
-      id="rememberme"
-      name="rememberme"
-      checked={rememberme}
-      onChange={handleChange}
-    />
-    <span>Prisiminti mane</span>
-  </label>
-</div>
+                      <label htmlFor="rememberme">
+                        <input
+                          type="checkbox"
+                          id="rememberme"
+                          name="rememberme"
+                          checked={rememberme}
+                          onChange={handleChange}
+                        />
+                        <span>Prisiminti mane</span>
+                      </label>
+                </div>
                 <div>
                     <button type="submit">Prisijungti</button>
                 </div>
