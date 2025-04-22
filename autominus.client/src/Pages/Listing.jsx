@@ -35,7 +35,7 @@ function TableRowEngine(engineCap, hP) {
         return (
             <tr>
                 <td><strong>Variklis:</strong></td>
-                <td>{engineCap} l, {hP} AG ({parseInt((hP * 0.745699872), 10)} KW)</td>
+                <td>{engineCap} l, {hP} KW</td>
             </tr>
         );
     }
@@ -51,7 +51,7 @@ function TableRowEngine(engineCap, hP) {
         return (
             <tr>
                 <td><strong>Variklis:</strong></td>
-                <td>{hP} AG ({parseInt((hP * 0.745699872 + 0.5), 10)} KW)</td>
+                <td>{hP} KW</td>
             </tr>
         );
     }

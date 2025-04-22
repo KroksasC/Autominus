@@ -502,37 +502,13 @@ namespace Auto.Tests
 
             Assert.AreEqual(5, cars?.Count());
         }
-        private TestContext testContextInstance;
-        public TestContext TestContext
-        {
-            get { return testContextInstance; }
-            set { testContextInstance = value; }
-        }
 
         // Tests the GetCars method, which returns every car that is added. The expected result is for every car to be returned.
         [TestMethod]
         public async Task GetCars_ShouldReturnCars_WhenCarsExists()
         {
             //Arrange
-            var options = new DbContextOptionsBuilder<ModelsContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-                .Options;
-
-            var context = new ModelsContext(options);
-
-            context.Cars.Add(new Car
-            {
-                Id = 1,
-                Brand = "1",
-                Model = "1"
-            });
-            context.Cars.Add(new Car
-            {
-                Id = 2,
-                Brand = "2",
-                Model = "2"
-            });
-            context.SaveChanges();
+            var context = GetDbContext();
             var controller = new CarController(context);
 
             //Act
@@ -542,15 +518,13 @@ namespace Auto.Tests
             //Assert
             Assert.IsNotNull(cars);
             var carList = cars.ToList();
+            Assert.AreEqual(3, carList.Count);
             var firstCar = carList.FirstOrDefault(c => c.Id == 1);
             Assert.IsNotNull(firstCar);
-            Assert.AreEqual("1", firstCar.Brand);
-            Assert.AreEqual("1", firstCar.Model);
-            var secondCar = carList.FirstOrDefault(c => c.Id == 2);
-            Assert.IsNotNull(secondCar);
-            Assert.AreEqual("2", secondCar.Brand);
-            Assert.AreEqual("2", secondCar.Model);
+            Assert.AreEqual("Toyota", firstCar.Brand);
+            Assert.AreEqual("Corolla", firstCar.Model);
         }
+
 
         // Tests the GetCars method, which returns every car that is added. The expected result is for no car to be returned.
         [TestMethod]
@@ -562,7 +536,6 @@ namespace Auto.Tests
                 .Options;
 
             var context = new ModelsContext(options);
-            context.SaveChanges();
             var controller = new CarController(context);
 
             //Act
@@ -571,9 +544,7 @@ namespace Auto.Tests
 
             //Assert
             Assert.IsNotNull(cars);
-            var carList = cars.ToList();
-            var firstCar = carList.FirstOrDefault(c => c.Id == 1);
-            Assert.IsNull(firstCar);
+            Assert.AreEqual(0, cars.Count());
         }
 
         // Tests the PutCar method, which puts a car in a specified place. The expected result is for a car to be added in a place.
@@ -581,35 +552,26 @@ namespace Auto.Tests
         public async Task PutCar_ShouldPutCar()
         {
             //Arrange
-            var options = new DbContextOptionsBuilder<ModelsContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-                .Options;
-
-            var context = new ModelsContext(options);
-
-            context.Cars.Add(new Car
-            {
-                Id = 1,
-                Brand = "1",
-                Model = "1"
-            });
-            context.SaveChanges();
+            var context = GetDbContext();
             var controller = new CarController(context);
 
             //Act
             Car test_car = new Car
             {
                 Id = 1,
-                Brand = "3",
-                Model = "3"
+                Brand = "UpdatedBrand",
+                Model = "UpdatedModel",
+                Year = 2020,
+                Price = 20000,
+                CreatedAt = DateTime.UtcNow.AddDays(-1)
             };
             await controller.PutCar(1, test_car);
             var result = await controller.GetCar(1);
 
             //Assert
             Assert.IsNotNull(result.Value);
-            Assert.AreEqual("3", result.Value.Brand);
-            Assert.AreEqual("3", result.Value.Model);
+            Assert.AreEqual("UpdatedBrand", result.Value.Brand);
+            Assert.AreEqual("UpdatedModel", result.Value.Model);
         }
 
         // Tests the PostCar method, which posts a car. The expected result is for a car to be added.
@@ -617,12 +579,7 @@ namespace Auto.Tests
         public async Task PostCar_ShouldPostCar()
         {
             //Arrange
-            var options = new DbContextOptionsBuilder<ModelsContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-                .Options;
-
-            var context = new ModelsContext(options);
-            context.SaveChanges();
+            var context = GetDbContext();
             var controller = new CarController(context);
 
             //Act
@@ -632,21 +589,23 @@ namespace Auto.Tests
                 Email = "test@example.com",
                 Id = "1"
             };
+            context.Users.Add(test_user);
+            await context.SaveChangesAsync();
+
             Car test_car = new Car
             {
-                Id = 1,
-                Brand = "1",
-                Model = "1",
+                Id = 4,
+                Brand = "NewBrand",
+                Model = "NewModel",
                 User = test_user
             };
-            context.Users.Add(test_user);
             await controller.PostCar(test_car);
-            var result = await controller.GetCar(1);
+            var result = await controller.GetCar(4);
 
             //Assert
             Assert.IsNotNull(result.Value);
-            Assert.AreEqual("1", result.Value.Brand);
-            Assert.AreEqual("1", result.Value.Model);
+            Assert.AreEqual("NewBrand", result.Value.Brand);
+            Assert.AreEqual("NewModel", result.Value.Model);
         }
 
         // Tests the DeleteCar method, which deletes a car by id. The expected result is for a car to be deleted.
@@ -654,19 +613,7 @@ namespace Auto.Tests
         public async Task DeleteCar_ShouldDeleteCar()
         {
             //Arrange
-            var options = new DbContextOptionsBuilder<ModelsContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-                .Options;
-
-            var context = new ModelsContext(options);
-
-            context.Cars.Add(new Car
-            {
-                Id = 1,
-                Brand = "1",
-                Model = "1"
-            });
-            context.SaveChanges();
+            var context = GetDbContext();
             var controller = new CarController(context);
 
             //Act
@@ -682,23 +629,11 @@ namespace Auto.Tests
         public async Task DeleteCar_ShouldReturnNotFound_WhenCardDoesntExist()
         {
             //Arrange
-            var options = new DbContextOptionsBuilder<ModelsContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-                .Options;
-
-            var context = new ModelsContext(options);
-
-            context.Cars.Add(new Car
-            {
-                Id = 1,
-                Brand = "1",
-                Model = "1"
-            });
-            context.SaveChanges();
+            var context = GetDbContext();
             var controller = new CarController(context);
 
             //Act
-            var result = await controller.DeleteCar(2);
+            var result = await controller.DeleteCar(999);
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(NotFoundResult));

@@ -108,14 +108,29 @@ function Posting() {
             if (!formData[field]) {
                 // Create display names by splitting camelCase and capitalizing
                 let displayName = field;
-                if (field === 'fuelType') displayName = 'Kuro tipas';
-                else if (field === 'horsepower') displayName = 'Arklio galia';
-                else if (field === 'bodyType') displayName = 'Kėbulo tipas';
+                if (field === 'fuelType') displayName = 'Kuro tipas yra privalomas';
+                else if (field === 'brand') displayName = 'Markė yra privaloma';
+                else if (field === 'model') displayName = 'Modelis yra privalomas';
+                else if (field === 'year') displayName = 'Metai yra privalomi';
+                else if (field === 'transmission') displayName = 'Pavarų dėžė yra privaloma';
+                else if (field === 'price') displayName = 'Kaina yra privaloma';
+                else if (field === 'condition') displayName = 'Būklė yra privaloma';
+                else if (field === 'horsepower') displayName = 'Variklio galia yra privaloma';
+                else if (field === 'bodyType') displayName = 'Kėbulo tipas yra privalomas';
                 else displayName = field.charAt(0).toUpperCase() + field.slice(1);
 
-                newErrors[field] = `${displayName} yra privalomas`;
+                newErrors[field] = displayName;
             }
         });
+
+        if (formData.mileage !== 0 && (Number(formData.mileage) < 0 || Number(formData.mileage) > 1500000)) newErrors.mileage = "Rida turi būti tarp 0 ir 1 500 000";
+        if (formData.engineCapacity !== 0 && (Number(formData.engineCapacity) < 0.5 || Number(formData.engineCapacity) > 10)) newErrors.engineCapacity = "Variklio tūris turi būti tarp 0.5 ir 10";
+        if (formData.horsepower !== 0 && (Number(formData.horsepower) < 15 || Number(formData.horsepower) > 1500)) newErrors.horsepower = "Variklio galia turi būti tarp 15 ir 1500";
+        if (formData.doors !== 0 && (Number(formData.doors) < 2 || Number(formData.doors) > 6)) newErrors.doors = "Durų skaičius turi būti tarp 2 ir 6";
+        if (formData.seats !== 0 && (Number(formData.seats) < 1 || Number(formData.seats) > 9)) newErrors.seats = "Sėdimų vietų skaičius turi būti tarp 1 ir 9";
+        if (formData.price !== 0 && (Number(formData.price) < 100 || Number(formData.seats) > 1000000)) newErrors.price = "Kaina turi būti tarp 100 ir 1000000";
+        if (formData.vin !== "" && formData.vin.length != 17) newErrors.vin = "VIN numeris turi susidaryti iš 17 simbolių";
+        if (formData.registrationNumber !== "" && (formData.registrationNumber.length < 4 || formData.registrationNumber.length > 10)) newErrors.registrationNumber = "Regisracijos numeryje turi būti tarp 4 ir 10 simbolių";
 
         // Special validation for radio buttons
         if (formData.accidentHistory === undefined) {
@@ -265,8 +280,9 @@ function Posting() {
 
             {/* MILEAGE */}
             <div className="input-group">
-                <label htmlFor="mileage">Rida</label>
-                <input type="number" id="mileage" name="mileage" placeholder="Įveskite ridą" onChange={handleChange} />
+                <label htmlFor="mileage">Rida (km)</label>
+                    <input type="number" id="mileage" name="mileage" placeholder="Įveskite ridą" onChange={handleChange} />
+                    {errors.mileage && <span className="error-message">{errors.mileage}</span>}
             </div>
 
             {/* FUEL TYPE */}
@@ -300,14 +316,15 @@ function Posting() {
 
             {/* ENGINE CAPACITY */}
             <div className="input-group">
-                <label htmlFor="engineCapacity">Variklio tūris</label>
+                <label htmlFor="engineCapacity">Variklio tūris (L)</label>
                 <input type="number" id="engineCapacity" name="engineCapacity" placeholder="Įveskite variklio tūrį" step="0.1" onChange={handleChange}/>
+                {errors.engineCapacity && <span className="error-message">{errors.engineCapacity}</span>}
             </div>
 
             {/* HORSE POWER */}
             <div className="input-group">
-                <label htmlFor="horsepower">Arklio galia (HP)</label>
-                <input type="number" id="horsepower" name="horsepower" placeholder="Įveskite arklio galią" onChange={handleChange} />
+                <label htmlFor="horsepower">Variklio galia (KW)</label>
+                <input type="number" id="horsepower" name="horsepower" placeholder="Įveskite variklio galią" onChange={handleChange} />
                 {errors.horsepower && <span className="error-message">{errors.horsepower}</span>}
             </div>
 
@@ -325,13 +342,15 @@ function Posting() {
             {/* DOORS */}
             <div className="input-group">
                 <label htmlFor="doors">Durų skaičius</label>
-                <input type="number" id="doors" name="doors" placeholder="Įveskite durų skaičių" onChange={handleChange}  />
+                    <input type="number" id="doors" name="doors" placeholder="Įveskite durų skaičių" onChange={handleChange} />
+                    {errors.doors && <span className="error-message">{errors.doors}</span>}
             </div>
 
             {/* SEATS */}
             <div className="input-group">
                 <label htmlFor="seats">Sėdimų vietų skaičius:</label>
-                <input type="number" id="seats" name="seats" placeholder="Įveskite sėdimų vietų skaičių" onChange={handleChange} />
+                    <input type="number" id="seats" name="seats" placeholder="Įveskite sėdimų vietų skaičių" onChange={handleChange} />
+                    {errors.seats && <span className="error-message">{errors.seats}</span>}
             </div>
 
             {/* BODY TYPE */}
@@ -374,13 +393,15 @@ function Posting() {
             {/* VIN */}
             <div className="input-group">
                 <label htmlFor="vin">VIN numeris</label>
-                <input type="text" id="vin" name="vin" placeholder="Įveskite VIN numerį" onChange={handleChange} value={formData.vin} />
+                    <input type="text" id="vin" name="vin" placeholder="Įveskite VIN numerį" onChange={handleChange} value={formData.vin} />
+                    {errors.vin && <span className="error-message">{errors.vin}</span>}
             </div>
 
             {/* Registration Number */}
             <div className="input-group">
                 <label htmlFor="registrationNumber">Registracijos numeris</label>
-                <input type="text" id="registrationNumber" name="registrationNumber" placeholder="Įveskite registracijos numerį" onChange={handleChange} />
+                    <input type="text" id="registrationNumber" name="registrationNumber" placeholder="Įveskite registracijos numerį" onChange={handleChange} />
+                    {errors.registrationNumber && <span className="error-message">{errors.registrationNumber}</span>}
             </div>
 
             {/* CONDITION */}
@@ -425,12 +446,13 @@ function Posting() {
             {/* Technical Inspection Date */}
             <div className="input-group">
                 <label htmlFor="technicalInspectionValidUntil">Tech. apžiūra iki</label>
-                <input type="date" id="technicalInspectionValidUntil" name="technicalInspectionValidUntil" onChange={handleChange}  />
+                    <input type="date" id="technicalInspectionValidUntil" name="technicalInspectionValidUntil" onChange={handleChange} min={new Date(new Date().setFullYear(new Date().getFullYear() - 5)).toISOString().split('T')[0]}
+                        max={new Date(new Date().setFullYear(new Date().getFullYear() + 5)).toISOString().split('T')[0]} />
             </div>
 
             {/* PRICE */}
             <div className="input-group">
-                <label htmlFor="price">Kaina</label>
+                <label htmlFor="price">Kaina (€)</label>
                 <input type="number" id="price" name="price" placeholder="Įveskite kainą" onChange={handleChange} />
                 {errors.price && <span className="error-message">{errors.price}</span>}
             </div>
