@@ -149,6 +149,83 @@ function Posting() {
     const [showConfirmation, setShowConfirmation] = useState(false);
     const navigate = useNavigate();
 
+    const [previewImages, setPreviewImages] = useState([]);
+
+    const handleFileChange = async (e) => {
+        const files = Array.from(e.target.files);
+        await processFiles(files);
+    };
+
+    const processFiles = async (files) => {
+        const newPreviews = [];
+        const urls = [];
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            // Create preview URL
+            const previewUrl = URL.createObjectURL(file);
+            newPreviews.push({
+                url: previewUrl,
+                name: file.name,
+                status: 'uploading'
+            });
+
+            // Upload to Supabase
+            try {
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
+                const filePath = `img-bucket/${fileName}`;
+
+                const { error } = await supabase.storage
+                    .from('img-bucket')
+                    .upload(filePath, file);
+
+                if (error) {
+                    console.error("Failed to upload file:", error);
+                    newPreviews[i].status = 'error';
+                } else {
+                    const { data: publicUrlData } = supabase.storage
+                        .from('img-bucket')
+                        .getPublicUrl(filePath);
+                    urls.push(publicUrlData.publicUrl);
+                    newPreviews[i].status = 'done';
+                }
+            } catch (error) {
+                console.error("Upload error:", error);
+                newPreviews[i].status = 'error';
+            }
+        }
+
+        setPreviewImages(prev => [...prev, ...newPreviews]);
+        setFormData(prev => ({
+            ...prev,
+            imageUrls: [...prev.imageUrls, ...urls]
+        }));
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const files = Array.from(e.dataTransfer.files);
+        if (files.length > 0) {
+            processFiles(files);
+        }
+    };
+
+    const removeImage = (index) => {
+        setPreviewImages(prev => prev.filter((_, i) => i !== index));
+        setFormData(prev => ({
+            ...prev,
+            imageUrls: prev.imageUrls.filter((_, i) => i !== index)
+        }));
+    };
+
     const validateForm = () => {
         const newErrors = {};
         const requiredFields = [
@@ -183,6 +260,9 @@ function Posting() {
         if (formData.price !== 0 && (Number(formData.price) < 100 || Number(formData.seats) > 1000000)) newErrors.price = "Kaina turi būti tarp 100 ir 1000000";
         if (formData.vin !== "" && formData.vin.length != 17) newErrors.vin = "VIN numeris turi susidaryti iš 17 simbolių";
         if (formData.registrationNumber !== "" && (formData.registrationNumber.length < 4 || formData.registrationNumber.length > 10)) newErrors.registrationNumber = "Regisracijos numeryje turi būti tarp 4 ir 10 simbolių";
+        if (formData.imageUrls.length === 0) {
+            newErrors.images = "Privaloma įkelti bent vieną nuotrauką";
+        }
 
         // Special validation for radio buttons
         if (formData.accidentHistory === undefined) {
@@ -195,36 +275,6 @@ function Posting() {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-    const handleFileChange = async (e) => {
-        const files = e.target.files;
-        const urls = [];
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
-            const filePath = `img-bucket/${fileName}`;
-
-            const { error } = await supabase.storage
-                .from('img-bucket') // tavo Supabase bucket pavadinimas
-                .upload(filePath, file);
-
-            if (error) {
-                console.error("Failed to upload file:", error);
-            } else {
-                const { data: publicUrlData } = supabase.storage
-                    .from('img-bucket')
-                    .getPublicUrl(filePath);
-                urls.push(publicUrlData.publicUrl);
-            }
-        }
-
-        setFormData((prev) => ({
-            ...prev,
-            imageUrls: [...prev.imageUrls, ...urls]
-        }));
-    };
-
 
     const handleChange = (e) => {
         const { name, value, type, checked, files } = e.target;
@@ -552,22 +602,75 @@ function Posting() {
                 <textarea id="description" name="description" placeholder="Įveskite aprašymą" onChange={handleChange}></textarea>
             </div>
 
+                {/* Updated Image Upload Section */}
+                <div className="input-group">
+                    <label htmlFor="images" className="upload-label">
+                        Nuotraukos:
+                    </label>
+                    {errors.images && <span className="error-message">{errors.images}</span>}
+                    <div
+                        className="drop-zone"
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                        onClick={() => document.getElementById('file-input').click()}
+                    >
+                        <input
+                            id="file-input"
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            style={{ display: 'none' }}
+                        />
+                        <div className="drop-zone-content">
+                            <p>Vilkite nuotraukas čia arba spauskite, kad pasirinktumėte</p>
+                            <p>PNG, JPG (maks. 10MB)</p>
+                        </div>
+                    </div>
+
+                    {/* Image Previews */}
+                    <div className="image-previews">
+                        {previewImages.map((image, index) => (
+                            <div key={index} className="image-preview-container">
+                                <img
+                                    src={image.url}
+                                    alt={`Preview ${index}`}
+                                    className="image-preview"
+                                />
+                                <button
+                                    type="button"
+                                    className="remove-image-btn"
+                                    onClick={() => removeImage(index)}
+                                >
+                                    ×
+                                </button>
+                                {image.status === 'uploading' && (
+                                    <div className="upload-progress">Įkeliama...</div>
+                                )}
+                                {image.status === 'error' && (
+                                    <div className="upload-error">Klaida!</div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
             {/* BUTTON */}
             <div className="form-actions">
                 <Link to="/" className="cancel-btn">Atšaukti</Link>
                 <button type="submit" className="submit-btn">Įkelti</button>
             </div>
 
-            <div className="input-group">
-                <label htmlFor="images">Upload Images:</label>
-                <input
-                    type="file"
-                    id="images"
-                    multiple
-                    accept="image/*"
-                    onChange={handleFileChange}
-                />
-            </div>
+            {/*<div className="input-group">*/}
+            {/*    <label htmlFor="images">Upload Images:</label>*/}
+            {/*    <input*/}
+            {/*        type="file"*/}
+            {/*        id="images"*/}
+            {/*        multiple*/}
+            {/*        accept="image/*"*/}
+            {/*        onChange={handleFileChange}*/}
+            {/*    />*/}
+            {/*</div>*/}
 
             {showConfirmation && (
                 <div className="confirmation-popup">
