@@ -1,16 +1,226 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import "../Styles/AccountPage.css";
+import NavBar from "../components/NavBar";
 
-//Cia galima kurti account page
 function AccountPage() {
     const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalField, setModalField] = useState("");
+    const [modalKey, setModalKey] = useState("");
+    const [modalValue, setModalValue] = useState("");
+    const [fields, setFields] = useState({
+        email: "",
+        password: "********",
+        firstName: "-",
+        lastName: "-",
+        phone: "-",
+        countryCity: "-",
+        street: "-",
+        address: "-"
+    });
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        const userId = localStorage.getItem("userId");
+
+        if (!token || !userId) return;
+
+        fetch(`https://localhost:7193/User/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Nepavyko gauti duomenų");
+                return res.json();
+            })
+            .then(data => {
+                setFields({
+                    email: data.email || "",
+                    password: "********",
+                    firstName: "-",
+                    lastName: "-",
+                    phone: data.phoneNumber || "-",
+                    countryCity: "-",
+                    street: "-",
+                    address: "-"
+                });
+            })
+            .catch(err => {
+                console.error("Klaida gaunant vartotojo duomenis:", err);
+            });
+    }, []);
+
+    const openModal = (key, label) => {
+        setModalKey(key);
+        setModalField(label);
+        setModalValue(fields[key]);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setModalField("");
+        setModalKey("");
+        setModalValue("");
+    };
+
+    const fieldMapToServer = {
+        phone: "phoneNumber",
+        firstName: "userName",
+        contactEmail: "email",
+    };
+
+    const saveModal = async () => {
+        const token = localStorage.getItem("token");
+        const userId = localStorage.getItem("userId");
+
+        if (!token || !userId) return;
+
+        try {
+            const res = await fetch(`https://localhost:7193/User/${userId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            const originalUser = await res.json();
+            const keyForServer = fieldMapToServer[modalKey] || modalKey;
+
+            const updatedUser = {
+                ...originalUser,
+                [keyForServer]: modalValue,
+
+                normalizedEmail: originalUser.normalizedEmail || "",
+                normalizedUserName: originalUser.normalizedUserName || "",
+                emailConfirmed: originalUser.emailConfirmed ?? true,
+                passwordHash: originalUser.passwordHash || "",
+                securityStamp: originalUser.securityStamp || "",
+                concurrencyStamp: originalUser.concurrencyStamp || "",
+                phoneNumberConfirmed: originalUser.phoneNumberConfirmed ?? true,
+                twoFactorEnabled: originalUser.twoFactorEnabled ?? false,
+                lockoutEnd: originalUser.lockoutEnd ?? null,
+                lockoutEnabled: originalUser.lockoutEnabled ?? false,
+                accessFailedCount: originalUser.accessFailedCount ?? 0
+            };
+
+            const putRes = await fetch(`https://localhost:7193/User/${userId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(updatedUser)
+            });
+
+            if (!putRes.ok) throw new Error("Nepavyko išsaugoti");
+
+            setFields(prev => ({ ...prev, [modalKey]: modalValue }));
+            closeModal();
+            console.log("✅ Duomenys atnaujinti");
+
+        } catch (err) {
+            console.error("❌ Klaida išsaugant:", err.message);
+            alert("Nepavyko išsaugoti. Žr. konsolę.");
+        }
+    };
+
 
     const handleLogout = () => {
         localStorage.removeItem("userId");
-        navigate("/");
-    };
-
+        localStorage.removeItem("token");
     return (
         <div>
+            <NavBar className="NavBar" />
+            <div className="account-page">
+                <h1 className="page-title">Profilio nustatymai</h1>
+
+                <div className="section">
+                    <h2 className="section-title">Prisijungimo nustatymai</h2>
+                    <div className="field">
+                        <label>El. paštas:</label>
+                        <div className="field-value">
+                            <span>{fields.email}</span>
+                            <button className="edit-button" disabled style={{ opacity: 0.5, cursor: "not-allowed" }}>Keisti</button>
+                        </div>
+                    </div>
+                    <div className="field">
+                        <label>Slaptažodis:</label>
+                        <div className="field-value">
+                            <span>{fields.password}</span>
+                            <button className="edit-button" disabled style={{ opacity: 0.5, cursor: "not-allowed" }}>Keisti</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="section">
+                    <h2 className="section-title">Vartotojo duomenys</h2>
+                    <div className="field">
+                        <label>Vardas:</label>
+                        <div className="field-value">
+                            <span>{fields.firstName}</span>
+                            <button className="edit-button" onClick={() => openModal("firstName", "Vardas")}>Keisti</button>
+                        </div>
+                    </div>
+                    <div className="field">
+                        <label>Pavardė:</label>
+                        <div className="field-value">
+                            <span>{fields.lastName}</span>
+                            <button className="edit-button" onClick={() => openModal("lastName", "Pavardė")}>Keisti</button>
+                        </div>
+                    </div>
+                    <div className="field">
+                        <label>Telefonas:</label>
+                        <div className="field-value">
+                            <span>{fields.phone}</span>
+                            <button className="edit-button" onClick={() => openModal("phone", "Telefonas")}>Keisti</button>
+                        </div>
+                    </div>
+                    <div className="field">
+                        <label>Šalis, Miestas:</label>
+                        <div className="field-value">
+                            <span>{fields.countryCity}</span>
+                            <button className="edit-button" onClick={() => openModal("countryCity", "Šalis, Miestas")}>Keisti</button>
+                        </div>
+                    </div>
+                    <div className="field">
+                        <label>Gatvė:</label>
+                        <div className="field-value">
+                            <span>{fields.street}</span>
+                            <button className="edit-button" onClick={() => openModal("street", "Gatvė")}>Keisti</button>
+                        </div>
+                    </div>
+                    <div className="field">
+                        <label>Adresas (namo numeris):</label>
+                        <div className="field-value">
+                            <span>{fields.address}</span>
+                            <button className="edit-button" onClick={() => openModal("address", "Adresas (namo numeris)")}>Keisti</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style={{ textAlign: "center", marginTop: "2rem" }}>
+                    <button className="logout-button" onClick={handleLogout}>Atsijungti</button>
+                </div>
+
+                {/* Modalas */}
+                {isModalOpen && (
+                    <div className="modal-overlay">
+                        <div className="modal">
+                            <h3>Redaguoti: {modalField}</h3>
+                            <input
+                                type="text"
+                                value={modalValue}
+                                onChange={(e) => setModalValue(e.target.value)}
+                                className="modal-input"
+                            />
+                            <div className="modal-buttons">
+                                <button onClick={saveModal} className="save-button">Išsaugoti</button>
+                                <button onClick={closeModal} className="cancel-button">Atšaukti</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
             <button onClick={handleLogout}>Logout</button>
         </div>
     );

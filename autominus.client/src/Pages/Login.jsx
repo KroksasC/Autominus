@@ -58,8 +58,8 @@ function Login() {
             if (data.userId) {
                 localStorage.setItem("userId", data.userId);
             }
-            if (data.token) {
-                localStorage.setItem("token", data.token);
+            if (data.accessToken) {
+                localStorage.setItem("token", data.accessToken);
             }
             if (data.email) {
                 localStorage.setItem("email", data.email);
