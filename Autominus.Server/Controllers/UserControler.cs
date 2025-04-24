@@ -45,6 +45,7 @@ namespace Autominus.Server.Controllers
             }
             existingUser.UserName = updatedUser.UserName;
             existingUser.Email = updatedUser.Email;
+            existingUser.PhoneNumber = updatedUser.PhoneNumber;
 
             try
             {
