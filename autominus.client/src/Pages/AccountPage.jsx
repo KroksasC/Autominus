@@ -128,6 +128,9 @@ function AccountPage() {
     const handleLogout = () => {
         localStorage.removeItem("userId");
         localStorage.removeItem("token");
+        navigate("/l");
+    }
+
     return (
         <div>
             <NavBar className="NavBar" />
@@ -221,7 +224,6 @@ function AccountPage() {
                     </div>
                 )}
             </div>
-            <button onClick={handleLogout}>Logout</button>
         </div>
     );
 }
