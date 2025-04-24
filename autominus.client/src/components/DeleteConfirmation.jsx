@@ -4,13 +4,12 @@ import DeleteCar from "../API/DeleteCar";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react"; // Import useState for managing state
 
-const DeleteConfirmation = ({ onClose }) => {
+const DeleteConfirmation = ({ onClose, carUserId }) => {
     const { id } = useParams();
     const navigate = useNavigate();  // Use navigate hook for redirect
     const [isDeleted, setIsDeleted] = useState(false); // State to track if the car was deleted
-
     const handleDelete = () => {
-        DeleteCar(id)
+        DeleteCar(id, carUserId)
             .then(() => {
                 console.log("Car deleted successfully");
                 setIsDeleted(true);  // Change the state to show success message
@@ -58,6 +57,7 @@ const DeleteConfirmation = ({ onClose }) => {
 
 DeleteConfirmation.propTypes = {
     onClose: PropTypes.func.isRequired,
+    carUserId: PropTypes.func.isRequired,
 };
 
 export default DeleteConfirmation;

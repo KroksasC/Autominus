@@ -61,6 +61,76 @@ const carModels = {
     Volvo: ["S60", "XC40", "XC90", "V60", "S90", "XC60", "C40 Recharge"]
 };
 
+const brandYears = {
+    Acura: { start: 1986, end: 2025 },
+    "Alfa Romeo": { start: 1910, end: 2025 },
+    "Aston Martin": { start: 1913, end: 2025 },
+    Audi: { start: 1910, end: 2025 },
+    Bentley: { start: 1919, end: 2025 },
+    BMW: { start: 1916, end: 2025 },
+    Bugatti: { start: 1909, end: 2025 },
+    Buick: { start: 1903, end: 2025 },
+    Cadillac: { start: 1902, end: 2025 },
+    Chevrolet: { start: 1911, end: 2025 },
+    Chrysler: { start: 1925, end: 2025 },
+    Citroen: { start: 1919, end: 2025 },
+    Dodge: { start: 1900, end: 2025 },
+    Ferrari: { start: 1947, end: 2025 },
+    Fiat: { start: 1899, end: 2025 },
+    Ford: { start: 1903, end: 2025 },
+    Genesis: { start: 2015, end: 2025 },
+    GMC: { start: 1911, end: 2025 },
+    Honda: { start: 1948, end: 2025 },
+    Hyundai: { start: 1967, end: 2025 },
+    Infiniti: { start: 1989, end: 2025 },
+    Jaguar: { start: 1922, end: 2025 },
+    Jeep: { start: 1941, end: 2025 },
+    Kia: { start: 1944, end: 2025 },
+    Lamborghini: { start: 1963, end: 2025 },
+    "Land Rover": { start: 1948, end: 2025 },
+    Lexus: { start: 1989, end: 2025 },
+    Lincoln: { start: 1917, end: 2025 },
+    Maserati: { start: 1914, end: 2025 },
+    Mazda: { start: 1920, end: 2025 },
+    McLaren: { start: 1963, end: 2025 },
+    Mercedes: { start: 1926, end: 2025 },
+    Mini: { start: 1959, end: 2025 },
+    Mitsubishi: { start: 1917, end: 2025 },
+    Nissan: { start: 1933, end: 2025 },
+    Pagani: { start: 1992, end: 2025 },
+    Peugeot: { start: 1889, end: 2025 },
+    Polestar: { start: 2017, end: 2025 },
+    Porsche: { start: 1948, end: 2025 },
+    Ram: { start: 2009, end: 2025 },
+    Renault: { start: 1899, end: 2025 },
+    "Rolls Royce": { start: 1904, end: 2025 },
+    Saab: { start: 1945, end: 2011 },
+    Smart: { start: 1994, end: 2025 },
+    Subaru: { start: 1953, end: 2025 },
+    Suzuki: { start: 1909, end: 2025 },
+    Tesla: { start: 2003, end: 2025 },
+    Toyota: { start: 1937, end: 2025 },
+    Volkswagen: { start: 1937, end: 2025 },
+    Volvo: { start: 1927, end: 2025 }
+};
+
+const lithuanianCities = [
+    "Vilnius", "Kaunas", "Klaipėda", "Šiauliai", "Panevėžys", "Alytus", "Marijampolė",
+    "Mažeikiai", "Jonava", "Utena", "Kėdainiai", "Tauragė", "Telšiai", "Ukmergė",
+    "Visaginas", "Plungė", "Kretinga", "Palanga", "Radviliškis", "Šilutė", "Druskininkai",
+    "Gargždai", "Rokiškis", "Biržai", "Elektrėnai", "Kuršėnai", "Garliava", "Jurbarkas",
+    "Vilkaviškis", "Raseiniai", "Anykščiai", "Lentvaris", "Grigiškės", "Naujoji Akmenė",
+    "Prienai", "Joniškis", "Kelmė", "Varėna", "Kaišiadorys", "Pasvalys", "Kupiškis",
+    "Zarasai", "Skuodas", "Kazlų Rūda", "Širvintos", "Molėtai", "Šalčininkai", "Šakiai",
+    "Ignalina", "Pabradė", "Švenčionys", "Trakai", "Vievis", "Lazdijai", "Kalvarija",
+    "Rietavas", "Žiežmariai", "Neringa", "Šilalė", "Pakruojis", "Švenčionėliai", "Venta",
+    "Subačius", "Baltoji Vokė", "Dūkštas", "Pandėlys", "Dusetos", "Užventis", "Seda",
+    "Varniai", "Viekšniai", "Žagarė", "Ežerėlis", "Skaudvilė", "Kudirkos Naumiestis",
+    "Simnas", "Salantai", "Linkuva", "Veisiejai", "Ramygala", "Priekulė", "Joniškėlis",
+    "Jieznas", "Daugai", "Obeliai", "Vandžiogala", "Sasnava", "Daugėliškis", "Kybartai",
+    "Tytuvėnai", "Troškūnai", "Viduklė", "Žemaičių Naumiestis", "Eišiškės", "Antalieptė",
+    "Kurkliai", "Smalininkai", "Viešvilė", "Panemunė", "Valkininkai", "Rūdiškės"
+];
 function Posting() {
 
     const [formData, setFormData] = useState({
@@ -86,7 +156,7 @@ function Posting() {
         "negotiable": undefined,
         "description": "",
         "imageUrls": [],
-        "location": "",
+        "city": "",
         "createdAt": "",
         "user": {
             id: 0
@@ -97,25 +167,149 @@ function Posting() {
     const [showConfirmation, setShowConfirmation] = useState(false);
     const navigate = useNavigate();
 
+    const [cityInput, setCityInput] = useState("");
+    const [filteredCities, setFilteredCities] = useState([]);
+    const [showCityDropdown, setShowCityDropdown] = useState(false);
+
+    // Add this handler
+    const handleCityInputChange = (e) => {
+        const input = e.target.value;
+        setCityInput(input);
+
+        if (input.length > 0) {
+            const filtered = lithuanianCities.filter(city =>
+                city.toLowerCase().includes(input.toLowerCase())
+            );
+            setFilteredCities(filtered);
+            setShowCityDropdown(true);
+        } else {
+            setFilteredCities([]);
+            setShowCityDropdown(false);
+        }
+    };
+
+    const handleCitySelect = (city) => {
+        setCityInput(city);
+        setFormData(prev => ({ ...prev, city: city }));
+        setShowCityDropdown(false);
+    };
+
+
+    const [previewImages, setPreviewImages] = useState([]);
+
+    const handleFileChange = async (e) => {
+        const files = Array.from(e.target.files);
+        await processFiles(files);
+    };
+
+    const processFiles = async (files) => {
+        const newPreviews = [];
+        const urls = [];
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            // Create preview URL
+            const previewUrl = URL.createObjectURL(file);
+            newPreviews.push({
+                url: previewUrl,
+                name: file.name,
+                status: 'uploading'
+            });
+
+            // Upload to Supabase
+            try {
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
+                const filePath = `img-bucket/${fileName}`;
+
+                const { error } = await supabase.storage
+                    .from('img-bucket')
+                    .upload(filePath, file);
+
+                if (error) {
+                    console.error("Failed to upload file:", error);
+                    newPreviews[i].status = 'error';
+                } else {
+                    const { data: publicUrlData } = supabase.storage
+                        .from('img-bucket')
+                        .getPublicUrl(filePath);
+                    urls.push(publicUrlData.publicUrl);
+                    newPreviews[i].status = 'done';
+                }
+            } catch (error) {
+                console.error("Upload error:", error);
+                newPreviews[i].status = 'error';
+            }
+        }
+
+        setPreviewImages(prev => [...prev, ...newPreviews]);
+        setFormData(prev => ({
+            ...prev,
+            imageUrls: [...prev.imageUrls, ...urls]
+        }));
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const files = Array.from(e.dataTransfer.files);
+        if (files.length > 0) {
+            processFiles(files);
+        }
+    };
+
+    const removeImage = (index) => {
+        setPreviewImages(prev => prev.filter((_, i) => i !== index));
+        setFormData(prev => ({
+            ...prev,
+            imageUrls: prev.imageUrls.filter((_, i) => i !== index)
+        }));
+    };
+
     const validateForm = () => {
         const newErrors = {};
         const requiredFields = [
             'brand', 'model', 'year', 'fuelType', 'transmission',
-            'horsepower', 'bodyType', 'condition', 'price'
+            'horsepower', 'bodyType', 'condition', 'price', 'city'
         ];
 
         requiredFields.forEach(field => {
             if (!formData[field]) {
                 // Create display names by splitting camelCase and capitalizing
                 let displayName = field;
-                if (field === 'fuelType') displayName = 'Kuro tipas';
-                else if (field === 'horsepower') displayName = 'Arklio galia';
-                else if (field === 'bodyType') displayName = 'Kėbulo tipas';
+                if (field === 'fuelType') displayName = 'Kuro tipas yra privalomas';
+                else if (field === 'brand') displayName = 'Markė yra privaloma';
+                else if (field === 'model') displayName = 'Modelis yra privalomas';
+                else if (field === 'year') displayName = 'Metai yra privalomi';
+                else if (field === 'transmission') displayName = 'Pavarų dėžė yra privaloma';
+                else if (field === 'price') displayName = 'Kaina yra privaloma';
+                else if (field === 'condition') displayName = 'Būklė yra privaloma';
+                else if (field === 'horsepower') displayName = 'Variklio galia yra privaloma';
+                else if (field === 'bodyType') displayName = 'Kėbulo tipas yra privalomas';
+                else if (field === 'city') displayName = 'Miestas tipas yra privalomas';
                 else displayName = field.charAt(0).toUpperCase() + field.slice(1);
 
-                newErrors[field] = `${displayName} yra privalomas`;
+                newErrors[field] = displayName;
             }
         });
+
+        if (formData.mileage !== 0 && (Number(formData.mileage) < 0 || Number(formData.mileage) > 1500000)) newErrors.mileage = "Rida turi būti tarp 0 ir 1 500 000";
+        if (formData.engineCapacity !== 0 && (Number(formData.engineCapacity) < 0.5 || Number(formData.engineCapacity) > 10)) newErrors.engineCapacity = "Variklio tūris turi būti tarp 0.5 ir 10";
+        if (formData.horsepower !== 0 && (Number(formData.horsepower) < 15 || Number(formData.horsepower) > 1500)) newErrors.horsepower = "Variklio galia turi būti tarp 15 ir 1500";
+        if (formData.doors !== 0 && (Number(formData.doors) < 2 || Number(formData.doors) > 6)) newErrors.doors = "Durų skaičius turi būti tarp 2 ir 6";
+        if (formData.seats !== 0 && (Number(formData.seats) < 1 || Number(formData.seats) > 9)) newErrors.seats = "Sėdimų vietų skaičius turi būti tarp 1 ir 9";
+        if (formData.price !== 0 && (Number(formData.price) < 100 || Number(formData.seats) > 1000000)) newErrors.price = "Kaina turi būti tarp 100 ir 1000000";
+        if (formData.vin !== "" && formData.vin.length != 17) newErrors.vin = "VIN numeris turi susidaryti iš 17 simbolių";
+        if (formData.registrationNumber !== "" && (formData.registrationNumber.length < 4 || formData.registrationNumber.length > 10)) newErrors.registrationNumber = "Regisracijos numeryje turi būti tarp 4 ir 10 simbolių";
+        if (formData.imageUrls.length === 0) {
+            newErrors.images = "Privaloma įkelti bent vieną nuotrauką";
+        }
 
         // Special validation for radio buttons
         if (formData.accidentHistory === undefined) {
@@ -128,36 +322,6 @@ function Posting() {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-    const handleFileChange = async (e) => {
-        const files = e.target.files;
-        const urls = [];
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
-            const filePath = `img-bucket/${fileName}`;
-
-            const { error } = await supabase.storage
-                .from('img-bucket') // tavo Supabase bucket pavadinimas
-                .upload(filePath, file);
-
-            if (error) {
-                console.error("Failed to upload file:", error);
-            } else {
-                const { data: publicUrlData } = supabase.storage
-                    .from('img-bucket')
-                    .getPublicUrl(filePath);
-                urls.push(publicUrlData.publicUrl);
-            }
-        }
-
-        setFormData((prev) => ({
-            ...prev,
-            imageUrls: [...prev.imageUrls, ...urls]
-        }));
-    };
-
 
     const handleChange = (e) => {
         const { name, value, type, checked, files } = e.target;
@@ -215,7 +379,6 @@ function Posting() {
     };
 
     const [selectedCar, setSelectedCar] = useState("");
-    const years = Array.from({ length: 2025 - 1920 + 1 }, (_, index) => 1920 + index);
 
     return (
         <div>
@@ -249,24 +412,36 @@ function Posting() {
                 {errors.model && <span className="error-message">{errors.model}</span>}
             </div>
 
-            {/* YEAR */}
-            <div className="select-group">
-                <label htmlFor="year">Metai</label>
-                <select id="year" name="year" onChange={handleChange} value={formData.year}>
-                    <option value="">--Pasirinkite metus--</option>
-                    {years.map((year) => (
-                        <option key={year} value={year}>
-                            {year}
-                        </option>
-                    ))}
-                </select>
-                {errors.year && <span className="error-message">{errors.year}</span>}
-            </div>
+                {/* YEAR */}
+                <div className="select-group">
+                    <label htmlFor="year">Metai</label>
+                    <select
+                        id="year"
+                        name="year"
+                        onChange={handleChange}
+                        value={formData.year}
+                        disabled={!formData.brand} // Disable if no brand selected
+                    >
+                        <option value="">--Pasirinkite metus--</option>
+                        {formData.brand &&
+                            Array.from(
+                                { length: brandYears[formData.brand].end - brandYears[formData.brand].start + 1 },
+                                (_, index) => brandYears[formData.brand].start + index
+                            ).map((year) => (
+                                <option key={year} value={year}>
+                                    {year}
+                                </option>
+                            ))
+                        }
+                    </select>
+                    {errors.year && <span className="error-message">{errors.year}</span>}
+                </div>
 
             {/* MILEAGE */}
             <div className="input-group">
-                <label htmlFor="mileage">Rida</label>
-                <input type="number" id="mileage" name="mileage" placeholder="Įveskite ridą" onChange={handleChange} />
+                <label htmlFor="mileage">Rida (km)</label>
+                    <input type="number" id="mileage" name="mileage" placeholder="Įveskite ridą" onChange={handleChange} />
+                    {errors.mileage && <span className="error-message">{errors.mileage}</span>}
             </div>
 
             {/* FUEL TYPE */}
@@ -300,14 +475,15 @@ function Posting() {
 
             {/* ENGINE CAPACITY */}
             <div className="input-group">
-                <label htmlFor="engineCapacity">Variklio tūris</label>
+                <label htmlFor="engineCapacity">Variklio tūris (L)</label>
                 <input type="number" id="engineCapacity" name="engineCapacity" placeholder="Įveskite variklio tūrį" step="0.1" onChange={handleChange}/>
+                {errors.engineCapacity && <span className="error-message">{errors.engineCapacity}</span>}
             </div>
 
             {/* HORSE POWER */}
             <div className="input-group">
-                <label htmlFor="horsepower">Arklio galia (HP)</label>
-                <input type="number" id="horsepower" name="horsepower" placeholder="Įveskite arklio galią" onChange={handleChange} />
+                <label htmlFor="horsepower">Variklio galia (KW)</label>
+                <input type="number" id="horsepower" name="horsepower" placeholder="Įveskite variklio galią" onChange={handleChange} />
                 {errors.horsepower && <span className="error-message">{errors.horsepower}</span>}
             </div>
 
@@ -325,13 +501,15 @@ function Posting() {
             {/* DOORS */}
             <div className="input-group">
                 <label htmlFor="doors">Durų skaičius</label>
-                <input type="number" id="doors" name="doors" placeholder="Įveskite durų skaičių" onChange={handleChange}  />
+                    <input type="number" id="doors" name="doors" placeholder="Įveskite durų skaičių" onChange={handleChange} />
+                    {errors.doors && <span className="error-message">{errors.doors}</span>}
             </div>
 
             {/* SEATS */}
             <div className="input-group">
                 <label htmlFor="seats">Sėdimų vietų skaičius:</label>
-                <input type="number" id="seats" name="seats" placeholder="Įveskite sėdimų vietų skaičių" onChange={handleChange} />
+                    <input type="number" id="seats" name="seats" placeholder="Įveskite sėdimų vietų skaičių" onChange={handleChange} />
+                    {errors.seats && <span className="error-message">{errors.seats}</span>}
             </div>
 
             {/* BODY TYPE */}
@@ -374,13 +552,15 @@ function Posting() {
             {/* VIN */}
             <div className="input-group">
                 <label htmlFor="vin">VIN numeris</label>
-                <input type="text" id="vin" name="vin" placeholder="Įveskite VIN numerį" onChange={handleChange} value={formData.vin} />
+                    <input type="text" id="vin" name="vin" placeholder="Įveskite VIN numerį" onChange={handleChange} value={formData.vin} />
+                    {errors.vin && <span className="error-message">{errors.vin}</span>}
             </div>
 
             {/* Registration Number */}
             <div className="input-group">
                 <label htmlFor="registrationNumber">Registracijos numeris</label>
-                <input type="text" id="registrationNumber" name="registrationNumber" placeholder="Įveskite registracijos numerį" onChange={handleChange} />
+                    <input type="text" id="registrationNumber" name="registrationNumber" placeholder="Įveskite registracijos numerį" onChange={handleChange} />
+                    {errors.registrationNumber && <span className="error-message">{errors.registrationNumber}</span>}
             </div>
 
             {/* CONDITION */}
@@ -425,12 +605,13 @@ function Posting() {
             {/* Technical Inspection Date */}
             <div className="input-group">
                 <label htmlFor="technicalInspectionValidUntil">Tech. apžiūra iki</label>
-                <input type="date" id="technicalInspectionValidUntil" name="technicalInspectionValidUntil" onChange={handleChange}  />
+                    <input type="date" id="technicalInspectionValidUntil" name="technicalInspectionValidUntil" onChange={handleChange} min={new Date(new Date().setFullYear(new Date().getFullYear() - 5)).toISOString().split('T')[0]}
+                        max={new Date(new Date().setFullYear(new Date().getFullYear() + 5)).toISOString().split('T')[0]} />
             </div>
 
             {/* PRICE */}
             <div className="input-group">
-                <label htmlFor="price">Kaina</label>
+                <label htmlFor="price">Kaina (€)</label>
                 <input type="number" id="price" name="price" placeholder="Įveskite kainą" onChange={handleChange} />
                 {errors.price && <span className="error-message">{errors.price}</span>}
             </div>
@@ -462,27 +643,100 @@ function Posting() {
                 {errors.negotiable && <span className="error-message">{errors.negotiable}</span>}
             </div>
 
+
+            {/* CITY */}
+             <div className="input-group">
+                 <label htmlFor="location">Miestas/Savivaldybė</label>
+                 <input
+                     type="text"
+                     id="location"
+                     name="location"
+                     value={cityInput}
+                     onChange={handleCityInputChange}
+                     onFocus={() => cityInput.length > 0 && setShowCityDropdown(true)}
+                     onBlur={() => setTimeout(() => setShowCityDropdown(false), 200)}
+                     placeholder="Pradėkite vesti miestą"
+                     autoComplete="off"
+                 />
+                 {showCityDropdown && filteredCities.length > 0 && (
+                     <ul className="city-dropdown">
+                         {filteredCities.map((city, index) => (
+                             <li
+                                 key={index}
+                                 onClick={() => handleCitySelect(city)}
+                                 className="city-option"
+                             >
+                                 {city}
+                             </li>
+                         ))}
+                     </ul>
+                    )}
+                 {errors.city && <span className="error-message">{errors.city}</span>}
+             </div>
+
             {/* DESCRIPTION */}
             <div className="input-group">
                 <label className="car_posting_header">Aprašymas:</label>
                 <textarea id="description" name="description" placeholder="Įveskite aprašymą" onChange={handleChange}></textarea>
             </div>
 
+                {/* Updated Image Upload Section */}
+                <div className="input-group">
+                    <label htmlFor="images" className="upload-label">
+                        Nuotraukos:
+                    </label>
+                    {errors.images && <span className="error-message">{errors.images}</span>}
+                    <div
+                        className="drop-zone"
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                        onClick={() => document.getElementById('file-input').click()}
+                    >
+                        <input
+                            id="file-input"
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            style={{ display: 'none' }}
+                        />
+                        <div className="drop-zone-content">
+                            <p>Vilkite nuotraukas čia arba spauskite, kad pasirinktumėte</p>
+                            <p>PNG, JPG (maks. 10MB)</p>
+                        </div>
+                    </div>
+
+                    {/* Image Previews */}
+                    <div className="image-previews">
+                        {previewImages.map((image, index) => (
+                            <div key={index} className="image-preview-container">
+                                <img
+                                    src={image.url}
+                                    alt={`Preview ${index}`}
+                                    className="image-preview"
+                                />
+                                <button
+                                    type="button"
+                                    className="remove-image-btn"
+                                    onClick={() => removeImage(index)}
+                                >
+                                    ×
+                                </button>
+                                {image.status === 'uploading' && (
+                                    <div className="upload-progress">Įkeliama...</div>
+                                )}
+                                {image.status === 'error' && (
+                                    <div className="upload-error">Klaida!</div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
             {/* BUTTON */}
             <div className="form-actions">
                 <Link to="/" className="cancel-btn">Atšaukti</Link>
                 <button type="submit" className="submit-btn">Įkelti</button>
-            </div>
-
-            <div className="input-group">
-                <label htmlFor="images">Upload Images:</label>
-                <input
-                    type="file"
-                    id="images"
-                    multiple
-                    accept="image/*"
-                    onChange={handleFileChange}
-                />
             </div>
 
             {showConfirmation && (

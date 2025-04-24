@@ -3,6 +3,7 @@ import CarPost from "../components/CarPost";
 import NavBar from "../components/NavBar";
 import FetchCars from "../API/FetchCars";
 import SearchBar from "../components/SearchBar";
+import { StatusView } from "../components/StatusView";
 
 function Home() {
     const [carList, setCarList] = useState([]);
@@ -150,6 +151,31 @@ function Home() {
             });
         }
 
+        if (filters?.sortConfig?.key) {
+            filtered.sort((a, b) => {
+                const key = filters.sortConfig.key;
+                const direction = filters.sortConfig.direction === 'asc' ? 1 : -1;
+
+                // Handle different sort keys
+                if (key === 'price') {
+                    return (parseFloat(a.price) - parseFloat(b.price)) * direction;
+                }
+                else if (key === 'createdAt') {
+                    return (new Date(a.createdAt) - new Date(b.createdAt)) * direction;
+                }
+                else if (key === 'brand') {
+                    // Sort by brand, then by model
+                    const brandCompare = a.brand.localeCompare(b.brand) * direction;
+                    if (brandCompare !== 0) return brandCompare;
+                    return a.model.localeCompare(b.model) * direction;
+                }
+                else if (key === 'year') {
+                    return (parseInt(a.year) - parseInt(b.year)) * direction;
+                }
+                return 0;
+            });
+        }
+
         setFilteredCarList(filtered);
     }, [filters, searchTerm, carList]); // Added searchTerm to dependencies
 
@@ -176,6 +202,7 @@ function Home() {
 
     return (
         <div className="Home">
+            <StatusView className="StatusView" />
             <NavBar className="NavBar" onFiltersChange={handleFiltersChange} />
             <SearchBar onSearch={handleSearch} />
             <div className="car-posts">
@@ -188,6 +215,7 @@ function Home() {
                         <CarPost key={car.id} car={car} />
                     ))
                 )}
+                {console.log(localStorage.getItem("userId"))}
             </div>
         </div>
     );

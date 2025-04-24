@@ -1,4 +1,4 @@
-﻿import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../Styles/AccountPage.css";
 import NavBar from "../components/NavBar";
@@ -128,9 +128,6 @@ function AccountPage() {
     const handleLogout = () => {
         localStorage.removeItem("userId");
         localStorage.removeItem("token");
-        navigate("/");
-    };
-
     return (
         <div>
             <NavBar className="NavBar" />
@@ -224,6 +221,7 @@ function AccountPage() {
                     </div>
                 )}
             </div>
+            <button onClick={handleLogout}>Logout</button>
         </div>
     );
 }
