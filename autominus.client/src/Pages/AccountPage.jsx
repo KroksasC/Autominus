@@ -15,7 +15,7 @@ function AccountPage() {
         firstName: "-",
         lastName: "-",
         phone: "-",
-        countryCity: "-",
+        city: "-",
         street: "-",
         address: "-"
     });
@@ -39,12 +39,12 @@ function AccountPage() {
                 setFields({
                     email: data.email || "",
                     password: "********",
-                    firstName: "-",
-                    lastName: "-",
+                    firstName: data.firstName || "-",
+                    lastName: data.lastName || "-",
                     phone: data.phoneNumber || "-",
-                    countryCity: "-",
-                    street: "-",
-                    address: "-"
+                    city: data.city || "-",
+                    street: data.street || "-",
+                    address: data.address || "-"
                 });
             })
             .catch(err => {
@@ -68,8 +68,11 @@ function AccountPage() {
 
     const fieldMapToServer = {
         phone: "phoneNumber",
-        firstName: "userName",
-        contactEmail: "email",
+        firstName: "firstName",
+        lastName: "lastName",
+        city: "city",
+        street: "street",
+        address: "address"
     };
 
     const saveModal = async () => {
@@ -86,9 +89,16 @@ function AccountPage() {
             const originalUser = await res.json();
             const keyForServer = fieldMapToServer[modalKey] || modalKey;
 
+            // naudoti jau atnaujintus fields reikšmes
             const updatedUser = {
                 ...originalUser,
-                [keyForServer]: modalValue,
+                firstName: fields.firstName,
+                lastName: fields.lastName,
+                city: fields.city,
+                street: fields.street,
+                address: fields.address,
+                phoneNumber: fields.phone,
+                [keyForServer]: modalValue, // perrašo tą vieną keistą reikšmę
 
                 normalizedEmail: originalUser.normalizedEmail || "",
                 normalizedUserName: originalUser.normalizedUserName || "",
@@ -117,19 +127,17 @@ function AccountPage() {
             setFields(prev => ({ ...prev, [modalKey]: modalValue }));
             closeModal();
             console.log("✅ Duomenys atnaujinti");
-
         } catch (err) {
             console.error("❌ Klaida išsaugant:", err.message);
             alert("Nepavyko išsaugoti. Žr. konsolę.");
         }
     };
 
-
     const handleLogout = () => {
         localStorage.removeItem("userId");
         localStorage.removeItem("token");
-        navigate("/l");
-    }
+        navigate("/");
+    };
 
     return (
         <div>
@@ -179,10 +187,10 @@ function AccountPage() {
                         </div>
                     </div>
                     <div className="field">
-                        <label>Šalis, Miestas:</label>
+                        <label>Miestas:</label>
                         <div className="field-value">
-                            <span>{fields.countryCity}</span>
-                            <button className="edit-button" onClick={() => openModal("countryCity", "Šalis, Miestas")}>Keisti</button>
+                            <span>{fields.city}</span>
+                            <button className="edit-button" onClick={() => openModal("city", "Miestas")}>Keisti</button>
                         </div>
                     </div>
                     <div className="field">
@@ -205,7 +213,6 @@ function AccountPage() {
                     <button className="logout-button" onClick={handleLogout}>Atsijungti</button>
                 </div>
 
-                {/* Modalas */}
                 {isModalOpen && (
                     <div className="modal-overlay">
                         <div className="modal">
