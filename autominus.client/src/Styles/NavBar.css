@@ -68,6 +68,7 @@
 .button,
 .filter.button,
 .LoginRegister-button {
+    position: relative;
     width: 48px;
     height: 48px;
     background-color: #d6d6d6;
@@ -79,31 +80,96 @@
     cursor: pointer;
 }
 
+.LoginRegister-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    background-color: gray; 
+    border-radius: 50%;
+    border: 2px solid #fff; 
+    z-index: 1;
+}
+
     /* Hover effect for all buttons */
-    .button:hover,
-    .filter.button:hover,
-    .LoginRegister-button:hover {
-        background-color: #bfbfbf;
-        transform: scale(1.05);
-    }
-
-    /* Icon inside buttons */
-    .button img,
-    .filter.button img {
-        width: 24px;
-        height: 24px;
-        object-fit: contain;
-    }
-
-    /* Login/Profile image (same size as others) */
-    .LoginRegister-button img {
-        width: 24px;
-        height: 24px;
-        object-fit: contain;
-        border-radius: 50%;
-    }
+.button:hover,
+.filter.button:hover,
+.LoginRegister-button:hover {
+    background-color: #bfbfbf;
+    transform: scale(1.05);
+}
+/* Icon inside buttons */
+.button img,
+.filter.button img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+/* Login/Profile image (same size as others) */
+.LoginRegister-button img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    border-radius: 50%;
+}
 
 /* Filter button special margin if needed */
+.filter.button {
+    margin-right: 1rem;
+}
+
+.LoggedIn-button {
+    width: 48px;
+    height: 48px;
+    background-color: #d6d6d6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative; /* Required for the pseudo-element */
+}
+
+/* Green online indicator */
+.LoggedIn-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    background-color: #4CAF50; 
+    border-radius: 50%;
+    border: 2px solid #fff; 
+    z-index: 1;
+}
+
+/* Hover effect */
+.button:hover,
+.filter.button:hover,
+.LoggedIn-button:hover {
+    background-color: #bfbfbf;
+    transform: scale(1.05);
+}
+
+/* Icon styles */
+.button img,
+.filter.button img,
+.LoggedIn-button img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+/* Profile image (circular) */
+.LoggedIn-button img {
+    border-radius: 50%;
+}
+
+/* Filter button spacing */
 .filter.button {
     margin-right: 1rem;
 }
