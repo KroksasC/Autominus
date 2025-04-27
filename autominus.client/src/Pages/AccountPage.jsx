@@ -138,6 +138,41 @@ function AccountPage() {
         localStorage.removeItem("token");
         navigate("/");
     };
+    
+    const handleDeleteAccount = async () => {
+        const confirmDelete = window.confirm("Ar tikrai norite ištrinti paskyrą? Šis veiksmas negalimas!");
+        if (!confirmDelete) return;
+    
+        const token = localStorage.getItem("token");
+        const userId = localStorage.getItem("userId");
+    
+        if (!token || !userId) {
+            alert("Prisijungimo duomenys nerasti. Prisijunkite iš naujo.");
+            return;
+        }
+    
+        try {
+            const deleteRes = await fetch(`https://localhost:7193/User/${userId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            if (!deleteRes.ok) throw new Error("Nepavyko ištrinti paskyros");
+    
+            localStorage.removeItem("token");
+            localStorage.removeItem("userId");
+            navigate("/");
+            alert("Paskyra sėkmingai ištrinta.");
+    
+        } catch (err) {
+            console.error("❌ Klaida trinant paskyrą:", err.message);
+            alert("Nepavyko ištrinti paskyros. Bandykite dar kartą.");
+        }
+    };
+    
 
     return (
         <div>
@@ -209,8 +244,9 @@ function AccountPage() {
                     </div>
                 </div>
 
-                <div style={{ textAlign: "center", marginTop: "2rem" }}>
+                <div style={{ display: "flex", marginTop: "2rem", gap: "1rem" }}>
                     <button className="logout-button" onClick={handleLogout}>Atsijungti</button>
+                    <button className="delete-button" onClick={handleDeleteAccount}>Naikiniti paskyrą</button>
                 </div>
 
                 {isModalOpen && (

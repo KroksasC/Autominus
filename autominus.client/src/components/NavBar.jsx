@@ -5,25 +5,32 @@ import notificationsImg from "../images/newNotification.png";
 import settingsImg from "../images/newSettings.png";
 import loginRegisterImg from "../images/newProfile.png";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { FilterWindow } from "./FilterWindow";
 import PropTypes from "prop-types"
+import { useState, useEffect } from "react";
 
 
-export function NavBar({ onFiltersChange }) {
+
+
+
+export function NavBar({ onFiltersChange }) 
+{
     const [showFilters, setShowFilters] = useState(false);
     const [currentFilters, setCurrentFilters] = useState(null);
 
-    const handleApplyFilters = (filters) => {
+
+    const handleApplyFilters = (filters) => 
+        {
         setCurrentFilters(filters);
         onFiltersChange(filters); // Pass filters to parent component
-    };
+        };
 
     return (
         <div className="navBar">
             <div className="filter button" onClick={() => setShowFilters(true)}>
                 <img src={filtersImg} alt="filter-window" />
             </div>
+
 
             {showFilters && (
                 <FilterWindow
@@ -38,6 +45,7 @@ export function NavBar({ onFiltersChange }) {
                 <span>AUTOMINUS</span> 
                 </h3>
             </Link>
+
             <div className="buttons">
                 <Link to="/Posting" className="Post button">
                     <img src={addPostImg} alt="add-post" />
@@ -49,8 +57,10 @@ export function NavBar({ onFiltersChange }) {
                     <img src={settingsImg} alt="settings" />
                 </div>
 
-                {localStorage.getItem("userId") ? (
-                    <Link to="/AccountPage" className="LoginRegister-button">
+
+                {localStorage.getItem("userId") ?
+                (
+                    <Link to="/AccountPage" className="LoggedIn-button">
                         <img src={loginRegisterImg} alt="LoginRegister" />
                     </Link>
                 ) : 
