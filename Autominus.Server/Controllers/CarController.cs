@@ -11,7 +11,11 @@ namespace Autominus.Server.Controllers
     {
         private readonly ModelsContext _context;
 
-        public CarController(ModelsContext context) => _context = context;
+        public CarController(ModelsContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Car>>> GetCars()
         {
