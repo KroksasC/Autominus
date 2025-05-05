@@ -142,6 +142,33 @@ namespace AnalyzerFix {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unused using directive.
+        /// </summary>
+        internal static string RemoveUnusedUsingsAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("RemoveUnusedUsingsAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using directive &apos;{0}&apos; is not used.
+        /// </summary>
+        internal static string RemoveUnusedUsingsAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("RemoveUnusedUsingsAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove unused using directives to clean up the code.
+        /// </summary>
+        internal static string RemoveUnusedUsingsAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("RemoveUnusedUsingsAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There should be no trailing white space.
         /// </summary>
         internal static string TrailingWhiteSpaceAnalyzerDescription {
