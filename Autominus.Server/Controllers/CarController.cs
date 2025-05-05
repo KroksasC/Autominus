@@ -13,7 +13,7 @@ namespace Autominus.Server.Controllers
 
         public CarController(ModelsContext context)
         {
-            _context = context;      
+            _context = context;
         }
 
         [HttpGet]
