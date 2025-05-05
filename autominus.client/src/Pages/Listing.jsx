@@ -7,6 +7,8 @@ import "../Styles/Listing.css";
 import UserCard from "../components/UserCard";
 import EditDeleteButtons from "../components/EditDeleteButtons";
 import CarLocationMap from "../components/CarLocationMap";
+import CarGallery from "../components/CarGallery";
+import PhotoView from "../components/CarPhotoView";
 
 
 function TableRow(left, right, extra = "") {
@@ -148,6 +150,8 @@ function Listing() {
                         <CarLocationMap city={car.city} />
                     </div>
                 </div>
+                <CarGallery car={car} />
+                <PhotoView car={car} />
                 <ul>
                     {car.imageUrls?.map((url, index) => (
                         <li key={index}>
@@ -156,6 +160,7 @@ function Listing() {
                         </li>
                     ))}
                 </ul>
+                
 
             </div>
         </div>

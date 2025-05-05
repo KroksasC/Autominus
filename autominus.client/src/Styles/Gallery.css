@@ -1,0 +1,56 @@
+.car-gallery {
+    max-width: 700px;
+    min-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-image img {
+    width: 700px;
+    border-radius: 10px;
+}
+
+.thumbnails {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+    .thumbnails img,
+    .thumbnail-overlay {
+        width: 132px;
+        height: auto;
+        border-radius: 6px;
+        object-fit: cover;
+        position: relative;
+        overflow: hidden;
+    }
+
+.thumbnail-overlay {
+    position: relative;
+}
+
+    .thumbnail-overlay img {
+        width: 132px;
+        height: auto;
+        object-fit: cover;
+        filter: brightness(60%);
+        border-radius: 6px;
+    }
+
+.overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 4px 8px;
+    border-radius: 4px
+}
