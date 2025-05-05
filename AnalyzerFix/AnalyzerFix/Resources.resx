@@ -141,4 +141,16 @@
     <value>There should be no trailing white space</value>
     <comment>Code has trailing white space</comment>
   </data>
+    <data name="MultipleBlankLinesAnalyzerTitle" xml:space="preserve">
+    <value>Contains multiple blank lines</value>
+    <comment>Multiple blank lines</comment>
+  </data>
+  <data name="MultipleBlankLinesAnalyzerMessageFormat" xml:space="preserve">
+    <value>Code has multiple blank lines</value>
+    <comment>The message that analyzer shows</comment>
+  </data>
+  <data name="MultipleBlankLinesAnalyzerDescription" xml:space="preserve">
+    <value>There should be no multiple blank lines</value>
+    <comment>Code has multiple blank lines</comment>
+  </data>
 </root>

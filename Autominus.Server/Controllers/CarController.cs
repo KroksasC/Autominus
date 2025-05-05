@@ -13,7 +13,7 @@ namespace Autominus.Server.Controllers
 
         public CarController(ModelsContext context)
         {
-            _context = context;
+            _context = context;      
         }
 
         [HttpGet]
@@ -33,6 +33,7 @@ namespace Autominus.Server.Controllers
 
             return Car;
         }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCar(int id, Car Car)
         {
@@ -46,7 +47,6 @@ namespace Autominus.Server.Controllers
             {
                 _context.Entry(existingCar).State = EntityState.Detached;
             }
-
 
             _context.Cars.Entry(Car).State = EntityState.Modified;
 
@@ -247,3 +247,4 @@ namespace Autominus.Server.Controllers
         }
     }
 }
+
