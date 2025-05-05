@@ -88,6 +88,60 @@ namespace AnalyzerFix {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There should be no multiple blank lines.
+        /// </summary>
+        internal static string MultipleBlankLinesAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("MultipleBlankLinesAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code has multiple blank lines.
+        /// </summary>
+        internal static string MultipleBlankLinesAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("MultipleBlankLinesAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contains multiple blank lines.
+        /// </summary>
+        internal static string MultipleBlankLinesAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("MultipleBlankLinesAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There should be spacing around operators.
+        /// </summary>
+        internal static string OperatorSpacingDescription {
+            get {
+                return ResourceManager.GetString("OperatorSpacingDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code has no spacing around operators.
+        /// </summary>
+        internal static string OperatorSpacingMessageFormat {
+            get {
+                return ResourceManager.GetString("OperatorSpacingMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contains no spacing around operators.
+        /// </summary>
+        internal static string OperatorSpacingTitle {
+            get {
+                return ResourceManager.GetString("OperatorSpacingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There should be no trailing white space.
         /// </summary>
         internal static string TrailingWhiteSpaceAnalyzerDescription {
@@ -111,39 +165,6 @@ namespace AnalyzerFix {
         internal static string TrailingWhiteSpaceAnalyzerTitle {
             get {
                 return ResourceManager.GetString("TrailingWhiteSpaceAnalyzerTitle", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to There should be no trailing white space.
-        /// </summary>
-        internal static string MultipleBlankLinesAnalyzerDescription
-        {
-            get
-            {
-                return ResourceManager.GetString("MultipleBlankLinesAnalyzerDescription", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Code has trailing white space.
-        /// </summary>
-        internal static string MultipleBlankLinesAnalyzerMessageFormat
-        {
-            get
-            {
-                return ResourceManager.GetString("MultipleBlankLinesAnalyzerMessageFormat", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Contains trailing white space.
-        /// </summary>
-        internal static string MultipleBlankLinesAnalyzerTitle
-        {
-            get
-            {
-                return ResourceManager.GetString("MultipleBlankLinesAnalyzerTitle", resourceCulture);
             }
         }
     }
