@@ -141,7 +141,7 @@
     <value>There should be no trailing white space</value>
     <comment>Code has trailing white space</comment>
   </data>
-    <data name="MultipleBlankLinesAnalyzerTitle" xml:space="preserve">
+  <data name="MultipleBlankLinesAnalyzerTitle" xml:space="preserve">
     <value>Contains multiple blank lines</value>
     <comment>Multiple blank lines</comment>
   </data>
@@ -152,5 +152,17 @@
   <data name="MultipleBlankLinesAnalyzerDescription" xml:space="preserve">
     <value>There should be no multiple blank lines</value>
     <comment>Code has multiple blank lines</comment>
+  </data>
+  <data name="OperatorSpacingDescription" xml:space="preserve">
+    <value>There should be spacing around operators</value>
+    <comment>Code has no spacing around operators</comment>
+  </data>
+  <data name="OperatorSpacingMessageFormat" xml:space="preserve">
+    <value>Code has no spacing around operators</value>
+    <comment>Tge message that analyzer shows</comment>
+  </data>
+  <data name="OperatorSpacingTitle" xml:space="preserve">
+    <value>Contains no spacing around operators</value>
+    <comment>no operator spacing</comment>
   </data>
 </root>

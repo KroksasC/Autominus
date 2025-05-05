@@ -1,49 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 
-  <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <RootNamespace>AnalyzerFix.Vsix</RootNamespace>
-    <AssemblyName>AnalyzerFix.Vsix</AssemblyName>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net472</TargetFramework>
+		<RootNamespace>AnalyzerFix.Vsix</RootNamespace>
+		<AssemblyName>AnalyzerFix.Vsix</AssemblyName>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <GeneratePkgDefFile>false</GeneratePkgDefFile>
-    <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
-    <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
-    <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
-    <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
-    <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
-    <VSSDKTargetPlatformRegRootSuffix>Roslyn</VSSDKTargetPlatformRegRootSuffix>
-  </PropertyGroup>
+	<PropertyGroup>
+		<GeneratePkgDefFile>false</GeneratePkgDefFile>
+		<IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
+		<IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
+		<IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
+		<CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
+		<CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
+		<VSSDKTargetPlatformRegRootSuffix>Roslyn</VSSDKTargetPlatformRegRootSuffix>
+	</PropertyGroup>
 
-  <ItemGroup>
-<PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.6.33428.276" PrivateAssets="all" />
+	<!-- Updated Package References -->
+	<ItemGroup>
+		<!-- Use the latest VSSDK BuildTools (17.9.x) -->
+		<PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.9.4056" PrivateAssets="all" />
 
-  </ItemGroup>
+		<!-- Add System.Security.Permissions -->
+		<PackageReference Include="System.Security.Permissions" Version="4.7.0" />
 
-  <PropertyGroup>
-    <StartAction>Program</StartAction>
-    <StartProgram>$(DevEnvDir)devenv.exe</StartProgram>
-    <StartArguments>/rootsuffix $(VSSDKTargetPlatformRegRootSuffix)</StartArguments>
-  </PropertyGroup>
+		<!-- Ensure Newtonsoft.Json is pinned to a compatible version if used -->
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
 
-  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+	<PropertyGroup>
+		<StartAction>Program</StartAction>
+		<StartProgram>$(DevEnvDir)devenv.exe</StartProgram>
+		<StartArguments>/rootsuffix $(VSSDKTargetPlatformRegRootSuffix)</StartArguments>
+	</PropertyGroup>
 
-  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="Exists('$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets')" />
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\AnalyzerFix.CodeFixes\AnalyzerFix.CodeFixes.csproj" />
-    <ProjectReference Include="..\AnalyzerFix\AnalyzerFix.csproj" />
-  </ItemGroup>
+	<Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="Exists('$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets')" />
 
-  <ItemGroup>
-    <!-- https://github.com/dotnet/sdk/issues/433 -->
-    <ProjectReference Update="@(ProjectReference)" AdditionalProperties="TargetFramework=netstandard2.0" />
+	<ItemGroup>
+		<ProjectReference Include="..\AnalyzerFix.CodeFixes\AnalyzerFix.CodeFixes.csproj" />
+		<ProjectReference Include="..\AnalyzerFix\AnalyzerFix.csproj" />
+	</ItemGroup>
 
-    <!-- https://github.com/Microsoft/extendvs/issues/57 -->
-    <ProjectReference Update="@(ProjectReference)" Name="%(Filename)" />
-  </ItemGroup>
+	<ItemGroup>
+		<!-- https://github.com/dotnet/sdk/issues/433 -->
+		<ProjectReference Update="@(ProjectReference)" AdditionalProperties="TargetFramework=netstandard2.0" />
+
+		<!-- https://github.com/Microsoft/extendvs/issues/57 -->
+		<ProjectReference Update="@(ProjectReference)" Name="%(Filename)" />
+	</ItemGroup>
+
+	<!-- Workaround for System.Security.Permissions -->
+	<Target Name="CopySecurityPermissions" AfterTargets="ResolveAssemblyReferences">
+		<ItemGroup>
+			<ReferenceCopyLocalPaths Include="$(NuGetPackageRoot)\system.security.permissions\4.7.0\lib\netstandard2.0\System.Security.Permissions.dll" />
+		</ItemGroup>
+	</Target>
 
 </Project>
