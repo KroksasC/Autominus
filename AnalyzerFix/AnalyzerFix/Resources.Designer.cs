@@ -113,5 +113,38 @@ namespace AnalyzerFix {
                 return ResourceManager.GetString("TrailingWhiteSpaceAnalyzerTitle", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to There should be no trailing white space.
+        /// </summary>
+        internal static string MultipleBlankLinesAnalyzerDescription
+        {
+            get
+            {
+                return ResourceManager.GetString("MultipleBlankLinesAnalyzerDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Code has trailing white space.
+        /// </summary>
+        internal static string MultipleBlankLinesAnalyzerMessageFormat
+        {
+            get
+            {
+                return ResourceManager.GetString("MultipleBlankLinesAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Contains trailing white space.
+        /// </summary>
+        internal static string MultipleBlankLinesAnalyzerTitle
+        {
+            get
+            {
+                return ResourceManager.GetString("MultipleBlankLinesAnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }
