@@ -165,4 +165,16 @@
     <value>Contains no spacing around operators</value>
     <comment>no operator spacing</comment>
   </data>
+  <data name="RemoveUnusedUsingsAnalyzerDescription" xml:space="preserve">
+    <value>Unused using directive</value>
+    <comment>Title for the RemoveUnusedUsings analyzer</comment>
+  </data>
+  <data name="RemoveUnusedUsingsAnalyzerMessageFormat" xml:space="preserve">
+    <value>Using directive '{0}' is not used</value>
+    <comment>The message that the analyzer shows</comment>
+  </data>
+  <data name="RemoveUnusedUsingsAnalyzerTitle" xml:space="preserve">
+    <value>Remove unused using directives to clean up the code</value>
+    <comment>Description of the RemoveUnusedUsings analyzer</comment>
+  </data>
 </root>
