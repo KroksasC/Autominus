@@ -151,15 +151,6 @@ function Listing() {
                     </div>
                 </div>
                 <CarGallery car={car} />
-                <PhotoView car={car} />
-                <ul>
-                    {car.imageUrls?.map((url, index) => (
-                        <li key={index}>
-                            {/* src={url} */}
-                            <img src={url} className="pic_width" alt={`Car ${index}`} />
-                        </li>
-                    ))}
-                </ul>
                 
 
             </div>

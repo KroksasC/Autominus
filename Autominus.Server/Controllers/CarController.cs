@@ -10,7 +10,7 @@ namespace Autominus.Server.Controllers
     public class CarController : ControllerBase
     {
         private readonly ModelsContext _context;
-
+        Stack<char> ss = new Stack<char>();
         public CarController(ModelsContext context)
         {
             _context = context;
