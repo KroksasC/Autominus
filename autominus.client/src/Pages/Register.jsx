@@ -34,38 +34,57 @@ function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         if (!email || !password || !confirmPassword) {
             setError("Užpildykite visus laukus.");
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setError("Įveskite tinkamą el. pašto adresą.");
-        } else if (password !== confirmPassword) {
-            setError("Slaptažodžiai nesutampa.");
-        } else {
-            setError("");
-            fetch("/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                }),
-            })
-                .then((data) => {
-                    console.log(data);
-                    if (data.ok) {
-                        Swal.fire("Registracija sėkminga.", 'Jūs sėkmingai prisiregistravote. Dabar prisijunkite.', 'success');
-                        navigate("/l");
-                    } else {
-                        Swal.fire('Oops!', 'Įvyko klaida, bandykite dar kartą!', 'error');
-                    }
-                })
-                .catch((error) => {
-                    console.error(error);
-                    Swal.fire('Oops!', 'Įvyko klaida, bandykite dar kartą!', 'error');
-                });
+            return;
         }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            setError("Įveskite tinkamą el. pašto adresą.");
+            return;
+        }
+        if (password !== confirmPassword) {
+            setError("Slaptažodžiai nesutampa.");
+            return;
+        }
+
+        setError("");
+        setError("");
+        fetch("/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Registration failed");
+                }
+                Swal.fire(
+                    "Registracija sėkminga.",
+                    "Jūs sėkmingai prisiregistravote. Dabar prisijunkite.",
+                    "success"
+                );
+
+                // Nest the email-send call here (no return):
+                fetch("/email", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email }),
+                })
+                    .then(() => {
+                        // Only navigate once the nested fetch completes:
+                        navigate("/l");
+                    })
+                    .catch((emailErr) => {
+                        console.error("Email send failed:", emailErr);
+                        // Still navigate (or handle differently if you wish):
+                        navigate("/l");
+                    });
+            })
+            .catch((err) => {
+                console.error(err);
+                Swal.fire("Oops!", "Įvyko klaida, bandykite dar kartą!", "error");
+            });
     };
 
     return (
