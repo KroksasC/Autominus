@@ -3,7 +3,6 @@ import CarPost from "../components/CarPost";
 import NavBar from "../components/NavBar";
 import FetchCars from "../API/FetchCars";
 import SearchBar from "../components/SearchBar";
-import { StatusView } from "../components/StatusView";
 
 function Home() {
     const [carList, setCarList] = useState([]);
@@ -202,7 +201,6 @@ function Home() {
 
     return (
         <div className="Home">
-            <StatusView className="StatusView" />
             <NavBar className="NavBar" onFiltersChange={handleFiltersChange} />
             <SearchBar onSearch={handleSearch} />
             <div className="car-posts">
