@@ -6,6 +6,7 @@ import { Routes, Route } from "react-router-dom"
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import AccountPage from "./Pages/AccountPage";
+import Favorites from "./Pages/Favorites";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                 <Route path="/l" element={<Login />}></Route>
                 <Route path="/r" element={<Register />}></Route>
                 <Route path="/AccountPage" element={<AccountPage />}></Route>
+                <Route path="/Favorites" element={<Favorites />}></Route>
             </Routes>
         </main>
     );

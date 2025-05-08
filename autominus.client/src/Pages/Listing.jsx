@@ -9,6 +9,7 @@ import EditDeleteButtons from "../components/EditDeleteButtons";
 import CarLocationMap from "../components/CarLocationMap";
 import CarGallery from "../components/CarGallery";
 import PhotoView from "../components/CarPhotoView";
+import FavoriteToggleButton from "../components/FavoriteToggle";
 
 
 function TableRow(left, right, extra = "") {
@@ -108,8 +109,9 @@ function Listing() {
                     <table className="info-table">
                         <thead>
                             <tr>
-                                <th colSpan="2">
+                                <th colSpan="3">
                                     <div className="table-header">
+                                        <FavoriteToggleButton car={car} />
                                         <h1>{car.brand} {car.model} {car.year}</h1>
                                         <EditDeleteButtons car={car} />
                                     </div>
