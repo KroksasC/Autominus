@@ -208,12 +208,17 @@ function Home() {
             <div className="car-posts">
                 {filteredCarList.length === 0 ? (
                     <p style={{ color: 'black' }}>
-                        {searchTerm || filters ? "No cars match your search or filters" : "Automobilių nėra"}
+                        {searchTerm || filters ? "Nėra skelbimų atitinkančių filtrus ar paiešką" : "Skelbimų nėra"}
                     </p>
                 ) : (
-                    filteredCarList.map(car => (
-                        <CarPost key={car.id} car={car} />
-                    ))
+                        <>
+                            <p style={{ color: 'black', fontWeight: 'bold' }}>
+                                Rastų skelbimų skaičius: {filteredCarList.length}
+                            </p>
+                            {filteredCarList.map(car => (
+                                <CarPost key={car.id} car={car} />
+                            ))}
+                        </>
                 )}
                 {console.log(localStorage.getItem("userId"))}
             </div>
