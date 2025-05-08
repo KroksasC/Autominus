@@ -1,14 +1,14 @@
-﻿using Autominus.Server.Models;
+﻿namespace Autominus.Server.Data;
+
+
+using Autominus.Server.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
-namespace Autominus.Server.Data
-{
-    public class ModelsContext : IdentityDbContext<User>
+public class ModelsContext : IdentityDbContext<User>
     {
         public ModelsContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Car> Cars { get; set; }
     }
-}
