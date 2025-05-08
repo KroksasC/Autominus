@@ -9,7 +9,7 @@ public class User : IdentityUser
     public string? City { get; set; }
     public string? Street { get; set; }
     public string? Address { get; set; }
-
+    public List<int>? FavoriteCars { get; set; }
     // Navigacijos savybė: vartotojas gali turėti kelis automobilius
     [JsonIgnore]
     public ICollection<Car>? Cars { get; set; }
