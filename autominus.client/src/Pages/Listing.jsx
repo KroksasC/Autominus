@@ -10,6 +10,7 @@ import CarLocationMap from "../components/CarLocationMap";
 import CarGallery from "../components/CarGallery";
 import PhotoView from "../components/CarPhotoView";
 import FavoriteToggleButton from "../components/FavoriteToggle";
+import { Link } from "react-router-dom";
 
 
 function TableRow(left, right, extra = "") {
@@ -100,6 +101,10 @@ function Listing() {
     if (car.negotiable?.toString() === "false") negotiable = "Ne";
     if (car.negotiable?.toString() === "true") negotiable = "Taip";
 
+    const userOtherCars = carList.filter(
+        (otherCar) => otherCar.user?.id === car.user?.id && otherCar.id !== car.id
+    );
+
     return (
         <div>
             <NavBar className="NavBar" />
@@ -154,7 +159,37 @@ function Listing() {
                 </div>
                 <CarGallery car={car} />
                 
+                <ul>
+                    {car.imageUrls?.map((url, index) => (
+                        <li key={index}>
+                            {/* src={url} */}
+                            <img src={url} className="pic_width" alt={`Car ${index}`} />
+                        </li>
+                    ))}
 
+                    {userOtherCars.length > 0 && (
+                        <div className="other-posts-section">
+                            <h3>Kiti šio vartotojo skelbimai</h3>
+                            <div className="other-posts-grid">
+                                {userOtherCars.map((otherCar) => (
+                                    <Link to={`/${otherCar.id}`} key={otherCar.id} className="other-post-card">
+                                        {otherCar.imageUrls?.[0] && (
+                                            <img
+                                                src={otherCar.imageUrls[0]}
+                                                alt={`${otherCar.brand} ${otherCar.model}`}
+                                                className="other-post-image"
+                                            />
+                                        )}
+                                        <div className="other-post-info">
+                                            <h4>{otherCar.brand} {otherCar.model} {otherCar.year}</h4>
+                                            <p>{otherCar.price} €</p>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </ul>
             </div>
         </div>
     );
