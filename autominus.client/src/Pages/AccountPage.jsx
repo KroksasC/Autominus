@@ -245,6 +245,7 @@ function AccountPage() {
                 </div>
 
                 <div style={{ display: "flex", marginTop: "2rem", gap: "1rem" }}>
+                    <button className="history-button" onClick={() => navigate("/recently-viewed")}>Skelbimų Istorija</button>
                     <button className="logout-button" onClick={handleLogout}>Atsijungti</button>
                     <button className="delete-button" onClick={handleDeleteAccount}>Naikiniti paskyrą</button>
                 </div>
