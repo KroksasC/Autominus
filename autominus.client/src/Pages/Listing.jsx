@@ -10,6 +10,12 @@ import CarLocationMap from "../components/CarLocationMap";
 import { Link } from "react-router-dom";
 
 
+function saveViewedCarId(carId) {
+    const key = 'viewedCars';
+    const existing = JSON.parse(localStorage.getItem(key) || '[]');
+    const updated = [carId, ...existing.filter((id) => id !== carId)].slice(0, 20);
+    localStorage.setItem(key, JSON.stringify(updated));
+}
 
 function TableRow(left, right, extra = "") {
     if (right != null && right != 0 && right != "Nenurodyta") {
@@ -67,6 +73,7 @@ function Listing() {
     const { id } = useParams();
 
     useEffect(() => {
+        saveViewedCarId(id);
         const fetchCars = async () => {
             try {
                 const data = await FetchCars();
