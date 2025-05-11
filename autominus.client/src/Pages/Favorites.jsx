@@ -3,7 +3,6 @@ import CarPost from "../components/CarPost";
 import NavBar from "../components/NavBar";
 import FetchCars from "../API/FetchCars";
 import IsCarFavoriteByUser from "../API/CheckCarIsFavorite";
-import { StatusView } from "../components/StatusView";
 
 function Home() {
     const [favoriteCars, setFavoriteCars] = useState([]);
@@ -59,7 +58,6 @@ function Home() {
 
     return (
         <div className="Home">
-            <StatusView className="StatusView" />
             <NavBar className="NavBar" />
             <div className="car-posts">
                 {favoriteCars.length === 0 ? (
