@@ -7,7 +7,12 @@ import "../Styles/Listing.css";
 import UserCard from "../components/UserCard";
 import EditDeleteButtons from "../components/EditDeleteButtons";
 import CarLocationMap from "../components/CarLocationMap";
+import CarGallery from "../components/CarGallery";
+import PhotoView from "../components/CarPhotoView";
+import FavoriteToggleButton from "../components/FavoriteToggle";
 import { Link } from "react-router-dom";
+
+
 
 
 function saveViewedCarId(carId) {
@@ -119,8 +124,9 @@ function Listing() {
                     <table className="info-table">
                         <thead>
                             <tr>
-                                <th colSpan="2">
+                                <th colSpan="3">
                                     <div className="table-header">
+                                        <FavoriteToggleButton car={car} />
                                         <h1>{car.brand} {car.model} {car.year}</h1>
                                         <EditDeleteButtons car={car} />
                                     </div>
@@ -161,6 +167,8 @@ function Listing() {
                         <CarLocationMap city={car.city} />
                     </div>
                 </div>
+                <CarGallery car={car} />
+                
                 <ul>
                     {car.imageUrls?.map((url, index) => (
                         <li key={index}>
@@ -192,7 +200,6 @@ function Listing() {
                         </div>
                     )}
                 </ul>
-
             </div>
         </div>
     );

@@ -84,6 +84,60 @@ namespace Autominus.Server.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("favorite/{userId}/{carId}")]
+        public async Task<bool> IsCarFavoriteByUser(string userId, int carId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null || user.FavoriteCars == null)
+            {
+                return false;
+            }
+
+            return user.FavoriteCars.Contains(carId);
+        }
+
+        [HttpPut("favorite/add/{userId}/{carId}")]
+        public async Task<IActionResult> AddCarToFavorites(string userId, int carId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.FavoriteCars ??= new List<int>(); // Initialize if null
+
+            if (!user.FavoriteCars.Contains(carId))
+            {
+                user.FavoriteCars.Add(carId);
+                await _context.SaveChangesAsync();
+            }
+
+            return NoContent();
+        }
+
+        [HttpPut("favorite/remove/{userId}/{carId}")]
+        public async Task<IActionResult> RemoveCarFromFavorites(string userId, int carId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null || user.FavoriteCars == null)
+            {
+                return NotFound();
+            }
+
+            if (user.FavoriteCars.Contains(carId))
+            {
+                user.FavoriteCars.Remove(carId);
+                await _context.SaveChangesAsync();
+            }
+
+            return NoContent();
+        }
+
         private bool UserExist(string id)
         {
             return _context.Users.Any(e => e.Id == id);

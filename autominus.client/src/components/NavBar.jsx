@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { FilterWindow } from "./FilterWindow";
 import PropTypes from "prop-types"
 import { useState, useEffect } from "react";
-
+import favImg from "../images/FavNav.png";
 
 
 
@@ -49,6 +49,9 @@ export function NavBar({ onFiltersChange })
             <div className="buttons">
                 <Link to="/Posting" className="Post button">
                     <img src={addPostImg} alt="add-post" />
+                </Link>
+                <Link to="/Favorites" className="Post button">
+                    <img src={favImg} alt="Favorites" className="favorites-icon"/>
                 </Link>
                 <div className="Notifications button">
                     <img src={notificationsImg} alt="notifications" />
