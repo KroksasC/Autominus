@@ -166,7 +166,8 @@ function Listing() {
                         <CarLocationMap city={car.city} />
                     </div>
                 </div>
-                <CarGallery car={car} />
+                <div>
+                <CarGallery car={car}/>
                 
                 <ul>
                     {userOtherCars.length > 0 && (
@@ -191,7 +192,8 @@ function Listing() {
                             </div>
                         </div>
                     )}
-                </ul>
+                    </ul>
+                </div>
             </div>
         </div>
     );
