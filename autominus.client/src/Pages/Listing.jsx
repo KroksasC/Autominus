@@ -8,7 +8,6 @@ import UserCard from "../components/UserCard";
 import EditDeleteButtons from "../components/EditDeleteButtons";
 import CarLocationMap from "../components/CarLocationMap";
 import CarGallery from "../components/CarGallery";
-import PhotoView from "../components/CarPhotoView";
 import FavoriteToggleButton from "../components/FavoriteToggle";
 import { Link } from "react-router-dom";
 
@@ -170,13 +169,6 @@ function Listing() {
                 <CarGallery car={car} />
                 
                 <ul>
-                    {car.imageUrls?.map((url, index) => (
-                        <li key={index}>
-                            {/* src={url} */}
-                            <img src={url} className="pic_width" alt={`Car ${index}`} />
-                        </li>
-                    ))}
-
                     {userOtherCars.length > 0 && (
                         <div className="other-posts-section">
                             <h3>Kiti šio vartotojo skelbimai</h3>

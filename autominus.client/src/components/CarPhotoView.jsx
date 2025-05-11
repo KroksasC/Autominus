@@ -139,4 +139,24 @@ CarPhotoView.propTypes = {
     onClose: PropTypes.func.isRequired
 }
 
+CarDisplay.propTypes = {
+    car: PropTypes.shape({
+        accidentHistory: PropTypes.bool,
+        bodyType: PropTypes.string,
+        brand: PropTypes.string,
+        condition: PropTypes.string,
+        engineCapacity: PropTypes.number,
+        fuelType: PropTypes.string,
+        horsepower: PropTypes.number,
+        mileage: PropTypes.number,
+        model: PropTypes.string,
+        price: PropTypes.number,
+        transmission: PropTypes.string,
+        year: PropTypes.number,
+        imageUrls: PropTypes.array.isRequired
+    }).isRequired,
+    initialIndex: PropTypes.number,
+    onClose: PropTypes.func.isRequired
+}
+
 export default CarPhotoView
