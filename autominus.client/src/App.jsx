@@ -7,6 +7,7 @@ import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import AccountPage from "./Pages/AccountPage";
 import Favorites from "./Pages/Favorites";
+import RecentlyViewed from "./Pages/RecentlyViewed"
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                 <Route path="/r" element={<Register />}></Route>
                 <Route path="/AccountPage" element={<AccountPage />}></Route>
                 <Route path="/Favorites" element={<Favorites />}></Route>
+                <Route path="/recently-viewed" element={<RecentlyViewed />} />
             </Routes>
         </main>
     );
