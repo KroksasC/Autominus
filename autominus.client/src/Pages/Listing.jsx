@@ -1,5 +1,6 @@
 ﻿import { useState, useEffect } from "react";
 import FetchCars from "../API/FetchCars";
+import FavoriteCount from "../API/FavoriteCount";
 import PropTypes from "prop-types";
 import NavBar from "../components/NavBar";
 import { useParams } from "react-router-dom";
@@ -91,10 +92,27 @@ function Listing() {
         fetchCars();
     }, []);
 
+    const car = carList.find((car) => car.id.toString() === id);
+
+    const [carCount, setCarCount] = useState(0);
+
+    useEffect(() => {
+        const fetchCount = async () => {
+            try {
+                const count = await FavoriteCount(id);
+                setCarCount(count);
+            } catch (error) {
+                console.error("Failed to load favorite count:", error);
+                setCarCount(0); // Fallback value
+            }
+        };
+        fetchCount();
+    }, [id]);
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
-    const car = carList.find((car) => car.id.toString() === id);
+   
 
     if (!car) {
         return <div>Automobilis nerastas</div>;
@@ -114,6 +132,7 @@ function Listing() {
         (otherCar) => otherCar.user?.id === car.user?.id && otherCar.id !== car.id
     );
 
+
     return (
         <div>
             <NavBar className="NavBar" />
@@ -132,11 +151,14 @@ function Listing() {
                                 </th>
                             </tr>
                         </thead>
+                        
+                        
                         <tbody className="info-body">
                             <tr>
                                 <td><strong>Kaina:</strong></td>
                                 <td>{car.price} &euro;</td>
                             </tr>
+                            
                             {TableRow("Rida:", car.mileage, "km")}
                             {TableRow("Pavarų dėžė:", car.transmission)}
                             {TableRow("Kuro tipas:", car.fuelType)}
@@ -157,10 +179,13 @@ function Listing() {
                     </table>
                     <br></br>
                     <div className="item_width">
-                        {Description(car.description) }
+                        {Description(car.description)}
                     </div>
                     <br></br>
                     <UserCard user={car.user} />
+                    <a style={{ fontSize: '0.9rem', color: 'gray' }}>
+                        Skelbimas įsimintas {carCount} kartų
+                    </a>
                     <br></br>
                     <div className="map-container">
                         <CarLocationMap city={car.city} />

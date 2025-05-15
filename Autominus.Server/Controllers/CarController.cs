@@ -245,6 +245,25 @@ namespace Autominus.Server.Controllers
                 .Take(5)
                 .ToListAsync();
         }
+
+        [HttpGet("favorites/{id}")]
+        public async Task<ActionResult<int>> GetFavoriteCount(int id)
+        {
+            // Check if car exists first
+            var carExists = await _context.Cars.AnyAsync(c => c.Id == id);
+            if (!carExists)
+            {
+                return NotFound();
+            }
+
+            // Count users who have this car in their favorites
+            var count = await _context.Users
+                .Where(u => u.FavoriteCars != null && u.FavoriteCars.Contains(id))
+                .CountAsync();
+
+            return Ok(count);
+        }
+
     }
 }
 
