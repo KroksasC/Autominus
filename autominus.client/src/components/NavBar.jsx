@@ -1,13 +1,11 @@
 import "../Styles/NavBar.css";
 import filtersImg from "../images/newFilter.png";
 import addPostImg from "../images/newAdd.png";
-import notificationsImg from "../images/newNotification.png";
-import settingsImg from "../images/newSettings.png";
 import loginRegisterImg from "../images/newProfile.png";
 import { Link } from "react-router-dom";
 import { FilterWindow } from "./FilterWindow";
 import PropTypes from "prop-types"
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import favImg from "../images/FavNav.png";
 
 
@@ -53,12 +51,6 @@ export function NavBar({ onFiltersChange })
                 <Link to="/Favorites" className="Post button">
                     <img src={favImg} alt="Favorites" className="favorites-icon"/>
                 </Link>
-                <div className="Notifications button">
-                    <img src={notificationsImg} alt="notifications" />
-                </div>
-                <div className="Settings button">
-                    <img src={settingsImg} alt="settings" />
-                </div>
 
 
                 {localStorage.getItem("userId") ?
