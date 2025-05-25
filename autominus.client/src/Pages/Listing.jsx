@@ -12,16 +12,6 @@ import CarGallery from "../components/CarGallery";
 import FavoriteToggleButton from "../components/FavoriteToggle";
 import { Link } from "react-router-dom";
 
-
-
-
-function saveViewedCarId(carId) {
-    const key = 'viewedCars';
-    const existing = JSON.parse(localStorage.getItem(key) || '[]');
-    const updated = [carId, ...existing.filter((id) => id !== carId)].slice(0, 20);
-    localStorage.setItem(key, JSON.stringify(updated));
-}
-
 function TableRow(left, right, extra = "") {
     if (right != null && right != 0 && right != "Nenurodyta") {
         return (
@@ -78,7 +68,6 @@ function Listing() {
     const { id } = useParams();
 
     useEffect(() => {
-        saveViewedCarId(id);
         const fetchCars = async () => {
             try {
                 const data = await FetchCars();
@@ -107,6 +96,16 @@ function Listing() {
             }
         };
         fetchCount();
+
+    useEffect(() => {
+        const carId = parseInt(id); // ensure it's a number
+        const key = 'viewedCars';
+        const viewed = JSON.parse(localStorage.getItem(key) || '[]');
+        if (!viewed.includes(carId)) {
+            const updated = [carId, ...viewed.filter((v) => v !== carId)].slice(0, 20);
+            localStorage.setItem(key, JSON.stringify(updated));
+        }
+
     }, [id]);
 
     if (loading) return <div>Loading...</div>;
@@ -191,7 +190,8 @@ function Listing() {
                         <CarLocationMap city={car.city} />
                     </div>
                 </div>
-                <CarGallery car={car} />
+                <div>
+                <CarGallery car={car}/>
                 
                 <ul>
                     {userOtherCars.length > 0 && (
@@ -216,7 +216,8 @@ function Listing() {
                             </div>
                         </div>
                     )}
-                </ul>
+                    </ul>
+                </div>
             </div>
         </div>
     );

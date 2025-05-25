@@ -16,7 +16,6 @@ function CarPost({ car }) {
     return (
         <Link to={`/${car.id}`} style={{ textDecoration: 'none' }}>
             <div className="car-post">
-                
                 <div className="info">
                     <p className="brand">{car.brand}</p>
                     <p className="model">{car.model}</p>

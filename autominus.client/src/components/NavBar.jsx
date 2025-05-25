@@ -1,14 +1,12 @@
-import "../Styles/NavBar.css";
+﻿import "../Styles/NavBar.css";
 import filtersImg from "../images/newFilter.png";
 import addPostImg from "../images/newAdd.png";
-import notificationsImg from "../images/newNotification.png";
-import settingsImg from "../images/newSettings.png";
 import loginRegisterImg from "../images/newProfile.png";
-import { Link } from "react-router-dom";
+import favImg from "../images/FavNav.png";
+import { Link, useNavigate } from "react-router-dom";
 import { FilterWindow } from "./FilterWindow";
 import PropTypes from "prop-types"
-import { useState, useEffect } from "react";
-import favImg from "../images/FavNav.png";
+import { useState } from "react";
 
 
 
@@ -17,13 +15,22 @@ export function NavBar({ onFiltersChange })
 {
     const [showFilters, setShowFilters] = useState(false);
     const [currentFilters, setCurrentFilters] = useState(null);
+    const navigate = useNavigate();
 
 
-    const handleApplyFilters = (filters) => 
-        {
+    const handleApplyFilters = (filters) => {
         setCurrentFilters(filters);
         onFiltersChange(filters); // Pass filters to parent component
-        };
+    };
+
+    const handleCreatePostClick = () => {
+        const isLoggedIn = !!localStorage.getItem("userId");
+        if (isLoggedIn) {
+            navigate("/Posting");
+        } else {
+            alert("Norint įkelti skelbimą, privalote prisijungti prie AutoMinus paskyros.");
+        }
+    };
 
     return (
         <div className="navBar">
@@ -47,18 +54,12 @@ export function NavBar({ onFiltersChange })
             </Link>
 
             <div className="buttons">
-                <Link to="/Posting" className="Post button">
+                <button className="Post button" onClick={handleCreatePostClick}>
                     <img src={addPostImg} alt="add-post" />
-                </Link>
+                </button>
                 <Link to="/Favorites" className="Post button">
                     <img src={favImg} alt="Favorites" className="favorites-icon"/>
                 </Link>
-                <div className="Notifications button">
-                    <img src={notificationsImg} alt="notifications" />
-                </div>
-                <div className="Settings button">
-                    <img src={settingsImg} alt="settings" />
-                </div>
 
 
                 {localStorage.getItem("userId") ?

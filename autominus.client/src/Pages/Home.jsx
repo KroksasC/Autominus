@@ -12,6 +12,7 @@ function Home() {
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(0); // NEW
+    const [showOnlyUnviewed, setShowOnlyUnviewed] = useState(false);
 
     const groupSize = 2;
 
@@ -36,6 +37,11 @@ function Home() {
 
     useEffect(() => {
         let filtered = [...carList];
+
+        if (showOnlyUnviewed) {
+            const viewedCarIds = JSON.parse(localStorage.getItem("viewedCars") || "[]");
+            filtered = filtered.filter((car) => !viewedCarIds.includes(Number(car.id)));
+        }
 
         if (filters && !Object.values(filters).every(val => val === null || val === "" || val === undefined)) {
             filtered = filtered.filter(car => {
@@ -116,7 +122,7 @@ function Home() {
 
         setFilteredCarList(filtered);
         setCurrentPage(0); // Reset to first page when filters/search change
-    }, [filters, searchTerm, carList]);
+    }, [filters, searchTerm, carList, showOnlyUnviewed]);
 
     const handleFiltersChange = (newFilters) => {
         setFilters(newFilters);
@@ -146,6 +152,18 @@ function Home() {
         <div className="Home">
             <NavBar className="NavBar" onFiltersChange={handleFiltersChange} />
             <SearchBar onSearch={handleSearch} />
+            <div style={{ margin: '1rem 0' }}>
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={showOnlyUnviewed}
+                        onChange={(e) => {
+                            setShowOnlyUnviewed(e.target.checked);
+                        }}
+                    />
+                    &nbsp;Rodyti tik neperžiūrėtus skelbimus
+                </label>
+            </div>
             <div className="car-posts">
                 {filteredCarList.length === 0 ? (
                     <p style={{ color: 'black' }}>
@@ -158,7 +176,7 @@ function Home() {
                         </p>
                         <p>
                             Rodoma {currentPage * groupSize + 1}–{Math.min((currentPage + 1) * groupSize, filteredCarList.length)} iš {filteredCarList.length}
-                        </p>
+                            </p>
                         {currentGroup.map(car => (
                             <CarPost key={car.id} car={car} />
                         ))}
