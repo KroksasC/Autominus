@@ -96,6 +96,7 @@ function Listing() {
             }
         };
         fetchCount();
+    }, [id]);
 
     useEffect(() => {
         const carId = parseInt(id); // ensure it's a number
